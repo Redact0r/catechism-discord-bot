@@ -25,7 +25,7 @@ bot.on("message", (msg) => {
   const command = args.shift().toLowerCase().replace(/\s/g, "").toString();
 
   if (!bot.commands.has(command)) {
-    return msg.reply("Try saying '+ccc #paragraphnumber'");
+    return;
   }
 
   try {
