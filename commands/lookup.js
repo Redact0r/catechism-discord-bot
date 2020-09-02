@@ -1,4 +1,5 @@
 const data = require("../sources/ccc");
+
 const ccc = data.ccc;
 
 module.exports = {
