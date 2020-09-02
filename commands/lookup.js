@@ -9,7 +9,7 @@ module.exports = {
     if (
       Number(args[0]) > 2865 ||
       Number(args[0] < 1) ||
-      Number(args[0] === "NaN")
+      typeof Number(args[0] !== "number")
     ) {
       return msg.reply("Please select a number between 1 and 2865");
     }
