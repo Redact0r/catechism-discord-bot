@@ -23,14 +23,9 @@ bot.on("message", (msg) => {
   const args = msg.content.split("#");
   const command = args.shift().toLowerCase().replace(/\s/g, "").toString();
 
-  if (Number(args[1]) > 2865 || Number(args[1] < 1)) {
-    msg.reply("Please select a number between 1 and 2865");
-  }
-
   if (!bot.commands.has(command)) {
     return msg.reply("Try saying '+ccc #paragraphnumber'");
   }
-
   try {
     bot.commands.get(command).execute(msg, args);
   } catch (error) {
