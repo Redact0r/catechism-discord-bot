@@ -24,7 +24,7 @@ bot.on("message", (msg) => {
   let args;
   let command;
 
-  if (msg.content.startsWith("+ccc")) {
+  if (msg.content.startsWith("+")) {
     args = msg.content.split("#");
     command = args.shift().toLowerCase().replace(/\s/g, "").toString();
   }
@@ -32,7 +32,9 @@ bot.on("message", (msg) => {
   if (msg.content.startsWith("!")) {
     args = msg.content.split(" ");
     command = args[0].toLowerCase().toString();
-  } else {
+  }
+
+  if (args === undefined) {
     args = msg.content;
     command = args.toLowerCase().replace(/\s/g, "").toString();
   }

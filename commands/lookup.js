@@ -6,7 +6,7 @@ module.exports = {
   name: "+ccc",
   description: "Lookup a paragraph in the catechism",
   execute(msg, args) {
-    console.log(typeof args[0]);
+    console.log(args[0]);
     if (
       Number(args[0]) > 2865 ||
       Number(args[0] < 1) ||
