@@ -21,8 +21,18 @@ bot.on("message", (msg) => {
     return;
   }
 
-  const args = msg.content.split("#");
-  const command = args.shift().toLowerCase().replace(/\s/g, "").toString();
+  let args;
+  let command;
+
+  if (msg.content.startsWith("+ccc")) {
+    args = msg.content.split("#");
+    command = args.shift().toLowerCase().replace(/\s/g, "").toString();
+  }
+
+  if (msg.content.startsWith("!")) {
+    args = msg.content.split(" ");
+    command = args[0].toLowerCase().toString();
+  }
 
   if (!bot.commands.has(command)) {
     return;

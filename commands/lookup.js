@@ -6,10 +6,11 @@ module.exports = {
   name: "+ccc",
   description: "Lookup a paragraph in the catechism",
   execute(msg, args) {
+    console.log(typeof args[0]);
     if (
       Number(args[0]) > 2865 ||
       Number(args[0] < 1) ||
-      typeof Number(args[0] !== "number")
+      typeof Number(args[0]) !== "number"
     ) {
       return msg.reply("Please select a number between 1 and 2865");
     }

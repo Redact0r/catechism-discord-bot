@@ -6,7 +6,7 @@ function splitParagraph(str) {
   let newStr = str.split(".");
   newStr.shift();
   newStr.toString();
-  let textStr = newStr.join(" ");
+  let textStr = newStr.join(".");
 
   makeArrayofObjects(idStr, textStr);
 }
