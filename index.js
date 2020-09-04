@@ -32,6 +32,9 @@ bot.on("message", (msg) => {
   if (msg.content.startsWith("!")) {
     args = msg.content.split(" ");
     command = args[0].toLowerCase().toString();
+  } else {
+    args = msg.content;
+    command = args.toLowerCase().replace(/\s/g, "").toString();
   }
 
   if (!bot.commands.has(command)) {
