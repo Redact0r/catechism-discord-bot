@@ -3,4 +3,5 @@ module.exports = {
   "achoo!": require("./achoo"),
   "hallelujah!": require("./hallelujah"),
   "!saint": require("./saints"),
+  "!remindme": require("./remindme"),
 };
