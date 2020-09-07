@@ -21,6 +21,27 @@ bot.on("message", (msg) => {
     return;
   }
 
+  const filterWords = [
+    "fuck",
+    "shit",
+    "bitch",
+    "cunt",
+    "dick",
+    "pussy",
+    "booty",
+    "asshole",
+  ];
+  const messageString = msg.content.toLowerCase();
+  for (let i = 0; i < filterWords.length; i++) {
+    if (messageString.includes(filterWords[i])) {
+      return msg.reply("This is a Christian minecraft server.");
+    }
+  }
+
+  if (messageString.includes("heresy") || messageString.includes("heretic")) {
+    return msg.reply("A heretic? Confess and repent!");
+  }
+
   let args;
   let command;
 
