@@ -13,7 +13,7 @@ module.exports = {
     //!remindme date 09/07/2020 12:15AM EST
     if (args.length < 2) {
       return msg.reply(
-        "Please reply in the following format:\n!remindme 3 hours.\nCurrently, you select seconds, minutes, hours, or days. \n A 'for date feature' will be implemented soon."
+        "Please reply in the following format:\n>!remindme 3 hours.\nCurrently, you select seconds, minutes, hours, or days. \n A 'for date feature' will be implemented soon."
       );
     }
     switch (args[2]) {
