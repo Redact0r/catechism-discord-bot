@@ -30,6 +30,7 @@ bot.on("message", (msg) => {
     "pussy",
     "booty",
     "asshole",
+    "nipples",
   ];
 
   const messageString = msg.content.toLowerCase();
