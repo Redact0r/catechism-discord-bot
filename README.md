@@ -1,8 +1,8 @@
-### CCC Bot
+# Popebot
 
-A discord bot for quoting the Catechism of the Catholic Church
+A discord bot for quoting the Catechism of the Catholic Church. Featuring an image of Saint John Paul II.
 
-# Commands
+### Commands
 
 +ccc #paragraphnumber
 
