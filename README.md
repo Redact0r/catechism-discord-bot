@@ -1,6 +1,6 @@
 # Popebot
 
-A discord bot for quoting the Catechism of the Catholic Church and maintaining humor and purity in your Catholic discord server. Featuring Saint John Paul II.
+A discord bot for quoting the Catechism of the Catholic Church and maintaining humor and purity in your Catholic discord server. Featuring an image of Saint John Paul II.
 
 ### Commands
 
