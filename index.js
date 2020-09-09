@@ -35,14 +35,22 @@ bot.on("message", (msg) => {
 
   const messageString = msg.content.toLowerCase();
 
+  if (messageString.includes(":chancla:")) {
+    return msg.channel.send(":chancla:");
+  }
+
   for (let i = 0; i < filterWords.length; i++) {
     if (messageString.includes(filterWords[i])) {
-      return msg.reply("This is a Christian minecraft server.");
+      msg.reply("This is a Christian minecraft server.");
     }
   }
 
   if (messageString.includes("heresy") || messageString.includes("heretic")) {
-    return msg.reply("A heretic? Confess and repent!");
+    msg.reply("A heretic? Confess and repent!");
+  }
+
+  if (messageString.includes("bread")) {
+    msg.react("🍞").catch((error) => console.log(error));
   }
 
   let args;

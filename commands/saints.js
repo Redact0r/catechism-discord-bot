@@ -15,20 +15,22 @@ module.exports = {
           `Today is ${celebrationsList[0]}. There are no feast days today.`
         );
       }
-      let feastDays = celebrationsList.shift();
+      let feastDays = celebrationsList.slice(1);
+
       if (feastDays.length === 1) {
         return msg.reply(
-          `Today is ${celebrationsList[0]} and we are celebrating ${feastDays[0]}`
+          `Today is ${celebrationsList[0]} and we are celebrating the Feast of ${feastDays[0]}`
         );
       }
 
       if (feastDays.length > 1) {
         let feastArray = feastDays.join(" and ");
         return msg.reply(
-          `Today is ${celebrationsList[0]} and we are celebrating ${feastArray}`
+          `Today is ${celebrationsList[0]} and we are celebrating the following Feasts: ${feastArray}`
         );
       }
     } catch (error) {
+      console.log(error);
       msg.reply("Sorry, something went wrong");
     }
   },
