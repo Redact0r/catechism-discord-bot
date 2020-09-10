@@ -11,7 +11,6 @@ module.exports = [
   "https://tenor.com/view/loeya-twitch-streamer-chancla-slipper-gif-16211365",
   "https://tenor.com/view/enojada-andreti-leal-la-chancla-chanclaso-mama-gif-17674681",
   "https://tenor.com/view/castigo-andreti-leal-golpear-la-chancla-limpiando-gif-17674674",
-  "https://tenor.com/view/chancla-carrot-la-chancla-slap-slapping-gif-17991809",
   "https://tenor.com/view/havaianas-flip-flops-suzanavieira-gif-10723301",
   "https://tenor.com/view/chancla-putazo-golpazo-voladora-mama-gif-11194202",
   "https://tenor.com/view/disparo-shoot-sniper-me-chancla-gif-12690604",
