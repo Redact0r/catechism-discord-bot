@@ -1,11 +1,10 @@
 {
-  "name": "discord-bot",
+  "name": "Popebot",
   "version": "1.0.0",
-  "description": "Discord bot for SitePoint",
+  "description": "The everyday bot for your Catholic Discord server!",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Tyler Sharp",
   "license": "ISC",
@@ -13,5 +12,6 @@
     "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0"
-  }
+  },
+  "devDependencies": {}
 }

@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require("./commands/");
+const url = require("./sources/chanclalibrary");
 
 Object.keys(botCommands).map((key) => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
@@ -35,10 +36,6 @@ bot.on("message", (msg) => {
 
   const messageString = msg.content.toLowerCase();
 
-  if (messageString.includes(":chancla:")) {
-    return msg.channel.send(":chancla:");
-  }
-
   for (let i = 0; i < filterWords.length; i++) {
     if (messageString.includes(filterWords[i])) {
       msg.reply("This is a Christian minecraft server.");
@@ -55,6 +52,11 @@ bot.on("message", (msg) => {
 
   let args;
   let command;
+
+  if (messageString.includes(":chancla:")) {
+    let index = Math.floor(Math.random() * 26);
+    msg.channel.send(url[index]);
+  }
 
   if (msg.content.startsWith("+")) {
     args = msg.content.split("#");
