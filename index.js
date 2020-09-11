@@ -22,7 +22,9 @@ bot.on("message", (msg) => {
     return;
   }
 
-  if (msg.member.nickname.toLowerCase().includes("hoagie")) {
+  const nickname = msg.member.nickname;
+
+  if (nickname && msg.member.nickname.toLowerCase().includes("hoagie")) {
     msg.react("🥪").catch((error) => console.log(error));
   }
 
