@@ -22,6 +22,10 @@ bot.on("message", (msg) => {
     return;
   }
 
+  if (msg.member.nickname.toLowerCase().includes("hoagie")) {
+    msg.react("🥪").catch((error) => console.log(error));
+  }
+
   const filterWords = [
     "fuck",
     "shit",
