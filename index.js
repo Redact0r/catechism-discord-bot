@@ -25,7 +25,11 @@ bot.on("message", (msg) => {
   const nickname = msg.member.nickname;
 
   if (nickname && nickname.toLowerCase().includes("hoagie")) {
-    msg.react("🥪").catch((error) => console.log(error));
+    let chance = Math.floor(Math.random() * 10);
+
+    if (chance <= 3) {
+      msg.react("🥪").catch((error) => console.log(error));
+    }
   }
 
   const filterWords = [
