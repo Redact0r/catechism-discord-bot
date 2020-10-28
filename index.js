@@ -22,7 +22,7 @@ bot.on("message", (msg) => {
     return;
   }
 
-  const nickname = msg.member.nickname;
+  const nickname = msg.member.Guildmember.nickname;
 
   if (nickname && nickname.toLowerCase().includes("hoagie")) {
     let chance = Math.floor(Math.random() * 10);
