@@ -22,8 +22,6 @@ bot.on("message", (msg) => {
     return;
   }
 
-  console.log(msg.member);
-
   // const nickname = msg.member.Guildmember.nickname;
 
   // if (nickname && nickname.toLowerCase().includes("hoagie")) {
@@ -36,7 +34,6 @@ bot.on("message", (msg) => {
 
   const filterWords = [
     "fuck",
-    "shit",
     "bitch",
     "cunt",
     "dick",
