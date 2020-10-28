@@ -22,15 +22,17 @@ bot.on("message", (msg) => {
     return;
   }
 
-  const nickname = msg.member.Guildmember.nickname;
+  console.log(msg.member);
 
-  if (nickname && nickname.toLowerCase().includes("hoagie")) {
-    let chance = Math.floor(Math.random() * 10);
+  // const nickname = msg.member.Guildmember.nickname;
 
-    if (chance <= 3) {
-      msg.react("🥪").catch((error) => console.log(error));
-    }
-  }
+  // if (nickname && nickname.toLowerCase().includes("hoagie")) {
+  //   let chance = Math.floor(Math.random() * 10);
+
+  //   if (chance <= 3) {
+  //     msg.react("🥪").catch((error) => console.log(error));
+  //   }
+  // }
 
   const filterWords = [
     "fuck",
