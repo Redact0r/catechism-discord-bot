@@ -46,6 +46,52 @@ bot.on("message", (msg) => {
 
   const messageString = msg.content.toLowerCase();
 
+  if (msg.content.includes("!bonk")) {
+    //turn into !bonk command
+    let args = msg.content.split(" ");
+    let arg = args[1].toString();
+    console.log(msg.channel.id);
+    const channel = bot.channels.find("id", msg.channel.id);
+
+    console.log(channel.members);
+    const target = channel.members.find((mem) =>
+      mem.nickname.toLowerCase().includes(arg)
+    );
+
+    if (!target || !arg) {
+      return;
+    }
+
+    const lastMessage = target.lastMessage;
+
+    if (!lastMessage) {
+      return;
+    }
+
+    lastMessage
+      .react(bot.emojis.get("753418611313344512"))
+      .catch((error) => console.log(error));
+  }
+
+  if (msg.author === "Johnny#7572" && messageString.includes("smite")) {
+    msg.reply("Exorcizamus te!");
+  }
+
+  if (
+    messageString.includes("get me a beer") &&
+    msg.author.discriminator === "7572"
+  ) {
+    msg.react("🍺").catch((error) => console.log(error));
+  }
+
+  if (
+    msg.author.discriminator === "7572" &&
+    messageString.includes("thanks") &&
+    messageString.includes("popebot")
+  ) {
+    msg.reply("You're welcome, my dude.");
+  }
+
   for (let i = 0; i < filterWords.length; i++) {
     if (messageString.includes(filterWords[i])) {
       msg.reply("This is a Christian minecraft server.");
