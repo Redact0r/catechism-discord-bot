@@ -83,7 +83,7 @@ bot.on("message", (msg) => {
   }
 
   if (
-    messageString.includes("thanks") &&
+    messageString.includes("thank") &&
     messageString.includes("popebot")
   ) {
     msg.reply("You're welcome, my dude.");
