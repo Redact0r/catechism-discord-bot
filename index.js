@@ -72,7 +72,7 @@ bot.on("message", (msg) => {
       .catch((error) => console.log(error));
   }
 
-  if (msg.author === "Johnny#7572" && messageString.includes("smite")) {
+  if (messageString.includes("smite")) {
     msg.reply("Exorcizamus te!");
   }
 
