@@ -83,7 +83,6 @@ bot.on("message", (msg) => {
   }
 
   if (
-    msg.author.discriminator === "7572" &&
     messageString.includes("thanks") &&
     messageString.includes("popebot")
   ) {
