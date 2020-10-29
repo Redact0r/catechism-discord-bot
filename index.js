@@ -77,8 +77,7 @@ bot.on("message", (msg) => {
   }
 
   if (
-    messageString.includes("get me a beer") &&
-    msg.author.discriminator === "7572"
+    messageString.includes("get me a beer")
   ) {
     msg.react("🍺").catch((error) => console.log(error));
   }
@@ -139,3 +138,6 @@ bot.on("message", (msg) => {
     msg.reply("Tell Tyler something broke!");
   }
 });
+
+
+
