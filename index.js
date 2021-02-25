@@ -22,70 +22,27 @@ bot.on("message", (msg) => {
     return;
   }
 
-  // const nickname = msg.member.Guildmember.nickname;
-
-  // if (nickname && nickname.toLowerCase().includes("hoagie")) {
-  //   let chance = Math.floor(Math.random() * 10);
-
-  //   if (chance <= 3) {
-  //     msg.react("🥪").catch((error) => console.log(error));
-  //   }
-  // }
-
   const filterWords = [
     "fuck",
     "bitch",
     "cunt",
     "dick",
     "pussy",
-    "booty",
     "asshole",
     "nipples",
   ];
 
   const messageString = msg.content.toLowerCase();
 
-  if (msg.content.includes("!bonk")) {
-    //turn into !bonk command
-    let args = msg.content.split(" ");
-    let arg = args[1].toString();
-    console.log(msg.channel.id);
-    const channel = bot.channels.find("id", msg.channel.id);
-
-    console.log(channel.members);
-    const target = channel.members.find((mem) =>
-      mem.nickname.toLowerCase().includes(arg)
-    );
-
-    if (!target || !arg) {
-      return;
-    }
-
-    const lastMessage = target.lastMessage;
-
-    if (!lastMessage) {
-      return;
-    }
-
-    lastMessage
-      .react(bot.emojis.get("753418611313344512"))
-      .catch((error) => console.log(error));
-  }
-
   if (messageString.includes("smite")) {
     msg.reply("Exorcizamus te!");
   }
 
-  if (
-    messageString.includes("get me a beer")
-  ) {
+  if (messageString.includes("get me a beer")) {
     msg.react("🍺").catch((error) => console.log(error));
   }
 
-  if (
-    messageString.includes("thank") &&
-    messageString.includes("popebot")
-  ) {
+  if (messageString.includes("thank") && messageString.includes("popebot")) {
     msg.reply("You're welcome, my dude.");
   }
 
@@ -105,6 +62,7 @@ bot.on("message", (msg) => {
 
   let args;
   let command;
+  let users;
 
   if (messageString.includes(":chancla:")) {
     let index = Math.floor(Math.random() * 26);
@@ -119,6 +77,7 @@ bot.on("message", (msg) => {
   if (msg.content.startsWith("!")) {
     args = msg.content.split(" ");
     command = args[0].toLowerCase().toString();
+    users = bot.users;
   }
 
   if (args === undefined) {
@@ -131,12 +90,9 @@ bot.on("message", (msg) => {
   }
 
   try {
-    bot.commands.get(command).execute(msg, args);
+    bot.commands.get(command).execute(msg, args, bot);
   } catch (error) {
     console.error(error);
     msg.reply("Tell Tyler something broke!");
   }
 });
-
-
-
