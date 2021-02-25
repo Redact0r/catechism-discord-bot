@@ -2,7 +2,7 @@ const DATABASE_URL = process.env.DATABASE_URL;
 const db = require("knex")({
   client: "pg",
   connection: DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
+  ssl: true,
 });
 
 const bonkService = {
