@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Discord = require("discord.js");
-const bot = new Discord.Client();
+const bot = new Discord.Client({ partials: ["USER", "REACTION"] });
 bot.commands = new Discord.Collection();
 const botCommands = require("./commands/");
 const url = require("./sources/chanclalibrary");
