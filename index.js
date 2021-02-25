@@ -24,7 +24,7 @@ bot.on("messageReactionAdd", async (reaction, user) => {
 
     const bonkee = await bonkService.getBonkCount(bonkeeId);
 
-    if (!bonkee.bonkCount) {
+    if (!bonkee) {
       return await bonkService.makeNewUser({ user_id: bonkeeId, bonkCount: 1 });
     }
 
