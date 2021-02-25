@@ -22,7 +22,7 @@ module.exports = {
     if (!user) return msg.reply("User not found, no bonks applied.");
 
     if (args[1] == "check") {
-      const bonkCount = await bonkService.getBonkCount(user.id);
+      const bonkCount = (await bonkService.getBonkCount(user.id)) || 0;
       return msg.reply(
         `${mention} has been bonked ${bonkCount.bonkCount} times!`
       );
