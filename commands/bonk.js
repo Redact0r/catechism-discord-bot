@@ -1,3 +1,5 @@
+const bonkService = require("../services/bonkService");
+
 function getUserFromMention(mention, users) {
   if (!mention) return;
 
@@ -15,8 +17,16 @@ module.exports = {
   name: "!bonk",
   description: "Bonk someone",
   async execute(msg, args, client) {
-    const user = (await getUserFromMention(args[1], client.users)) || null;
+    const mention = args[1] == "check" ? args[2] : args[1];
+    const user = (await getUserFromMention(mention, client.users)) || null;
     if (!user) return msg.reply("User not found, no bonks applied.");
+
+    if (args[1] == "check") {
+      const bonkCount = await bonkService.getBonkCount(user.id);
+      return msg.reply(
+        `${mention} has been bonked ${bonkCount.bonkCount} times!`
+      );
+    }
 
     const lastMessage = (await user.lastMessage) || null;
     const bonkEmoji = await client.emojis.get("753418611313344512");

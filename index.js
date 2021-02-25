@@ -4,6 +4,7 @@ const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require("./commands/");
 const url = require("./sources/chanclalibrary");
+const bonkService = require("./services/bonkService");
 
 Object.keys(botCommands).map((key) => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
@@ -15,6 +16,20 @@ bot.login(TOKEN);
 
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
+});
+
+bot.on("messageReactionAdd", async (reaction, user) => {
+  if (reaction.emoji.id == "753418611313344512") {
+    const bonkeeId = reaction.message.author.id.toString();
+
+    const bonkee = await bonkService.getBonkCount(bonkeeId);
+
+    if (!bonkee.bonkCount) {
+      return bonkService.makeNewUser({ user_id: bonkeeId, bonkCount: 1 });
+    }
+
+    return bonkService.updateBonkCount(bonkeeId);
+  }
 });
 
 bot.on("message", (msg) => {
