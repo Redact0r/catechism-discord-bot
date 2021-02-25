@@ -24,7 +24,7 @@ module.exports = {
     if (args[1] == "check") {
       const bonkCount = (await bonkService.getBonkCount(user.id)) || 0;
       return msg.reply(
-        `${mention} has been bonked ${bonkCount.bonkCount} times!`
+        `${mention} has been bonked ${bonkCount.bonkCount || bonkCount} times!`
       );
     }
 
