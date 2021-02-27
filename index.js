@@ -32,6 +32,16 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   }
 });
 
+bot.on("messageReactionRemove", async (reaction, user) => {
+  const bonkeeId = reaction.message.author.id.toString();
+
+  const bonkee = await bonkService.getBonkCount(bonkeeId);
+
+  if (!bonkee) return;
+
+  return await bonkService.minusBonkCountByOne(bonkeeId);
+});
+
 bot.on("message", (msg) => {
   if (msg.author.bot) {
     return;

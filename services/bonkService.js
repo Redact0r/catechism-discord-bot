@@ -18,6 +18,12 @@ const bonkService = {
     return db("bonk_table").increment("bonkCount", 1).where("user_id", user_id);
   },
 
+  minusBonkCountByOne(user_id) {
+    return db("bonk_table")
+      .increment("bonkCount", -1)
+      .where("user_id", user_id);
+  },
+
   makeNewUser(newUser) {
     return db.insert(newUser).into("bonk_table").returning("*");
   },
