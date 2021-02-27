@@ -22,8 +22,10 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.emoji.id == "753418611313344512") {
     const bonkeeId = reaction.message.author.id.toString();
 
+    console.log(`bonk Object Data: ${reaction}`);
+
     console.log(
-      `THIS IS THE AUTHOR ID: ${reaction.message.author.id} THIS IS THE USER ID ${reaction.users.id}`
+      `THIS IS THE AUTHOR ID: ${reaction.message.author.id} THIS IS THE USER ID ${reaction.users}`
     );
 
     if (reaction.message.author.id == reaction.users.id) return;
