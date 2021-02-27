@@ -25,7 +25,9 @@ bot.on("messageReactionAdd", async (reaction, user) => {
     console.log(`bonk Object Data: ${reaction}`);
 
     console.log(
-      `THIS IS THE AUTHOR ID: ${reaction.message.author.id} THIS IS THE USER ID ${reaction.users}`
+      `THIS IS THE AUTHOR ID: ${
+        reaction.message.author.id
+      } THIS IS THE USER ID ${Object.keys(reaction.users)}`
     );
 
     if (reaction.message.author.id == reaction.users.id) return;
