@@ -22,6 +22,8 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.emoji.id == "753418611313344512") {
     const bonkeeId = reaction.message.author.id.toString();
 
+    console.log(reaction);
+
     const bonkee = await bonkService.getBonkCount(bonkeeId);
 
     if (!bonkee) {
