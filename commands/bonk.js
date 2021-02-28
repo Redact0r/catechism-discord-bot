@@ -23,7 +23,7 @@ module.exports = {
     if (args[1] == "rank") {
       const top5 = await bonkService.getTop5Bonks();
       let n = 0;
-      const top5Embed = new Discord.MessageEmbed()
+      const top5Embed = new Discord.RichEmbed()
         .setColor("#7851a9")
         .setTitle("Bonk Leaderboard")
         .addFields([
