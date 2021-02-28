@@ -29,7 +29,7 @@ const bonkService = {
   },
 
   getTop5Bonks() {
-    return db("bonk_table").select("*").orderBy("bonkCount", "asc").limit(5);
+    return db("bonk_table").select("*").orderBy("bonkCount", "desc").limit(5);
   },
 };
 
