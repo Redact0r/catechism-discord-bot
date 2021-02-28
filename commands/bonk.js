@@ -35,7 +35,11 @@ module.exports = {
           },
         ]);
 
-      return msg.send(top5Embed);
+      try {
+        return msg.send(top5Embed);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     const user = (await getUserFromMention(mention, client.users)) || null;
