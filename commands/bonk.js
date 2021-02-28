@@ -17,7 +17,14 @@ module.exports = {
   name: "!bonk",
   description: "Bonk someone",
   async execute(msg, args, client) {
-    const mention = args[1] == "check" ? args[2] : args[1];
+    const mention = args[1] == "check" || args[1] == "rank" ? args[2] : args[1];
+
+    if (args[1] == "rank") {
+      console.log("sup");
+      const top5 = await bonkService.getTop5Bonks();
+      return console.log(top5);
+    }
+
     const user = (await getUserFromMention(mention, client.users)) || null;
     if (!user) return msg.reply("User not found, no bonks applied.");
 

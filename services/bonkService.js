@@ -27,6 +27,10 @@ const bonkService = {
   makeNewUser(newUser) {
     return db.insert(newUser).into("bonk_table").returning("*");
   },
+
+  getTop5Bonks() {
+    return db("bonk_table").select("*").orderBy("bonkCount", "asc").limit(5);
+  },
 };
 
 module.exports = bonkService;
