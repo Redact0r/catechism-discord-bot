@@ -28,7 +28,8 @@ module.exports = {
         .setTitle("Bonk Leaderboard")
         .addField(
           `**Top 5 Bonk'd!**\n\n ${top5.forEach((bonkedUser) => {
-            `${n++}. ${bonkedUser.used_id} ${bonkedUser.bonkCount}\n`;
+            `${n + 1}. ${bonkedUser[n].used_id} ${bonkedUser[n].bonkCount}\n`;
+            n++;
           })}`
         );
 
