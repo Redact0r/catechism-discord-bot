@@ -33,7 +33,7 @@ module.exports = {
         );
 
       try {
-        return msg.send(top5Embed);
+        return msg.channel.send(top5Embed);
       } catch (error) {
         console.error(error);
       }
