@@ -21,7 +21,9 @@ module.exports = {
     const mention = args[1] == "check" || args[1] == "rank" ? args[2] : args[1];
 
     if (args[1] == "rank") {
-      const top5 = await bonkService.getTop5Bonks();
+      const top5 = await bonkService
+        .getTop5Bonks()
+        .catch((error) => console.log(error));
       let n = 0;
       const top5Embed = new Discord.RichEmbed()
         .setColor("#7851a9")
