@@ -26,14 +26,11 @@ module.exports = {
       const top5Embed = new Discord.RichEmbed()
         .setColor("#7851a9")
         .setTitle("Bonk Leaderboard")
-        .addFields([
-          {
-            name: "Top 5 Bonk'd!",
-            value: top5.map((bonkedUser) => {
-              `${n++}. ${bonkedUser.used_id} ${bonkedUser.bonkCount}\n`;
-            }),
-          },
-        ]);
+        .addField(
+          `**Top 5 Bonk'd!**\n\n ${top5.map((bonkedUser) => {
+            `${n++}. ${bonkedUser.used_id} ${bonkedUser.bonkCount}\n`;
+          })}`
+        );
 
       try {
         return msg.send(top5Embed);
