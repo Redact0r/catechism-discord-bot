@@ -27,7 +27,7 @@ module.exports = {
         .setColor("#7851a9")
         .setTitle("Bonk Leaderboard")
         .addField(
-          `**Top 5 Bonk'd!**\n\n ${top5.map((bonkedUser) => {
+          `**Top 5 Bonk'd!**\n\n ${top5.forEach((bonkedUser) => {
             `${n++}. ${bonkedUser.used_id} ${bonkedUser.bonkCount}\n`;
           })}`
         );
