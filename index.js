@@ -19,6 +19,34 @@ bot.on("ready", () => {
 });
 
 bot.on("messageReactionAdd", async (reaction, user) => {
+  if (reaction.emoji.name == "📌") {
+    const mappedEmojiList = reaction.message.reactions.map(
+      (reaction) => reaction
+    );
+
+    const justThePushpinEmojis = mappedEmojiList.filter(
+      (item) => item._emoji.name == "📌"
+    )[0].count;
+
+    if (justThePushpinEmojis >= 5) {
+      return reaction.message.channel
+        .send(
+          `Congrats! This message was so popular, it's been pinned by the community.\n\nᵀʰᶦˢ ᵖᶦⁿⁿᵉᵈ ᵖᵒˢᵗ ʰᵃˢ ⁿᵒᵗ ᵇᵉᵉⁿ ˢᶜʳᵉᵉⁿᵉᵈ ᶠᵒʳ ʰᵉʳᵉˢʸ. ᴹᵃʸ ᴳᵒᵈ ʰᵃᵛᵉ ᵐᵉʳᶜʸ ᵒⁿ ʸᵒᵘʳ ˢᵒᵘˡ.`
+        )
+        .then(() => reaction.message.pin())
+        .catch((err) => console.log(err));
+    }
+
+    if (user.id == "298190703857500171") {
+      return reaction.message.channel
+        .send(
+          "Tyler, since your pins count as ten, I went ahead and pinned the message for you."
+        )
+        .then(() => reaction.message.pin())
+        .catch((err) => console.log(err));
+    }
+  }
+
   if (reaction.emoji.id == "753418611313344512") {
     const bonkeeId = reaction.message.author.id.toString();
 
@@ -27,7 +55,10 @@ bot.on("messageReactionAdd", async (reaction, user) => {
     const bonkee = await bonkService.getBonkCount(bonkeeId);
 
     if (!bonkee) {
-      return await bonkService.makeNewUser({ user_id: bonkeeId, bonkCount: 1 });
+      return await bonkService.makeNewUser({
+        user_id: bonkeeId,
+        bonkCount: 1,
+      });
     }
 
     return await bonkService.updateBonkCount(bonkeeId);
