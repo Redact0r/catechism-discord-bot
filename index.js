@@ -82,15 +82,7 @@ bot.on("message", (msg) => {
     return;
   }
 
-  const filterWords = [
-    "fuck",
-    "bitch",
-    "cunt",
-    "dick",
-    "pussy",
-    "asshole",
-    "nipples",
-  ];
+  const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
 
   const messageString = msg.content.toLowerCase();
 
