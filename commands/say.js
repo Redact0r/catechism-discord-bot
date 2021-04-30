@@ -15,7 +15,8 @@ module.exports = {
         client.channels
           .get(channelToSendMessageTo)
           .send(message)
-          .then(() => msg.delete());
+          .then(() => msg.delete())
+          .catch((error) => console.log(error));
       }
     }
   },
