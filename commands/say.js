@@ -2,8 +2,6 @@ module.exports = {
   name: "!say",
   description: "praise be",
   execute(msg, args, client) {
-    console.log(args);
-    console.log(msg.author.id);
     const message = args.slice(2).join(" ");
     if (
       msg.author.id == "104268884969807872" ||
