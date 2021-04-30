@@ -29,8 +29,23 @@ bot.on("messageReactionAdd", async (reaction, user) => {
     const justThePushpinEmojis = mappedEmojiList.filter(
       (item) => item._emoji.name == "⭐"
     )[0].count;
+    console.log(reaction.message.embeds);
+    if (justThePushpinEmojis >= 4) {
+      const currentMessageURL = reaction.message.url;
+      const previousMessages = await bot.channels
+        .get(hallOfFameChannelId)
+        .fetchMessages();
 
-    if (justThePushpinEmojis >= 5) {
+      const filteredEmbedsMessages = previousMessages.filter(
+        (message) => message.embeds.length > 0
+      );
+
+      for (let i = 0; i < filteredEmbedsMessages.length; i++) {
+        let messageEmbed = filteredEmbedsMessages[i][0];
+
+        if (messageEmbed.fields[2].value == currentMessageURL) return;
+      }
+
       const randomAdjective = utils.randomAdjective();
       const aOrAn =
         randomAdjective.startsWith("a") ||
