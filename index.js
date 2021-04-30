@@ -5,6 +5,7 @@ bot.commands = new Discord.Collection();
 const botCommands = require("./commands/");
 const url = require("./sources/chanclalibrary");
 const bonkService = require("./services/bonkService");
+const utils = require("./services/utils");
 
 Object.keys(botCommands).map((key) => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
@@ -19,21 +20,48 @@ bot.on("ready", () => {
 });
 
 bot.on("messageReactionAdd", async (reaction, user) => {
-  if (reaction.emoji.name == "📌") {
+  if (reaction.emoji.name == "⭐") {
+    const hallOfFameChannelId = "837767757784154152";
     const mappedEmojiList = reaction.message.reactions.map(
       (reaction) => reaction
     );
 
     const justThePushpinEmojis = mappedEmojiList.filter(
-      (item) => item._emoji.name == "📌"
+      (item) => item._emoji.name == "⭐"
     )[0].count;
 
     if (justThePushpinEmojis >= 5) {
-      return reaction.message.channel
-        .send(
-          `Congrats! This message was so popular, it's been pinned by the community.\n\nᵀʰᶦˢ ᵖᶦⁿⁿᵉᵈ ᵖᵒˢᵗ ʰᵃˢ ⁿᵒᵗ ᵇᵉᵉⁿ ˢᶜʳᵉᵉⁿᵉᵈ ᶠᵒʳ ʰᵉʳᵉˢʸ. ᴹᵃʸ ᴳᵒᵈ ʰᵃᵛᵉ ᵐᵉʳᶜʸ ᵒⁿ ʸᵒᵘʳ ˢᵒᵘˡ.`
+      const randomAdjective = utils.randomAdjective();
+      const aOrAn =
+        randomAdjective.startsWith("a") ||
+        randomAdjective.startsWith("e") ||
+        randomAdjective.startsWith("i") ||
+        randomAdjective.startsWith("o") ||
+        randomAdjective.startsWith("u")
+          ? "An"
+          : "A";
+      const hallOfFameEmbed = new Discord.RichEmbed()
+        .setTitle(`⭐HALL OF FAME⭐`)
+        .setDescription(
+          `${aOrAn} ${randomAdjective} post by ${reaction.message.author}:`
         )
-        .then(() => reaction.message.pin())
+        .addField("Message", reaction.message.content)
+        .addField("Channel", reaction.message.channel)
+        .addField("Context", reaction.message.url)
+        .setTimestamp(reaction.message.createdTimestamp);
+
+      return bot.channels
+        .get(hallOfFameChannelId)
+        .send(
+          hallOfFameEmbed
+          //`Congrats! This message was so popular, it's been inducted into the hall of fame!\n\nᵀʰᶦˢ ᵖᵒˢᵗ ʰᵃˢ ⁿᵒᵗ ᵇᵉᵉⁿ ˢᶜʳᵉᵉⁿᵉᵈ ᶠᵒʳ ʰᵉʳᵉˢʸ. ᴹᵃʸ ᴳᵒᵈ ʰᵃᵛᵉ ᵐᵉʳᶜʸ ᵒⁿ ʸᵒᵘʳ ˢᵒᵘˡ.`
+        )
+        .then(() => reaction.message.react("🥳"))
+        .then(() =>
+          reaction.message.reply(
+            "This message has been added to the hall of fame! May God have mercy on your soul."
+          )
+        )
         .catch((err) => console.log(err));
     }
   }
