@@ -9,10 +9,10 @@
   "author": "Tyler Sharp",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^11.6.4",
     "dotenv": "^8.2.0",
-    "knex": "^0.21.18",
-    "node-fetch": "^2.6.0",
+    "knex": "^0.21.19",
+    "node-fetch": "^2.6.1",
     "pg": "^8.5.1"
   },
   "devDependencies": {}

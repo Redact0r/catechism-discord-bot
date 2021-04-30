@@ -36,15 +36,6 @@ bot.on("messageReactionAdd", async (reaction, user) => {
         .then(() => reaction.message.pin())
         .catch((err) => console.log(err));
     }
-
-    if (user.id == "298190703857500171") {
-      return reaction.message.channel
-        .send(
-          "Tyler, since your pins count as ten, I went ahead and pinned the message for you."
-        )
-        .then(() => reaction.message.pin())
-        .catch((err) => console.log(err));
-    }
   }
 
   if (reaction.emoji.id == "753418611313344512") {
@@ -77,7 +68,7 @@ bot.on("messageReactionRemove", async (reaction, user) => {
   return await bonkService.minusBonkCountByOne(bonkeeId);
 });
 
-bot.on("message", (msg) => {
+bot.on("message", async (msg) => {
   if (msg.author.bot) {
     return;
   }
