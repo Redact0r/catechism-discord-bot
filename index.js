@@ -116,16 +116,15 @@ bot.on("message", async (msg) => {
     return;
   }
 
+  const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
+
+  const messageString = msg.content.toLowerCase();
   if (
     msg.author.id == "677700901049466974" &&
     messageString.includes("onion")
   ) {
     msg.react("🧅").catch((error) => console.log(error));
   }
-
-  const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
-
-  const messageString = msg.content.toLowerCase();
 
   if (messageString.includes("smite")) {
     msg.reply("Exorcizamus te!");
