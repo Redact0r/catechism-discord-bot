@@ -100,6 +100,8 @@ bot.on("messageReactionAdd", async (reaction, user) => {
 });
 
 bot.on("messageReactionRemove", async (reaction, user) => {
+  if (reaction.emoji.id !== "753418611313344512") return;
+
   const bonkeeId = reaction.message.author.id.toString();
 
   if (bonkeeId == user.id) return;
