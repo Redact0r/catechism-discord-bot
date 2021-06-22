@@ -1,3 +1,5 @@
+const bonk = require("../commands/bonk");
+
 module.exports = {
   getUserFromMention(mention, users) {
     if (!mention) return;
@@ -68,5 +70,17 @@ module.exports = {
     );
 
     return arrayOfAdjectives[randomIndex];
+  },
+
+  getNickNameFromGuildObjectWithUserId(guild, user_id) {
+    let userObj = guild.members.filter((member) => member.user.id == user_id);
+    let userMap = userObj.map((user) => user);
+    let user = userMap[0].user || "user not found";
+    console.log("LINE 2 FIRE", user);
+    if (user === "user not found") return user;
+
+    let userName = user.nickname ? user.nickname : user.username;
+
+    return userName;
   },
 };

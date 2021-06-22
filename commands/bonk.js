@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const bonkService = require("../services/bonkService");
+const utils = require("../services/utils");
 
 function getUserFromMention(mention, users) {
   if (!mention) return;
@@ -25,14 +26,47 @@ module.exports = {
         .getTop5Bonks()
         .catch((error) => console.log(error));
       let n = 0;
+      console.log(
+        "top 5",
+        top5,
+        top5[0].user_id,
+        top5[0].bonkCount,
+        msg.author.id,
+        typeof msg.author.id,
+        "top 5 end"
+      );
+
+      const guild = client.guilds.get(msg.guild.id);
+      let userName = utils.getNickNameFromGuildObjectWithUserId(
+        guild,
+        msg.author.id
+      );
+      console.log(userName);
       const top5Embed = new Discord.RichEmbed()
         .setColor("#7851a9")
-        .setTitle("Bonk Leaderboard")
+        .setTitle("Test Bonk Leaderboard")
         .addField(
-          `**Top 5 Bonk'd!**\n\n ${top5.forEach((bonkedUser) => {
-            `${n + 1}. ${bonkedUser.user_id} ${bonkedUser.bonkCount}\n`;
-            n++;
-          })}`
+          `**TOP 5 BONK'D**\n\n
+          1. ${utils.getNickNameFromGuildObjectWithUserId(
+            guild,
+            top5[0].user_id
+          )}: ${top5[0].bonkCount}\n
+          2. ${utils.getNickNameFromGuildObjectWithUserId(
+            guild,
+            top5[1].user_id
+          )}: ${top5[1].bonkCount}\n
+          3. ${utils.getNickNameFromGuildObjectWithUserId(
+            guild,
+            top5[2].user_id
+          )}: ${top5[2].bonkCount}\n
+          4. ${utils.getNickNameFromGuildObjectWithUserId(
+            guild,
+            top5[3].user_id
+          )}: ${top5[3].bonkCount}\n
+          5. ${utils.getNickNameFromGuildObjectWithUserId(
+            guild,
+            top5[4].user_id
+          )}: ${top5[4].bonkCount}\n`
         );
 
       try {
