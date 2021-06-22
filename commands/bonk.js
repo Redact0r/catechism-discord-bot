@@ -11,9 +11,20 @@ function getUserFromMention(mention, users) {
     if (mention.startsWith("!")) {
       mention = mention.slice(1);
     }
-    return users.get(mention);
+    return users.cache.get(mention);
   }
 }
+
+getNickNameFromUserId = async (user_id, client, msg) => {
+  let user = await getUserFromMention(`<@${user_id}>`, client.users);
+  if (!user) console.log("no user");
+  const guild = await client.guilds.cache.get(msg.guild.id);
+  if (!guild) console.log("no guild");
+  const member = await guild.member(user);
+  if (!member) return console.log("no member");
+  const nickName = member.nickname || member.user.username;
+  return nickName;
+};
 
 module.exports = {
   name: "!bonk",
@@ -25,48 +36,26 @@ module.exports = {
       const top5 = await bonkService
         .getTop5Bonks()
         .catch((error) => console.log(error));
-      let n = 0;
-      console.log(
-        "top 5",
-        top5,
-        top5[0].user_id,
-        top5[0].bonkCount,
-        msg.author.id,
-        typeof msg.author.id,
-        "top 5 end"
-      );
-
-      const guild = client.guilds.get(msg.guild.id);
-      let userName = utils.getNickNameFromGuildObjectWithUserId(
-        guild,
-        msg.author.id
-      );
-      console.log(userName);
-      const top5Embed = new Discord.RichEmbed()
-        .setColor("#7851a9")
+      const top5Embed = new Discord.MessageEmbed()
         .setTitle("Test Bonk Leaderboard")
+        .setColor("#7851a9")
         .addField(
           `**TOP 5 BONK'D**\n\n
-          1. ${utils.getNickNameFromGuildObjectWithUserId(
-            guild,
-            top5[0].user_id
-          )}: ${top5[0].bonkCount}\n
-          2. ${utils.getNickNameFromGuildObjectWithUserId(
-            guild,
-            top5[1].user_id
-          )}: ${top5[1].bonkCount}\n
-          3. ${utils.getNickNameFromGuildObjectWithUserId(
-            guild,
-            top5[2].user_id
-          )}: ${top5[2].bonkCount}\n
-          4. ${utils.getNickNameFromGuildObjectWithUserId(
-            guild,
-            top5[3].user_id
-          )}: ${top5[3].bonkCount}\n
-          5. ${utils.getNickNameFromGuildObjectWithUserId(
-            guild,
-            top5[4].user_id
-          )}: ${top5[4].bonkCount}\n`
+          1. ${await getNickNameFromUserId(top5[0].user_id, client, msg)}: ${
+            top5[0].bonkCount
+          }\n
+          2. ${await getNickNameFromUserId(top5[1].user_id, client, msg)}: ${
+            top5[1].bonkCount
+          }\n
+          3. ${await getNickNameFromUserId(top5[2].user_id, client, msg)}: ${
+            top5[2].bonkCount
+          }\n
+          4. ${await getNickNameFromUserId(top5[3].user_id, client, msg)}: ${
+            top5[3].bonkCount
+          }\n
+          5. ${await getNickNameFromUserId(top5[4].user_id, client, msg)}: ${
+            top5[4].bonkCount
+          }\n`
         );
 
       try {
@@ -86,7 +75,7 @@ module.exports = {
     }
 
     const lastMessage = (await user.lastMessage) || null;
-    const bonkEmoji = await client.emojis.get("753418611313344512");
+    const bonkEmoji = await client.emojis.cache.get("753418611313344512");
 
     if (!lastMessage)
       return msg.reply("I don't think they did anything wrong.");

@@ -10,7 +10,7 @@ module.exports = {
     ) {
       if (args[1].startsWith("<#")) {
         const channelToSendMessageTo = args[1].substring(2, args[1].length - 1);
-        client.channels
+        client.channels.cache
           .get(channelToSendMessageTo)
           .send(message)
           .then(() => msg.delete())

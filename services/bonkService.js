@@ -29,7 +29,6 @@ const bonkService = {
   },
 
   getTop5Bonks() {
-    console.log("line 1 fire");
     return db("bonk_table").select("*").orderBy("bonkCount", "desc").limit(5);
   },
 };
