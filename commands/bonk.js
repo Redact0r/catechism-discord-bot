@@ -40,7 +40,8 @@ module.exports = {
         .setTitle("Test Bonk Leaderboard")
         .setColor("#7851a9")
         .addField(
-          `**TOP 5 BONK'D**\n\n
+          "Top 5 Bonks",
+          `
           1. ${await getNickNameFromUserId(top5[0].user_id, client, msg)}: ${
             top5[0].bonkCount
           }\n
