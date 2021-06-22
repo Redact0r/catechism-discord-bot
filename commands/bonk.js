@@ -36,11 +36,12 @@ module.exports = {
       const top5 = await bonkService
         .getTop5Bonks()
         .catch((error) => console.log(error));
+      const adjective = utils.randomAdjective();
       const top5Embed = new Discord.MessageEmbed()
-        .setTitle("Test Bonk Leaderboard")
+        .setTitle("Bonk Leaderboard")
         .setColor("#7851a9")
         .addField(
-          "Top 5 Bonks",
+          `Top 5 Most Bonk'd`,
           `
           1. ${await getNickNameFromUserId(top5[0].user_id, client, msg)}: ${
             top5[0].bonkCount
@@ -56,7 +57,8 @@ module.exports = {
           }\n
           5. ${await getNickNameFromUserId(top5[4].user_id, client, msg)}: ${
             top5[4].bonkCount
-          }\n`
+          }\n
+          You're a ${adjective} bunch!`
         );
 
       try {
