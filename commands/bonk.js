@@ -37,6 +37,14 @@ module.exports = {
         .getTop5Bonks()
         .catch((error) => console.log(error));
       const adjective = utils.randomAdjective();
+      const article =
+        adjective.charAt(0) == "a" ||
+        adjective.charAt(0) == "e" ||
+        adjective.charAt(0) == "i" ||
+        adjective.charAt(0) == "o" ||
+        adjective.charAt(0) == "u"
+          ? "an"
+          : "a";
       const top5Embed = new Discord.MessageEmbed()
         .setTitle("Bonk Leaderboard")
         .setColor("#7851a9")
@@ -58,7 +66,7 @@ module.exports = {
           5. ${await getNickNameFromUserId(top5[4].user_id, client, msg)}: ${
             top5[4].bonkCount
           }\n
-          You're a ${adjective} bunch!`
+          You're ${article} ${adjective} bunch!`
         );
 
       try {
