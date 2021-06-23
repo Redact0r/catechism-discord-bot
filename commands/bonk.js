@@ -50,7 +50,7 @@ module.exports = {
         .setColor("#7851a9")
         .addField(
           `Top 5 Most Bonk'd`,
-          `1. ${await getNickNameFromUserId(top5[0].user_id, client, msg)}: ${
+          `\n1. ${await getNickNameFromUserId(top5[0].user_id, client, msg)}: ${
             top5[0].bonkCount
           }\n
           2. ${await getNickNameFromUserId(top5[1].user_id, client, msg)}: ${
