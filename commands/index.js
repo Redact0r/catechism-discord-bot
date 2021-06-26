@@ -3,6 +3,7 @@ module.exports = {
   "achoo!": require("./achoo"),
   "hallelujah!": require("./hallelujah"),
   "!compliment": require("./compliment"),
+  "!dadjoke": require("./dadjoke"),
   "!saint": require("./saints"),
   "!remindme": require("./remindme"),
   "!bonk": require("./bonk"),
