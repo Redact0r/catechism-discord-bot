@@ -23,7 +23,7 @@ module.exports = {
 
     compliment = compliment[0].toUpperCase() + compliment.substring(1);
 
-    if (args[1] && !args[1].startsWith("<@!"))
+    if (args[1] && !args[1].startsWith("<@"))
       return msg.reply("I can't compliment someone who doesn't exist.");
 
     if (args[1] && args[1] == "<@!750161264482975805>")
