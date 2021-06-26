@@ -15,7 +15,11 @@ module.exports = {
 
     let compliment = await getCompliment();
 
-    if (!compliment) return console.error("No compliment found. API issue?");
+    if (!compliment)
+      return console.error(
+        "No compliment found. API issue? This is the raw data from the server:" +
+          compliment
+      );
 
     compliment = compliment[0].toUpperCase() + compliment.substring(1);
 
