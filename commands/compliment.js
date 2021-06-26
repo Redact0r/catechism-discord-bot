@@ -26,7 +26,7 @@ module.exports = {
     if (args[1] && !args[1].startsWith("<@"))
       return msg.reply("I can't compliment someone who doesn't exist.");
 
-    if (args[1] && args[1] == "<@!750161264482975805>")
+    if (args[1] && args[1].includes("750161264482975805"))
       return msg.reply("I'm flattered.");
 
     if (args[1] && args[1].startsWith("<@!"))
