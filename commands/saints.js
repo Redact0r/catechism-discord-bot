@@ -1,19 +1,22 @@
 const fetch = require("node-fetch");
-const url = "http://calapi.inadiutorium.cz/api/v0/en/calendars/default/today";
 
 module.exports = {
   name: "!saint",
   description: "Saint of the day",
   async execute(msg, args) {
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    console.log(date, month, day, year);
+    const url = `http://calapi.inadiutorium.cz/api/v0/en/calendars/default/${year}/${month}/${day}`;
     try {
       const response = await fetch(url);
       const json = await response.json();
       let celebrations = json.celebrations;
       let celebrationsList = celebrations.map((c) => c.title);
       if (celebrationsList.length === 1) {
-        return msg.reply(
-          `Today is ${celebrationsList[0]}. There are no feast days today.`
-        );
+        return msg.reply(`Today is ${celebrationsList[0]}.`);
       }
       let feastDays = celebrationsList.slice(1);
 
