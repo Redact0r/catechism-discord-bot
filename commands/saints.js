@@ -8,7 +8,6 @@ module.exports = {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const year = date.getFullYear();
-    console.log(date, month, day, year);
     const url = `http://calapi.inadiutorium.cz/api/v0/en/calendars/default/${year}/${month}/${day}`;
     try {
       const response = await fetch(url);

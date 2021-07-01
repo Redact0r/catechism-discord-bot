@@ -11,6 +11,7 @@ function getUserFromMention(mention, users) {
     if (mention.startsWith("!")) {
       mention = mention.slice(1);
     }
+
     return users.cache.get(mention);
   }
 }
@@ -84,7 +85,9 @@ module.exports = {
       return msg.reply(`${mention} has been bonked ${count} times!`);
     }
 
-    const lastMessage = (await user.lastMessage) || null;
+    const lastMessage = user.lastMessageID || null;
+    const fetchedUser = msg.guild.member(user.id);
+    console.log(fetchedUser, lastMessage);
     const bonkEmoji = await client.emojis.cache.get("753418611313344512");
 
     if (!lastMessage)

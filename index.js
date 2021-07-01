@@ -1,6 +1,8 @@
 require("dotenv").config();
 const Discord = require("discord.js");
-const bot = new Discord.Client({ partials: ["USER", "REACTION"] });
+const bot = new Discord.Client({
+  partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBER"],
+});
 bot.commands = new Discord.Collection();
 const botCommands = require("./commands/");
 const url = require("./sources/chanclalibrary");
@@ -22,7 +24,7 @@ bot.on("ready", () => {
 bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.emoji.name == "⭐") {
     const hallOfFameChannelId = "837767757784154152";
-    const mappedEmojiList = reaction.message.reactions.map(
+    const mappedEmojiList = reaction.message.reactions.cache.map(
       (reaction) => reaction
     );
 
