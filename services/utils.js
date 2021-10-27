@@ -1,5 +1,3 @@
-const bonk = require("../commands/bonk");
-
 module.exports = {
   getUserFromMention(mention, users) {
     if (!mention) return;

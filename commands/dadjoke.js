@@ -18,6 +18,6 @@ module.exports = {
 
     let dadJoke = await getDadJoke();
 
-    return msg.reply(dadJoke);
+    return msg.channel.send(dadJoke);
   },
 };

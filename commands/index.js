@@ -7,7 +7,5 @@ module.exports = {
   "!saint": require("./saints"),
   "!remindme": require("./remindme"),
   "!vacate": require("./vacate"),
-  "!bonk": require("./bonk"),
-  "!birthday": require("./birthday"),
   "!say": require("./say"),
 };
