@@ -5,7 +5,6 @@ module.exports = {
   "!compliment": require("./compliment"),
   "!dadjoke": require("./dadjoke"),
   "!saint": require("./saints"),
-  "!remindme": require("./remindme"),
   "!vacate": require("./vacate"),
   "!say": require("./say"),
 };
