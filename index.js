@@ -40,6 +40,10 @@ bot.on("message", async (msg) => {
     msg.reply("You're welcome, my dude.").catch((error) => console.log(error));
   }
 
+  if (messageString.includes("no cap") && messageString.includes("popebot")) {
+    msg.reply("fr fr").catch((error) => console.log(error));
+  }
+
   for (let i = 0; i < filterWords.length; i++) {
     if (messageString.includes(filterWords[i])) {
       msg
