@@ -24,6 +24,10 @@ bot.on("message", async (msg) => {
     return;
   }
 
+  if (process.env.TESTMODE && msg.guild.id === "890984994611265556") {
+    return;
+  }
+
   const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
 
   const messageString = msg.content.toLowerCase();
