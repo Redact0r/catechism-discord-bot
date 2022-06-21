@@ -33,7 +33,7 @@ bot.on("message", async (msg) => {
     ) {
       msg.channel
         .send(
-          `Hey, <@&890984994611265557> and <@&891744347454844978>, ${msgAuthor} changed their sex role!`
+          `Hey, <@&890984994611265557> and <@&891744347454844978>, @${msgAuthor} changed their sex role!`
         )
         .catch((error) => console.log(error));
     }
