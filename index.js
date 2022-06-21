@@ -20,11 +20,30 @@ bot.on("ready", () => {
 });
 
 bot.on("message", async (msg) => {
+  if (msg.channel.id === "905081710734114869" && msg.embeds[0]) {
+    // console.log(msg.embeds[0]);
+    const msgContent = msg.embeds[0].description;
+    const strToLookFor1 = "<@&891391330234818660>";
+    const strToLookFor2 = "<@&891419366745342012>";
+    const msgAuthor = msg.embeds[0].author.name;
+
+    if (
+      msgContent.includes(strToLookFor1) &&
+      msgContent.includes(strToLookFor2)
+    ) {
+      msg.channel
+        .send(
+          `Hey, <@&890984994611265557> and <@&891744347454844978>, ${msgAuthor} changed their sex role!`
+        )
+        .catch((error) => console.log(error));
+    }
+  }
+
   if (msg.author.bot) {
     return;
   }
 
-  if (process.env.TESTMODE && msg.guild.id === "890984994611265556") {
+  if (process.env.TESTMODE && msg.guild.id !== "750160687237431307") {
     return;
   }
 

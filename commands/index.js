@@ -8,5 +8,5 @@ module.exports = {
   "!remindme": require("./remindme"),
   "!vacate": require("./vacate"),
   "!say": require("./say"),
-  "!studybreak": require("./studybreak"),
+  // "!studybreak": require("./studybreak"),
 };
