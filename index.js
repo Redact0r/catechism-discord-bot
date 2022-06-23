@@ -25,7 +25,7 @@ bot.on("message", async (msg) => {
     const msgContent = msg.embeds[0].description;
     const strToLookFor1 = "<@&891391330234818660>";
     const strToLookFor2 = "<@&891419366745342012>";
-    const msgAuthor = msg.embeds[0].author.name;
+    const msgAuthor = msg.embeds[0].author.name || "someone";
 
     if (
       msgContent.includes(strToLookFor1) &&
