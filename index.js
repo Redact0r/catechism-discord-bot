@@ -20,14 +20,16 @@ bot.on("ready", () => {
 });
 
 bot.on("message", async (msg) => {
-  if (msg.channel.id === "905081710734114869" && msg.embeds[0]) {
+  if (
+    msg.channel.id === "905081710734114869" &&
+    msg.embeds[0] &&
+    msg.embeds[0].author
+  ) {
     // console.log(msg.embeds[0]);
     const msgContent = msg.embeds[0].description;
     const strToLookFor1 = "<@&891391330234818660>";
     const strToLookFor2 = "<@&891419366745342012>";
-    const msgAuthor = msg.embeds[0].author.name
-      ? msg.embeds[0].author.name
-      : "someone";
+    const msgAuthor = msg.embeds[0].author.name;
 
     if (
       msgContent.includes(strToLookFor1) &&
