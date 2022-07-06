@@ -1,10 +1,10 @@
 require("dotenv").config();
-const { Client, Intents } = require("discord.js");
+const { Client, Intents, Collection } = require("discord.js");
 const bot = new Client({
   partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBER"],
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
-bot.commands = new Discord.Collection();
+bot.commands = new Collection();
 const botCommands = require("./commands/");
 const utils = require("./services/utils");
 
