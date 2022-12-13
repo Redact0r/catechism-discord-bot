@@ -13,6 +13,7 @@ Object.keys(botCommands).map((key) => {
 });
 
 const TOKEN = process.env.TOKEN;
+console.log(TOKEN);
 
 bot
   .login(TOKEN)

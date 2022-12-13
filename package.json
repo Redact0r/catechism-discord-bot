@@ -1,6 +1,6 @@
 {
   "name": "Popebot",
-  "version": "1.0.0",
+  "version": "1.3.2",
   "description": "The everyday bot for your Catholic Discord server!",
   "main": "index.js",
   "scripts": {
