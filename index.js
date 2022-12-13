@@ -14,7 +14,9 @@ Object.keys(botCommands).map((key) => {
 
 const TOKEN = process.env.TOKEN;
 
-bot.login(TOKEN);
+bot
+  .login(TOKEN)
+  .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
 
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
