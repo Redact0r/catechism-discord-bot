@@ -19,7 +19,12 @@ module.exports = {
       roleToTestFor = modRole;
     }
 
-    if (!roleToTestFor && msg.author.id !== "289925886424121345") return;
+    if (
+      !roleToTestFor &&
+      msg.author.id !== "289925886424121345" &&
+      msg.author.id !== "298190703857500171"
+    )
+      return;
 
     const message = args.slice(2).join(" ");
 
