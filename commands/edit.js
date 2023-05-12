@@ -28,17 +28,15 @@ module.exports = {
 
     if (args.length < 3) return;
     const messageID = args[1];
-    const messageText = args[2];
+    const messageText = args.splice(2).join(" ");
+    console.log(messageText);
 
     if (!isNaN(parseInt(messageID))) {
-      console.log(messageID);
-      console.log(
-        msg.channel.messages.fetch(messageID).then((m) => {
-          m.edit(messageText).catch((err) => {
-            console.error(err);
-          });
-        })
-      );
+      msg.channel.messages.fetch(messageID).then((m) => {
+        m.edit(messageText).catch((err) => {
+          console.error(err);
+        });
+      });
     }
   },
 };
