@@ -5,11 +5,13 @@ module.exports = {
   description: "Compliments a user",
   async execute(msg, args) {
     function getCompliment() {
-      return fetch("https://complimentr.com/api")
+      return fetch(
+        "https://8768zwfurd.execute-api.us-east-1.amazonaws.com/v1/compliments"
+      )
         .then((res) =>
           res.ok ? res.json() : new Error("Something's wrong with the API")
         )
-        .then((data) => data["compliment"])
+        .then((data) => data)
         .catch((err) => console.error(err));
     }
 
@@ -30,7 +32,7 @@ module.exports = {
       return msg.reply("I'm flattered.");
 
     if (args[1] && args[1].startsWith("<@"))
-      return msg.channel.send(`${args[1]} ${compliment}!`);
+      return msg.channel.send(`${args[1]} ${compliment}`);
 
     return msg.reply(compliment);
   },

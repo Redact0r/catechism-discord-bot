@@ -29,7 +29,6 @@ module.exports = {
     if (args.length < 3) return;
     const messageID = args[1];
     const messageText = args.splice(2).join(" ");
-    console.log(messageText);
 
     if (!isNaN(parseInt(messageID))) {
       msg.channel.messages.fetch(messageID).then((m) => {

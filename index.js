@@ -13,6 +13,8 @@ Object.keys(botCommands).map((key) => {
 });
 
 const TOKEN = process.env.TOKEN;
+const TEST_MODE = process.env.TEST_MODE;
+const TESTER_ID = process.env.TESTER_ID;
 
 bot
   .login(TOKEN)
@@ -23,6 +25,8 @@ bot.on("ready", () => {
 });
 
 bot.on("messageCreate", async (msg) => {
+  if (TEST_MODE && msg.author.id !== TESTER_ID) return;
+
   if (
     msg.channel.id === "905081710734114869" &&
     msg.embeds[0] &&
