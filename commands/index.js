@@ -2,6 +2,7 @@ module.exports = {
   "+ccc": require("./lookup"),
   "achoo!": require("./achoo"),
   "hallelujah!": require("./hallelujah"),
+  "!bonk": require("./bonk"),
   "!compliment": require("./compliment"),
   "!dadjoke": require("./dadjoke"),
   "!edit": require("./edit"),
