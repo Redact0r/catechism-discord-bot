@@ -8,9 +8,13 @@ module.exports = {
       return fetch(
         "https://8768zwfurd.execute-api.us-east-1.amazonaws.com/v1/compliments"
       )
-        .then((res) =>
-          res.ok ? res.json() : new Error("Something's wrong with the API")
-        )
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw new Error("Something went wrong with the Compliment API");
+          }
+        })
         .then((data) => data)
         .catch((err) => console.error(err));
     }
@@ -19,7 +23,7 @@ module.exports = {
 
     if (!compliment)
       return console.error(
-        "No compliment found. API issue? This is the raw data from the server:" +
+        "No compliment found. API issue? This is the raw data from the server: " +
           compliment
       );
 
