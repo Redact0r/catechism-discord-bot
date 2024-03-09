@@ -1,3 +1,5 @@
+const TEST_MODE = process.env.TEST_MODE;
+
 module.exports = {
   getUserFromMention(mention, users) {
     if (!mention) return;
@@ -80,5 +82,36 @@ module.exports = {
     let userName = user.nickname ? user.nickname : user.username;
 
     return userName;
+  },
+
+  checkIfUserIsAuthorized(msg) {
+    let authorized = false;
+
+    const officerRole = msg.member.roles.cache.find(
+      (role) => role.id == "890984994611265557"
+    );
+    const modRole = msg.member.roles.cache.find(
+      (role) => role.id == "891744347454844978"
+    );
+
+    const modRoleTest = msg.member.roles.cache.find(
+      (role) => role.name == "Moderator"
+    );
+
+    if (TEST_MODE && modRoleTest) {
+      authorized = true;
+    }
+
+    if (officerRole || modRole) {
+      authorized = true;
+    }
+
+    if (
+      msg.author.id == "289925886424121345" ||
+      msg.author.id == "298190703857500171"
+    ) {
+      authorized = true;
+    }
+    return authorized;
   },
 };

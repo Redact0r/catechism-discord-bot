@@ -1,32 +1,12 @@
+const utils = require("../services/utils");
+
 module.exports = {
   name: "!say",
   description: "let's a mod talk through the bot",
   execute(msg, args, client) {
-    const officerRole = msg.member.roles.cache.find(
-      (role) => role.name == "Sheriff"
-    );
-    const modRole = msg.member.roles.cache.find(
-      (role) => role.name == "Deputy"
-    );
+    const authCheck = utils.checkIfUserIsAuthorized(msg);
 
-    const modRoleTest = msg.member.roles.cache.find(
-      (role) => role.name == "Moderator"
-    );
-
-    let roleToTestFor;
-
-    if (officerRole) {
-      roleToTestFor = officerRole;
-    } else {
-      roleToTestFor = modRole;
-    }
-
-    if (
-      !roleToTestFor &&
-      msg.author.id !== "289925886424121345" &&
-      msg.author.id !== "298190703857500171"
-    )
-      return;
+    if (!authCheck) return;
 
     const message = args.slice(2).join(" ");
 
