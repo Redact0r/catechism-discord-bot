@@ -3,9 +3,11 @@ module.exports = {
   description: "Bonks a user's last message",
   async execute(msg, args) {
     const officerRole = msg.member.roles.cache.find(
-      (role) => role.name == "officers"
+      (role) => role.name == "Sheriff"
     );
-    const modRole = msg.member.roles.cache.find((role) => role.name == "Cadet");
+    const modRole = msg.member.roles.cache.find(
+      (role) => role.name == "Deputy"
+    );
 
     const modRoleTest = msg.member.roles.cache.find(
       (role) => role.name == "Moderator"
