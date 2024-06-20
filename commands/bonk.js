@@ -1,6 +1,17 @@
+/**
+ * Command module to handle the !bonk command, which reacts to a user's last message with a "bonk" emoji.
+ * @module !bonk
+ */
 module.exports = {
   name: "!bonk",
   description: "Bonks a user's last message",
+
+  /**
+   * Executes the !bonk command.
+   * @param {import('discord.js').Message} msg - The message object from Discord.
+   * @param {Array<string>} args - The command arguments.
+   * @returns {Promise<void>}
+   */
   async execute(msg, args) {
     const officerRole = msg.member.roles.cache.find(
       (role) => role.name == "Sheriff"

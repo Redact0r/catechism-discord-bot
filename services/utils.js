@@ -1,6 +1,16 @@
 const TEST_MODE = process.env.TEST_MODE;
 
+/**
+ * Utility module providing various helper functions.
+ * @module utils
+ */
 module.exports = {
+  /**
+   * Gets a user object from a mention string.
+   * @param {string} mention - The mention string to extract the user from.
+   * @param {import('discord.js').Collection<string, import('discord.js').User>} users - The collection of users.
+   * @returns {import('discord.js').User|undefined} The user object, or undefined if not found.
+   */
   getUserFromMention(mention, users) {
     if (!mention) return;
 
@@ -14,6 +24,10 @@ module.exports = {
     }
   },
 
+  /**
+   * Gets a random adjective from a predefined list.
+   * @returns {string} A random adjective.
+   */
   randomAdjective() {
     const arrayOfAdjectives = [
       "dastardly",
@@ -72,6 +86,12 @@ module.exports = {
     return arrayOfAdjectives[randomIndex];
   },
 
+  /**
+   * Gets the nickname of a user in a guild by their user ID.
+   * @param {import('discord.js').Guild} guild - The guild object.
+   * @param {string} user_id - The ID of the user.
+   * @returns {string} The nickname or username of the user, or "user not found".
+   */
   getNickNameFromGuildObjectWithUserId(guild, user_id) {
     let userObj = guild.members.filter((member) => member.user.id == user_id);
     let userMap = userObj.map((user) => user);
@@ -84,6 +104,11 @@ module.exports = {
     return userName;
   },
 
+  /**
+   * Checks if a user is authorized based on their roles or ID.
+   * @param {import('discord.js').Message} msg - The message object from Discord.
+   * @returns {boolean} True if the user is authorized, false otherwise.
+   */
   checkIfUserIsAuthorized(msg) {
     let authorized = false;
 

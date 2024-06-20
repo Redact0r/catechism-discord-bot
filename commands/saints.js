@@ -1,8 +1,18 @@
 const fetch = require("node-fetch");
 
+/**
+ * Command module to handle the !saint command, which provides information about the saint of the day.
+ * @module !saint
+ */
 module.exports = {
   name: "!saint",
   description: "Saint of the day",
+
+  /**
+   * Executes the !saint command.
+   * @param {import('discord.js').Message} msg - The message object from Discord.
+   * @param {Array<string>} args - The command arguments.
+   */
   async execute(msg, args) {
     const date = new Date();
     let options = {
