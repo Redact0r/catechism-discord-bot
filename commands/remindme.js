@@ -1,13 +1,26 @@
-const { Message } = require("discord.js");
-
+/**
+ * Command module to handle the !remindme command, which allows users to set a reminder.
+ * @module !remindme
+ */
 module.exports = {
   name: "!remindme",
   description: "allows users to set reminder",
+
+  /**
+   * Executes the !remindme command.
+   * @param {import('discord.js').Message} msg - The message object from Discord.
+   * @param {Array<string>} args - The command arguments.
+   */
   execute(msg, args) {
     const reminderMessage = args.slice(3).join(" ");
+
+    /**
+     * Sends the reminder message as a reply.
+     */
     function reminder() {
       msg.reply(`\n **REMINDER** \n ${reminderMessage}`);
     }
+
     //!remindme "3 hours message"
     //!remindme "2 days message"
     //!remindme date 09/07/2020 12:15AM EST
@@ -16,6 +29,7 @@ module.exports = {
         "Please reply in the following format:\n\n!remindme 3 hours.\n\nCurrently, you can select seconds, minutes, hours, or days. \n A 'for date feature' will be implemented soon."
       );
     }
+
     switch (args[2]) {
       case "seconds": {
         let msDelay = args[1] * 1000;

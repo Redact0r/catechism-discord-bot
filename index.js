@@ -1,137 +1,157 @@
 require("dotenv").config();
 const { Client, Intents, Collection } = require("discord.js");
+
+/**
+ * Initialize a new Discord client.
+ * @type {import('discord.js').Client}
+ */
 const bot = new Client({
-  partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBER"],
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+    partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBER"],
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
+
 bot.commands = new Collection();
+
+/**
+ * Load bot commands from the specified directory.
+ * @type {Object.<string, { name: string, description: string, execute: function }>}
+ */
 const botCommands = require("./commands/");
+
+/**
+ * Utility functions for the bot.
+ * @type {Object}
+ */
 const utils = require("./services/utils");
 
+/**
+ * Set bot commands in the collection.
+ */
 Object.keys(botCommands).map((key) => {
-  bot.commands.set(botCommands[key].name, botCommands[key]);
+    bot.commands.set(botCommands[key].name, botCommands[key]);
 });
 
 const TOKEN = process.env.TOKEN;
 const TEST_MODE = process.env.TEST_MODE;
 const TESTER_ID = process.env.TESTER_ID;
 
-bot
-  .login(TOKEN)
-  .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
+/**
+ * Log in to Discord with the provided token.
+ */
+bot.login(TOKEN).catch((err) => console.log("Couldn't login. Wrong token?\n" + err));
 
 bot.on("ready", () => {
-  console.info(`Logged in as ${bot.user.tag}!`);
+    console.info(`Logged in as ${bot.user.tag}!`);
 });
 
+/**
+ * Handle incoming messages.
+ * @param {import('discord.js').Message} msg - The message object from Discord.
+ */
 bot.on("messageCreate", async (msg) => {
-  if (TEST_MODE && msg.author.id !== TESTER_ID) return;
-
-  if (
-    msg.channel.id === "905081710734114869" &&
-    msg.embeds[0] &&
-    msg.embeds[0].author
-  ) {
-    // console.log(msg.embeds[0]);
-    const msgContent = msg.embeds[0].description;
-    const strToLookFor1 = "<@&891391330234818660>";
-    const strToLookFor2 = "<@&891419366745342012>";
-    const msgAuthor = msg.embeds[0].author.name;
+    if (TEST_MODE && msg.author.id !== TESTER_ID) return;
 
     if (
-      msgContent.includes(strToLookFor1) &&
-      msgContent.includes(strToLookFor2)
+        msg.channel.id === "905081710734114869" &&
+        msg.embeds[0] &&
+        msg.embeds[0].author
     ) {
-      msg.channel
-        .send(
-          `Hey, <@&890984994611265557> and <@&891744347454844978>, @${msgAuthor} changed their sex role!`
-        )
-        .catch((error) => console.log(error));
+        // console.log(msg.embeds[0]);
+        const msgContent = msg.embeds[0].description;
+        const strToLookFor1 = "<@&891391330234818660>";
+        const strToLookFor2 = "<@&891419366745342012>";
+        const msgAuthor = msg.embeds[0].author.name;
+
+        if (
+            msgContent.includes(strToLookFor1) &&
+            msgContent.includes(strToLookFor2)
+        ) {
+            msg.channel
+                .send(
+                    `Hey, <@&890984994611265557> and <@&891744347454844978>, @${msgAuthor} changed their sex role!`
+                )
+                .catch((error) => console.log(error));
+        }
     }
-  }
 
-  if (msg.author.bot) {
-    return;
-  }
-
-  if (process.env.TESTMODE && msg.guild.id !== "750160687237431307") {
-    return;
-  }
-
-  const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
-
-  const messageString = msg.content.toLowerCase();
-
-  if (messageString.includes("smite")) {
-    msg.channel.send("Exorcizamus te!").catch((error) => console.log(error));
-  }
-
-  if (messageString.includes("get me a beer")) {
-    msg.react("🍺").catch((error) => console.log(error));
-  }
-
-  if (messageString.includes("thank") && messageString.includes("popebot")) {
-    msg.reply("You're welcome, my dude.").catch((error) => console.log(error));
-  }
-
-  if (messageString.includes("no cap") && messageString.includes("popebot")) {
-    msg.reply("fr fr").catch((error) => console.log(error));
-  }
-
-  for (let i = 0; i < filterWords.length; i++) {
-    if (messageString.includes(filterWords[i])) {
-      msg
-        .reply("This is a Christian minecraft server.")
-        .catch((error) => console.log(error));
+    if (msg.author.bot) {
+        return;
     }
-  }
 
-  if (messageString.includes("heresy") || messageString.includes("heretic")) {
-    let chanceToSay = Math.floor(Math.random() * 100);
+    if (process.env.TESTMODE && msg.guild.id !== "750160687237431307") {
+        return;
+    }
 
-    if (chanceToSay < 50)
-      return msg
-        .reply("A heretic? Confess and repent!")
-        .catch((error) => console.log(error));
-  }
+    const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
 
-  if (messageString.includes("bread")) {
-    msg.react("🍞").catch((error) => console.log(error));
-  }
+    const messageString = msg.content.toLowerCase();
 
-  let args;
-  let command;
-  let users;
+    if (messageString.includes("smite")) {
+        msg.channel.send("Exorcizamus te!").catch((error) => console.log(error));
+    }
 
-  if (messageString.includes(":chancla:")) {
-    let index = Math.floor(Math.random() * 26);
-    msg.channel.send(url[index]);
-  }
+    if (messageString.includes("get me a beer")) {
+        msg.react("🍺").catch((error) => console.log(error));
+    }
 
-  if (msg.content.startsWith("+")) {
-    args = msg.content.split("#");
-    command = args.shift().toLowerCase().replace(/\s/g, "").toString();
-  }
+    if (messageString.includes("thank") && messageString.includes("popebot")) {
+        msg.reply("You're welcome, my dude.").catch((error) => console.log(error));
+    }
 
-  if (msg.content.startsWith("!")) {
-    args = msg.content.split(" ");
-    command = args[0].toLowerCase().toString();
-    users = bot.users;
-  }
+    if (messageString.includes("no cap") && messageString.includes("popebot")) {
+        msg.reply("fr fr").catch((error) => console.log(error));
+    }
 
-  if (args === undefined) {
-    args = msg.content;
-    command = args.toLowerCase().replace(/\s/g, "").toString();
-  }
+    for (let i = 0; i < filterWords.length; i++) {
+        if (messageString.includes(filterWords[i])) {
+            msg.reply("This is a Christian minecraft server.").catch((error) => console.log(error));
+        }
+    }
 
-  if (!bot.commands.has(command)) {
-    return;
-  }
+    if (messageString.includes("heresy") || messageString.includes("heretic")) {
+        let chanceToSay = Math.floor(Math.random() * 100);
 
-  try {
-    bot.commands.get(command).execute(msg, args, bot);
-  } catch (error) {
-    console.error(error);
-    msg.reply("Tell Tyler something broke!");
-  }
+        if (chanceToSay < 50)
+            return msg.reply("A heretic? Confess and repent!").catch((error) => console.log(error));
+    }
+
+    if (messageString.includes("bread")) {
+        msg.react("🍞").catch((error) => console.log(error));
+    }
+
+    let args;
+    let command;
+    let users;
+
+    if (messageString.includes(":chancla:")) {
+        let index = Math.floor(Math.random() * 26);
+        msg.channel.send(url[index]);
+    }
+
+    if (msg.content.startsWith("+")) {
+        args = msg.content.split("#");
+        command = args.shift().toLowerCase().replace(/\s/g, "").toString();
+    }
+
+    if (msg.content.startsWith("!")) {
+        args = msg.content.split(" ");
+        command = args[0].toLowerCase().toString();
+        users = bot.users;
+    }
+
+    if (args === undefined) {
+        args = msg.content;
+        command = args.toLowerCase().replace(/\s/g, "").toString();
+    }
+
+    if (!bot.commands.has(command)) {
+        return;
+    }
+
+    try {
+        bot.commands.get(command).execute(msg, args, bot);
+    } catch (error) {
+        console.error(error);
+        msg.reply("Tell Tyler something broke!");
+    }
 });
