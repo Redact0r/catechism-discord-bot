@@ -16,6 +16,17 @@ const TOKEN = process.env.TOKEN;
 const TEST_MODE = process.env.TEST_MODE;
 const TESTER_ID = process.env.TESTER_ID;
 
+const ROLES = {
+  FEMALE: "891419366745342012",
+  FEMALE_MENTIONABLE: "<@&891419366745342012>",
+  MALE: "891391330234818660",
+  MALE_MENTIONABLE: "<@&891391330234818660>",
+  SHERIFF: "890984994611265557",
+  SHERIFF_MENTIONABLE: "<@&890984994611265557>",
+  DEPUTY: "891744347454844978",
+  DEPUTY_MENTIONABLE: "<@&891744347454844978>",
+}
+
 bot
   .login(TOKEN)
   .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
@@ -34,17 +45,15 @@ bot.on("messageCreate", async (msg) => {
   ) {
     // console.log(msg.embeds[0]);
     const msgContent = msg.embeds[0].description;
-    const strToLookFor1 = "<@&891391330234818660>";
-    const strToLookFor2 = "<@&891419366745342012>";
     const msgAuthor = msg.embeds[0].author.name;
 
     if (
-      msgContent.includes(strToLookFor1) &&
-      msgContent.includes(strToLookFor2)
+      msgContent.includes(ROLES.MALE_MENTIONABLE) &&
+      msgContent.includes(ROLES.FEMALE_MENTIONABLE)
     ) {
       msg.channel
         .send(
-          `Hey, <@&890984994611265557> and <@&891744347454844978>, @${msgAuthor} changed their sex role!`
+          `Hey, ${ROLES.SHERIFF_MENTIONABLE} and ${ROLES.DEPUTY_MENTIONABLE}, @${msgAuthor} changed their sex role!`
         )
         .catch((error) => console.log(error));
     }
