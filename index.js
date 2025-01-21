@@ -6,7 +6,7 @@ const bot = new Client({
 });
 bot.commands = new Collection();
 const botCommands = require("./commands/");
-const utils = require("./services/utils");
+const {ROLES} = require("./services/utils");
 
 Object.keys(botCommands).map((key) => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
@@ -15,17 +15,6 @@ Object.keys(botCommands).map((key) => {
 const TOKEN = process.env.TOKEN;
 const TEST_MODE = process.env.TEST_MODE;
 const TESTER_ID = process.env.TESTER_ID;
-
-const ROLES = {
-  FEMALE: "891419366745342012",
-  FEMALE_MENTIONABLE: "<@&891419366745342012>",
-  MALE: "891391330234818660",
-  MALE_MENTIONABLE: "<@&891391330234818660>",
-  SHERIFF: "890984994611265557",
-  SHERIFF_MENTIONABLE: "<@&890984994611265557>",
-  DEPUTY: "891744347454844978",
-  DEPUTY_MENTIONABLE: "<@&891744347454844978>",
-}
 
 bot
   .login(TOKEN)
@@ -75,7 +64,7 @@ bot.on("messageCreate", async (msg) => {
     msg.channel.send("Exorcizamus te!").catch((error) => console.log(error));
   }
 
-  if (messageString.includes("get me a beer")) {
+  if (messageString.includes("get me a beer") || messageString.includes("beer me") || (messageString.includes("get") && messageString.includes("a pint"))) {
     msg.react("🍺").catch((error) => console.log(error));
   }
 
