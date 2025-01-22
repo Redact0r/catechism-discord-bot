@@ -6,7 +6,7 @@ const bot = new Client({
 });
 bot.commands = new Collection();
 const botCommands = require("./commands/");
-const utils = require("./services/utils");
+const {ROLES} = require("./services/utils");
 
 Object.keys(botCommands).map((key) => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
@@ -34,17 +34,15 @@ bot.on("messageCreate", async (msg) => {
   ) {
     // console.log(msg.embeds[0]);
     const msgContent = msg.embeds[0].description;
-    const strToLookFor1 = "<@&891391330234818660>";
-    const strToLookFor2 = "<@&891419366745342012>";
     const msgAuthor = msg.embeds[0].author.name;
 
     if (
-      msgContent.includes(strToLookFor1) &&
-      msgContent.includes(strToLookFor2)
+      msgContent.includes(ROLES.MALE_MENTIONABLE) &&
+      msgContent.includes(ROLES.FEMALE_MENTIONABLE)
     ) {
       msg.channel
         .send(
-          `Hey, <@&890984994611265557> and <@&891744347454844978>, @${msgAuthor} changed their sex role!`
+          `Hey, ${ROLES.SHERIFF_MENTIONABLE} and ${ROLES.DEPUTY_MENTIONABLE}, @${msgAuthor} changed their sex role!`
         )
         .catch((error) => console.log(error));
     }
@@ -66,7 +64,7 @@ bot.on("messageCreate", async (msg) => {
     msg.channel.send("Exorcizamus te!").catch((error) => console.log(error));
   }
 
-  if (messageString.includes("get me a beer")) {
+  if (messageString.includes("get me a beer") || messageString.includes("beer me") || (messageString.includes("get") && messageString.includes("a pint"))) {
     msg.react("🍺").catch((error) => console.log(error));
   }
 

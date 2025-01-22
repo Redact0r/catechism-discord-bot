@@ -14,6 +14,17 @@ module.exports = {
     }
   },
 
+  ROLES: {
+    FEMALE: "891419366745342012",
+    FEMALE_MENTIONABLE: "<@&891419366745342012>",
+    MALE: "891391330234818660",
+    MALE_MENTIONABLE: "<@&891391330234818660>",
+    SHERIFF: "890984994611265557",
+    SHERIFF_MENTIONABLE: "<@&890984994611265557>",
+    DEPUTY: "891744347454844978",
+    DEPUTY_MENTIONABLE: "<@&891744347454844978>",
+  },
+
   randomAdjective() {
     const arrayOfAdjectives = [
       "dastardly",
@@ -88,10 +99,10 @@ module.exports = {
     let authorized = false;
 
     const officerRole = msg.member.roles.cache.find(
-      (role) => role.id == "890984994611265557"
+      (role) => role.id == ROLES.SHERIFF
     );
     const modRole = msg.member.roles.cache.find(
-      (role) => role.id == "891744347454844978"
+      (role) => role.id == ROLES.DEPUTY
     );
 
     const modRoleTest = msg.member.roles.cache.find(
