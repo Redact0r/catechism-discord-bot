@@ -68,6 +68,14 @@ bot.on("messageCreate", async (msg) => {
     msg.react("🍺").catch((error) => console.log(error));
   }
 
+  if (messageString.includes("get") && (messageString.includes("a glass of wine") || messageString.includes("some wine"))) {
+    msg.react("🍷").catch((error) => console.log(error))
+  }
+
+  if (messageString.includes("get") && (messageString.includes("a glass of whiskey") || messageString.includes("some whiskey") || messageString.includes("a glass of rum") || messageString.includes("some rum"))) {
+    msg.react("🥃").catch(err => console.log(err))
+  }
+
   if (messageString.includes("thank") && messageString.includes("popebot")) {
     msg.reply("You're welcome, my dude.").catch((error) => console.log(error));
   }
