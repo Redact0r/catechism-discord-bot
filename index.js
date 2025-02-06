@@ -98,8 +98,7 @@ bot.on("messageCreate", async (msg) => {
     let chanceToSay = Math.floor(Math.random() * 100);
 
     if (chanceToSay < 50)
-      return msg
-        .reply("A heretic? Confess and repent!")
+      msg.reply("A heretic? Confess and repent!")
         .catch((error) => console.log(error));
   }
 
