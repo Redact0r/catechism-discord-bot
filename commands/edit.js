@@ -4,8 +4,18 @@ module.exports = {
   name: "!edit",
   description: "let's a mod talk through the bot",
   execute(msg, args, client) {
-    if (!utils.checkIfUserIsAuthorized(msg)) return;
-    if (args.length < 3) return;
+    if (!utils.checkIfUserIsAuthorized(msg)) {
+      msg.react("🚫");
+      console.log("User is not authorized to use this command");
+      console.log("User", msg.author.username);
+      console.log("User ID", msg.author.id);
+      return
+    }
+    if (args.length < 3) {
+      msg.reply(`Error, not enough arguments provided. Expected 3 arguments, received ${args.length}`);
+      console.log("Error, not enough arguments provided. Expected 3 arguments, received", args.length);
+      return;
+    }
 
     let messageID = args[1];
     if (args[1].startsWith("<#")) {

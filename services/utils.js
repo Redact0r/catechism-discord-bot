@@ -104,7 +104,6 @@ module.exports = {
     const modRole = msg.member.roles.cache.find(
       (role) => role.id == this.ROLES.DEPUTY
     );
-
     const modRoleTest = msg.member.roles.cache.find(
       (role) => role.name == "Moderator"
     );
