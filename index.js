@@ -122,7 +122,7 @@ bot.on("messageCreate", async (msg) => {
   }
 
   if (msg.content.startsWith("!")) {
-    args = msg.content.split(" ", 2);
+    args = msg.content.split(" ");
     command = args[0].toLowerCase().toString();
     users = bot.users;
   }
