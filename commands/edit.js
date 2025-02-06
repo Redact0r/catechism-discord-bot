@@ -4,12 +4,17 @@ module.exports = {
   name: "!edit",
   description: "let's a mod talk through the bot",
   execute(msg, args, client) {
-    const authCheck = utils.checkIfUserIsAuthorized(msg);
-
-    if (!authCheck) return;
-
+    if (!utils.checkIfUserIsAuthorized(msg)) return;
     if (args.length < 3) return;
-    const messageID = args[1];
+
+    let messageID = args[1];
+    if (args[1].startsWith("<#")) {
+      // Extract message ID from <#message_id>
+      messageID = args[1].substring(2, args[1].length - 1);
+    } else {
+      messageID = args[1];
+    }
+
     const messageText = args.splice(2).join(" ");
 
     if (!isNaN(parseInt(messageID))) {

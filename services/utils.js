@@ -99,10 +99,10 @@ module.exports = {
     let authorized = false;
 
     const officerRole = msg.member.roles.cache.find(
-      (role) => role.id == ROLES.SHERIFF
+      (role) => role.id == this.ROLES.SHERIFF
     );
     const modRole = msg.member.roles.cache.find(
-      (role) => role.id == ROLES.DEPUTY
+      (role) => role.id == this.ROLES.DEPUTY
     );
 
     const modRoleTest = msg.member.roles.cache.find(

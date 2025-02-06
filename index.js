@@ -27,6 +27,7 @@ bot.on("ready", () => {
 bot.on("messageCreate", async (msg) => {
   if (TEST_MODE && msg.author.id !== TESTER_ID) return;
 
+  // Log when a user changes their sex role to the #carl-log channel
   if (
     msg.channel.id === "905081710734114869" &&
     msg.embeds[0] &&
@@ -58,6 +59,9 @@ bot.on("messageCreate", async (msg) => {
 
   const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
 
+  // Take our list of filtered words and assign to a map for O(n) complexity
+  const filterWordsMap = filterWords.map(word => ({ [word]: true }))
+
   const messageString = msg.content.toLowerCase();
 
   if (messageString.includes("smite")) {
@@ -84,12 +88,10 @@ bot.on("messageCreate", async (msg) => {
     msg.reply("fr fr").catch((error) => console.log(error));
   }
 
-  for (let i = 0; i < filterWords.length; i++) {
-    if (messageString.includes(filterWords[i])) {
-      msg
-        .reply("This is a Christian minecraft server.")
-        .catch((error) => console.log(error));
-    }
+  if (filterWordsMap[messageString]) {
+    msg
+      .reply("This is a Christian minecraft server.")
+      .catch((error) => console.log(error));
   }
 
   if (messageString.includes("heresy") || messageString.includes("heretic")) {
@@ -105,14 +107,14 @@ bot.on("messageCreate", async (msg) => {
     msg.react("🍞").catch((error) => console.log(error));
   }
 
-  let args;
-  let command;
-  let users;
-
   if (messageString.includes(":chancla:")) {
     let index = Math.floor(Math.random() * 26);
     msg.channel.send(url[index]);
   }
+
+  let args;
+  let command;
+  let users;
 
   if (msg.content.startsWith("+")) {
     args = msg.content.split("#");
@@ -120,7 +122,7 @@ bot.on("messageCreate", async (msg) => {
   }
 
   if (msg.content.startsWith("!")) {
-    args = msg.content.split(" ");
+    args = msg.content.split(" ", 2);
     command = args[0].toLowerCase().toString();
     users = bot.users;
   }

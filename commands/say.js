@@ -18,5 +18,9 @@ module.exports = {
         .then(() => msg.delete())
         .catch((error) => console.log(error));
     }
+    else {
+        return msg.channel.send("Error, please use the format `!say <#channel_id> message`")
+            .catch((error) => console.log(error));
+    }
   },
 };
