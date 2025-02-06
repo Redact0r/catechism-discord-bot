@@ -14,6 +14,7 @@ module.exports = {
     if (args.length < 3) {
       msg.reply(`Error, not enough arguments provided. Expected 3 arguments, received ${args.length}`);
       console.log("Error, not enough arguments provided. Expected 3 arguments, received", args.length);
+      console.log("Arguments", args);
       return;
     }
 
