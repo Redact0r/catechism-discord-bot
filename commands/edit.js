@@ -17,6 +17,8 @@ module.exports = {
 
     const messageText = args.splice(2).join(" ");
 
+    console.log("Sending message to channel", messageID);
+    console.log("Message text", messageText);
     if (!isNaN(parseInt(messageID))) {
       msg.channel.messages.fetch(messageID).then((m) => {
         m.edit(messageText).catch((err) => {
