@@ -1,8 +1,8 @@
 
 module.exports = {
-    name: "!timer",
+    name: "!chanTimer",
     description: "Set a timer",
-    execute(msg, args) {
+    async execute(msg, args, client) {
         if (args.length < 3) {
             msg.reply("Error, not enough arguments provided. Expected 2 arguments, received " + args.length);
             console.log("Error, not enough arguments provided. Expected 2 arguments, received", args.length);
@@ -17,6 +17,14 @@ module.exports = {
             return
         }
         const channel = args[1].substring(2, args[1].length - 1);
+        const channelToSendTo = client.channels.cache.get(channel);
+
+        if (!channelToSendTo) {
+            msg.reply("Error, channel not found");
+            console.log("Error, channel not found");
+            console.log("Arguments", args);
+            return;
+        }
 
         const time = args[2];
         if (isNaN(time)) {
@@ -31,9 +39,11 @@ module.exports = {
         msg.reply("Timer set for " + time + " seconds");
 
         // Update the message text every second with the remaining time left
+        const m = await channelToSendTo.send("Time left: " + time + " seconds");
+        const msgToEdit = await channelToSendTo.messages.fetch(m.id)
         for (let i = time; i > 0; i--) {
-            setTimeout(() => {
-                msg.channel(channel).send("Time left: " + i + " seconds");
+            setTimeout(async () => {
+                await msgToEdit.edit("Time left: " + i + " seconds");
             }, i * 1000);
         }
 
