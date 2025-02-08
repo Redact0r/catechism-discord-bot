@@ -28,14 +28,21 @@ module.exports = {
 
     const messageText = args.splice(2).join(" ");
 
-    console.log("Sending message to channel", messageID);
-    console.log("Message text", messageText);
+    console.log("Sending message to channel:", messageID);
+    console.log("Message text:", messageText);
     if (!isNaN(parseInt(messageID))) {
       msg.channel.messages.fetch(messageID).then((m) => {
         m.edit(messageText).catch((err) => {
           console.error(err);
+          if (err.status === 404) {
+            msg.reply("Error, message not found.");
+            msg.reply("This could be because the message was not found or the bot does not have permission to edit the message.");
+          } else if (err.status === 403) {
+            msg.reply("Error, bot does not have permission to edit the message.");
+          }
         });
       });
+      msg.delete();
     }
   },
 };
