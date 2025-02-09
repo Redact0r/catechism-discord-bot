@@ -48,6 +48,5 @@ module.exports = {
         }
 
         // After the timer is done, send a message to the channel
-        msg.channel(channel).send("Timer is done!");
     }
 }
