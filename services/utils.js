@@ -135,7 +135,7 @@ module.exports = {
    * @param {string} time
    * @Returns {number} the duration in seconds
   */
-  parseDuration(time) {
+  parseDuration: (time) => {
     // Step through duration string and parse the time
     let duration = 0;
     let currentNumber = "";
