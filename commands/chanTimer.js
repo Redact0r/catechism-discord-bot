@@ -1,6 +1,6 @@
 
 module.exports = {
-    name: "!chanTimer",
+    name: "!chantimer",
     description: "Set a timer",
     execute: async (msg, args, client) => {
         if (args.length < 3) {

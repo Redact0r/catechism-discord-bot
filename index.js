@@ -132,7 +132,6 @@ bot.on("messageCreate", async (msg) => {
   }
 
   if (!bot.commands.has(command)) {
-    console.log("Command not found:", command);
     return;
   }
 
