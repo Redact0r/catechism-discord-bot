@@ -126,5 +126,54 @@ module.exports = {
   },
   sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
+  },
+
+  /**
+   * time should be formatted like Go duration strings
+   * https://golang.org/pkg/time/#ParseDuration
+   * e.g. 1s, 1m, 1h, 1d
+   * @param {string} time
+   * @Returns {number} the duration in seconds
+  */
+  parseDuration(time) {
+    // Step through duration string and parse the time
+    let duration = 0;
+    let currentNumber = "";
+    let currentUnit = "";
+    for (let i = 0; i < time.length; i++) {
+      if (isNaN(parseInt(time[i]))) {
+        // If we have a number and a unit, add the time to the duration
+        currentUnit += time[i];
+        if (currentNumber && currentUnit) {
+          duration += this.convertToSeconds(currentNumber, currentUnit);
+          currentNumber = "";
+          currentUnit = "";
+        }
+      } else {
+        currentNumber += time[i];
+      }
+    }
+
+    return duration;
+  },
+  convertToSeconds(currentNumber, currentUnit) {
+    let seconds = 0;
+    switch (currentUnit) {
+      case "s":
+        seconds = parseInt(currentNumber);
+        break;
+      case "m":
+        seconds = parseInt(currentNumber) * 60;
+        break;
+      case "h":
+        seconds = parseInt(currentNumber) * 60 * 60;
+        break;
+      case "d":
+        seconds = parseInt(currentNumber) * 60 * 60 * 24;
+        break;
+      default:
+        break;
+    }
+    return seconds;
   }
 };

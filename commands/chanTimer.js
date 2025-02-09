@@ -1,5 +1,5 @@
 const util = require("node:util");
-const {sleep} = require("../services/utils");
+const {sleep, parseDuration} = require("../services/utils");
 
 module.exports = {
     name: "!chantimer",
@@ -28,13 +28,11 @@ module.exports = {
             return;
         }
 
+        // time should be formatted like Go duration strings
+        // https://golang.org/pkg/time/#ParseDuration
+        // e.g. 1s, 1m, 1h, 1d
         const time = args[2];
-        if (isNaN(time)) {
-            msg.reply("Error, expected a number of seconds for the time argument");
-            console.log("Error, expected a number for the time argument");
-            console.log("Arguments", args);
-            return;
-        }
+        const parsedTime = parseDuration(time);
 
         console.log("Setting a timer for", time, "seconds");
 
@@ -43,9 +41,9 @@ module.exports = {
         // Update the message text every second with the remaining time left
         const m = await channelToSendTo.send("Time left: " + time + " seconds");
         const msgToEdit = await channelToSendTo.messages.fetch(m.id)
-        for (let i = time; i > 0; i--) {
-            await sleep(1000);
+        for (let i = parsedTime; i > 0; i--) {
             await msgToEdit.edit("Time left: " + i + " seconds");
+            await sleep(1000);
         }
 
         // After the timer is done, send a message to the channel
