@@ -1,6 +1,6 @@
 const TEST_MODE = process.env.TEST_MODE;
 
-module.exports = {
+const utils = {
   getUserFromMention(mention, users) {
     if (!mention) return;
 
@@ -127,35 +127,14 @@ module.exports = {
   sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   },
-
   /**
-   * time should be formatted like Go duration strings
+   * Converts a number and unit to seconds
+   * Uses the Go duration string format
    * https://golang.org/pkg/time/#ParseDuration
-   * e.g. 1s, 1m, 1h, 1d
-   * @param {string} time
-   * @Returns {number} the duration in seconds
-  */
-  parseDuration: (time) => {
-    // Step through duration string and parse the time
-    let duration = 0;
-    let currentNumber = "";
-    let currentUnit = "";
-    for (let i = 0; i < time.length; i++) {
-      if (isNaN(parseInt(time[i]))) {
-        // If we have a number and a unit, add the time to the duration
-        currentUnit += time[i];
-        if (currentNumber && currentUnit) {
-          duration += this.convertToSeconds(currentNumber, currentUnit);
-          currentNumber = "";
-          currentUnit = "";
-        }
-      } else {
-        currentNumber += time[i];
-      }
-    }
-
-    return duration;
-  },
+   * @param currentNumber {number|string}
+   * @param currentUnit {string}
+   * @returns {number}
+   */
   convertToSeconds(currentNumber, currentUnit) {
     let seconds = 0;
     switch (currentUnit) {
@@ -175,5 +154,35 @@ module.exports = {
         break;
     }
     return seconds;
+  },
+  /**
+   * time should be formatted like Go duration strings
+   * https://golang.org/pkg/time/#ParseDuration
+   * e.g. 1s, 1m, 1h, 1d
+   * @param {string} time
+   * @Returns {number} the duration in seconds
+  */
+  parseDuration(time) {
+    // Step through duration string and parse the time
+    let duration = 0;
+    let currentNumber = "";
+    let currentUnit = "";
+    for (let i = 0; i < time.length; i++) {
+      if (isNaN(parseInt(time[i]))) {
+        // If we have a number and a unit, add the time to the duration
+        currentUnit += time[i];
+        if (currentNumber && currentUnit) {
+          duration += utils.convertToSeconds(currentNumber, currentUnit);
+          currentNumber = "";
+          currentUnit = "";
+        }
+      } else {
+        currentNumber += time[i];
+      }
+    }
+
+    return duration;
   }
 };
+
+module.exports = utils;
