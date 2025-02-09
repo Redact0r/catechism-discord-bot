@@ -136,6 +136,8 @@ bot.on("messageCreate", async (msg) => {
   }
 
   try {
+    console.log("Command received:", command);
+    console.log("Arguments received:", args);
     bot.commands.get(command).execute(msg, args, bot);
   } catch (error) {
     console.error(error);
