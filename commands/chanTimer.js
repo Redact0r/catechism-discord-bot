@@ -1,5 +1,5 @@
 const util = require("node:util");
-const {sleep, parseDuration} = require("../services/utils");
+const {sleep, parseDuration, parseSecondsToDuration} = require("../services/utils");
 
 module.exports = {
     name: "!chantimer",
@@ -34,20 +34,18 @@ module.exports = {
         const time = args[2];
         const parsedTime = parseDuration(time);
 
-        console.log("Setting a timer for", time, "seconds");
-
-        msg.reply("Timer set for " + time + " seconds");
+        console.log("Setting a timer for", parsedTime, "seconds");
 
         // Update the message text every second with the remaining time left
         const m = await channelToSendTo.send("Time left: " + time + " seconds");
         const msgToEdit = await channelToSendTo.messages.fetch(m.id)
         for (let i = parsedTime; i > 0; i--) {
-            await msgToEdit.edit("Time left: " + i + " seconds");
+            await msgToEdit.edit("Time left: " + parseSecondsToDuration(i));
             await sleep(1000);
         }
 
         // After the timer is done, send a message to the channel
         msgToEdit.edit("Time's up!").catch((error) => console.log(error));
-
+        msg.reply("Timer is done!").catch((error) => console.log(error));
     }
 }
