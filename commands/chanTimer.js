@@ -2,7 +2,7 @@
 module.exports = {
     name: "!chanTimer",
     description: "Set a timer",
-    async execute(msg, args, client) {
+    execute: async (msg, args, client) => {
         if (args.length < 3) {
             msg.reply("Error, not enough arguments provided. Expected 2 arguments, received " + args.length);
             console.log("Error, not enough arguments provided. Expected 2 arguments, received", args.length);
