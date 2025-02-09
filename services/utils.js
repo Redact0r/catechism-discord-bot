@@ -124,4 +124,7 @@ module.exports = {
     }
     return authorized;
   },
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 };

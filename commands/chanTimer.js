@@ -1,3 +1,5 @@
+const util = require("node:util");
+const {sleep} = require("../services/utils");
 
 module.exports = {
     name: "!chantimer",
@@ -42,11 +44,12 @@ module.exports = {
         const m = await channelToSendTo.send("Time left: " + time + " seconds");
         const msgToEdit = await channelToSendTo.messages.fetch(m.id)
         for (let i = time; i > 0; i--) {
-            setTimeout(async () => {
-                await msgToEdit.edit("Time left: " + i + " seconds");
-            }, i * 1000);
+            await sleep(1000);
+            await msgToEdit.edit("Time left: " + i + " seconds");
         }
 
         // After the timer is done, send a message to the channel
+        msgToEdit.edit("Time's up!").catch((error) => console.log(error));
+
     }
 }
