@@ -185,6 +185,8 @@ const utils = {
     },
     /**
      * Converts seconds to a human-readable duration
+     * @param {number} seconds
+     * @returns {string}
      */
     parseSecondsToDuration(seconds) {
         let time = "";
