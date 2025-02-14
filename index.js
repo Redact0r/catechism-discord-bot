@@ -60,7 +60,11 @@ bot.on("messageCreate", async (msg) => {
   const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
 
   // Take our list of filtered words and assign to a map for O(n) complexity
-  const filterWordsMap = filterWords.map(word => ({ [word]: true }))
+  const filterWordsMap = filterWords.reduce((acc, value, index, arr) => {
+    acc[value] = true
+
+    return acc
+  }, {})
 
   const messageString = msg.content.toLowerCase();
 
