@@ -57,63 +57,9 @@ bot.on("messageCreate", async (msg) => {
     return;
   }
 
-  const filterWords = ["fuck", "bitch", "cunt", "pussy", "asshole", "nipples"];
-
-  // Take our list of filtered words and assign to a map for O(n) complexity
-  const filterWordsMap = filterWords.reduce((acc, value, index, arr) => {
-    acc[value] = true
-
-    return acc
-  }, {})
-
   const messageString = msg.content.toLowerCase();
 
-  if (messageString.includes("smite")) {
-    msg.channel.send("Exorcizamus te!").catch((error) => console.log(error));
-  }
 
-  if (messageString.includes("get me a beer") || messageString.includes("beer me") || (messageString.includes("get") && messageString.includes("a pint"))) {
-    msg.react("🍺").catch((error) => console.log(error));
-  }
-
-  if (messageString.includes("get") && (messageString.includes("a glass of wine") || messageString.includes("some wine"))) {
-    msg.react("🍷").catch((error) => console.log(error))
-  }
-
-  if (messageString.includes("get") && (messageString.includes("a glass of whiskey") || messageString.includes("some whiskey") || messageString.includes("a glass of rum") || messageString.includes("some rum"))) {
-    msg.react("🥃").catch(err => console.log(err))
-  }
-
-  if (messageString.includes("thank") && messageString.includes("popebot")) {
-    msg.reply("You're welcome, my dude.").catch((error) => console.log(error));
-  }
-
-  if (messageString.includes("no cap") && messageString.includes("popebot")) {
-    msg.reply("fr fr").catch((error) => console.log(error));
-  }
-
-  if (filterWordsMap[messageString]) {
-    msg
-      .reply("This is a Christian minecraft server.")
-      .catch((error) => console.log(error));
-  }
-
-  if (messageString.includes("heresy") || messageString.includes("heretic")) {
-    let chanceToSay = Math.floor(Math.random() * 100);
-
-    if (chanceToSay < 50)
-      msg.reply("A heretic? Confess and repent!")
-        .catch((error) => console.log(error));
-  }
-
-  if (messageString.includes("bread")) {
-    msg.react("🍞").catch((error) => console.log(error));
-  }
-
-  if (messageString.includes(":chancla:")) {
-    let index = Math.floor(Math.random() * 26);
-    msg.channel.send(url[index]);
-  }
 
   let args;
   let command;
