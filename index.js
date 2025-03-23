@@ -7,6 +7,8 @@ const bot = new Client({
 bot.commands = new Collection();
 const botCommands = require("./commands/");
 const {ROLES} = require("./services/utils");
+const { drinkReacts, foodReacts } = require("./popebot-reactions");
+const { popebotReplies } = require("./popebot-replies");
 
 Object.keys(botCommands).map((key) => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
