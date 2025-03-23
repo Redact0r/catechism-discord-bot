@@ -51,9 +51,10 @@ export async function drinkReacts(msg) {
 
             // Get all the beverage words in the message
             const bvgWordsInMessage = bevs.filter(word => messageString.includes(word));
+            console.debug("Bvg words in message:", bvgWordsInMessage);
 
             // If there are multiple beverage words, react with all of them
-            if (bvgWordsInMessage.length > 1) {
+            if (bvgWordsInMessage.length > 0) {
                 for (const bvg of bvgWordsInMessage) {
                     msg.react(bvgWords[bvg]).catch((error) => console.log(error));
                     await new Promise(resolve => setTimeout(resolve, 1000));
