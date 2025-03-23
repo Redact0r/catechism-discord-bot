@@ -42,7 +42,7 @@ export async function drinkReacts(msg) {
         const requestWord = requestWords.find(word => messageString.includes(word));
         const requestWordIndex = messageString.indexOf(requestWord);
         const nextWord = messageString.split(" ")[requestWordIndex + 1];
-        console.debug("Next word after request word:", nextWord);
+        console.debug("Next word after request word:", nextWord, "Request word index:", requestWordIndex);
 
         // Check if the next word is a target word
         if (targetWords.some(word => nextWord.includes(word))) {
