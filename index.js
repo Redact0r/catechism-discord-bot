@@ -59,7 +59,9 @@ bot.on("messageCreate", async (msg) => {
 
   const messageString = msg.content.toLowerCase();
 
-
+  drinkReacts(msg)
+  foodReacts(msg);
+  popebotReplies(msg)
 
   let args;
   let command;

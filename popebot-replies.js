@@ -32,7 +32,6 @@ function filteredWordResponse(msg) {
     // Take our list of filtered words and assign to a map for O(n) complexity
     const filterWordsMap = filterWords.reduce((acc, value, index, arr) => {
         acc[value] = true
-
         return acc
     }, {})
 
