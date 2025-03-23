@@ -36,15 +36,21 @@ export async function drinkReacts(msg) {
 
     // Check if the message contains any of the request words
     if (requestWords.some(word => messageString.includes(word))) {
+        console.debug("Request word found in message:", messageString);
+
         // Find the first request word in the message and get the next word, check if it's a target word
         const requestWord = requestWords.find(word => messageString.includes(word));
         const requestWordIndex = messageString.indexOf(requestWord);
         const nextWord = messageString.split(" ")[requestWordIndex + 1];
+        console.debug("Next word after request word:", nextWord);
 
         // Check if the next word is a target word
         if (targetWords.some(word => nextWord.includes(word))) {
+            console.debug("Target word after request word:", nextWord);
+
             // Get all the beverage words in the message
             const bvgWordsInMessage = bevs.filter(word => messageString.includes(word));
+
             // If there are multiple beverage words, react with all of them
             if (bvgWordsInMessage.length > 1) {
                 for (const bvg of bvgWordsInMessage) {
