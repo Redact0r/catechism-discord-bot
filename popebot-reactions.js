@@ -30,19 +30,6 @@ export function drinkReacts(msg) {
         const bvg = bevs.find(word => messageString.includes(word));
         msg.react(bvgWords[bvg]).catch((error) => console.log(error));
     }
-
-    //
-    // if (messageString.includes("get me a beer") || messageString.includes("beer me") || (messageString.includes("get") && messageString.includes("a pint"))) {
-    //     msg.react("🍺").catch((error) => console.log(error));
-    // }
-    //
-    // if (messageString.includes("get") && (messageString.includes("a glass of wine") || messageString.includes("some wine"))) {
-    //     msg.react("🍷").catch((error) => console.log(error))
-    // }
-    //
-    // if (messageString.includes("get") && (messageString.includes("a glass of whiskey") || messageString.includes("some whiskey") || messageString.includes("a glass of rum") || messageString.includes("some rum"))) {
-    //     msg.react("🥃").catch(err => console.log(err))
-    // }
 }
 
 export function foodReacts(msg) {
