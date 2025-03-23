@@ -56,7 +56,7 @@ export async function drinkReacts(msg) {
             // If there are multiple beverage words, react with all of them
             if (bvgWordsInMessage.length > 0) {
                 for (const bvg of bvgWordsInMessage) {
-                    msg.react(bvgWords[bvg]).catch((error) => console.log(error));
+                    await msg.react(bvgWords[bvg]).catch((error) => console.log(error));
                     await new Promise(resolve => setTimeout(resolve, 1000));
                 }
             }
