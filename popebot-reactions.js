@@ -1,5 +1,5 @@
 
-export function drinkReacts(msg) {
+export async function drinkReacts(msg) {
     const messageString = msg.content.toLowerCase();
 
     const requestWords = [
@@ -42,14 +42,15 @@ export function drinkReacts(msg) {
         const nextWord = messageString.split(" ")[requestWordIndex + 1];
 
         // Check if the next word is a target word
-        if (targetWords.some(word => messageString.includes(word))) {
+        if (targetWords.some(word => nextWord.includes(word))) {
             // Get all the beverage words in the message
             const bvgWordsInMessage = bevs.filter(word => messageString.includes(word));
             // If there are multiple beverage words, react with all of them
             if (bvgWordsInMessage.length > 1) {
-                bvgWordsInMessage.forEach(bvg => {
+                for (const bvg of bvgWordsInMessage) {
                     msg.react(bvgWords[bvg]).catch((error) => console.log(error));
-                });
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
             }
         }
 
