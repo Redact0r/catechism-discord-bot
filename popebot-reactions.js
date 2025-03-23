@@ -1,5 +1,5 @@
 
-function drinkReacts(msg) {
+export function drinkReacts(msg) {
     const messageString = msg.content.toLowerCase();
 
     const requestWords = [
@@ -45,7 +45,7 @@ function drinkReacts(msg) {
     // }
 }
 
-function foodReacts(msg) {
+export function foodReacts(msg) {
     const messageString = msg.content.toLowerCase();
     if (messageString.includes("bread")) {
         msg.react("🍞").catch((error) => console.log(error));

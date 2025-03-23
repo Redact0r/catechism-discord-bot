@@ -1,5 +1,5 @@
 
-function popebotReplies(msg) {
+export function popebotReplies(msg) {
     const messageString = msg.content.toLowerCase();
 
     filteredWordResponse(msg)
