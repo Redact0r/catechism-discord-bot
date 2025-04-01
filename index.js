@@ -61,9 +61,13 @@ bot.on("messageCreate", async (msg) => {
 
   const messageString = msg.content.toLowerCase();
 
-  drinkReacts(msg)
-  foodReacts(msg);
-  popebotReplies(msg)
+  try {
+    drinkReacts(msg)
+    foodReacts(msg);
+    popebotReplies(msg)
+  } catch (error) {
+    console.error(error);
+  }
 
   let args;
   let command;
@@ -97,4 +101,4 @@ bot.on("messageCreate", async (msg) => {
     console.error(error);
     msg.reply("Tell Tyler something broke!");
   }
-});
+})
