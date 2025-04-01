@@ -48,6 +48,12 @@ export async function drinkReacts(msg) {
         const nextWord = messageList[requestWordIndex + 1];
         console.debug("Next word after request word:", nextWord, "Request word index:", requestWordIndex);
 
+        // If the next word is undefined, return
+        if (nextWord === undefined) {
+            console.debug("Next word is undefined, returning.");
+            return;
+        }
+
         // Check if the next word is a target word
         if (targetWords.some(word => nextWord.includes(word))) {
             console.debug("Target word after request word:", nextWord);
