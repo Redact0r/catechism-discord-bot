@@ -1,6 +1,6 @@
 const utils = require("../services/utils");
 
-export default {
+module.exports = {
     name: "!pruneIntros",
     description: "Prune intros from the server",
     async execute(msg, args, client) {
