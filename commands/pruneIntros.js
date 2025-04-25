@@ -3,7 +3,7 @@ const utils = require("../services/utils");
 module.exports = {
     name: "!pruneIntros",
     description: "Prune intros from the server",
-    async execute(msg, args, client) {
+    execute: async (msg, args, client) => {
         console.log("!pruneIntros command executed");
         if (!utils.checkIfUserIsAuthorized(msg)) {
             await msg.react("🚫");
