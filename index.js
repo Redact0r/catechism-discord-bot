@@ -11,6 +11,7 @@ const { drinkReacts, foodReacts } = require("./popebot-reactions");
 const { popebotReplies } = require("./popebot-replies");
 
 Object.keys(botCommands).map((key) => {
+  console.log("Loading command: ", botCommands[key].name);
   bot.commands.set(botCommands[key].name, botCommands[key]);
 });
 
@@ -90,6 +91,7 @@ bot.on("messageCreate", async (msg) => {
   }
 
   if (!bot.commands.has(command)) {
+    await msg.reply("I don't know what you're requesting!");
     return;
   }
 
