@@ -98,7 +98,14 @@ bot.on("messageCreate", async (msg) => {
   try {
     console.log("Command received:", command);
     console.log("Arguments received:", args);
-    bot.commands.get(command).execute(msg, args, bot);
+    const c = bot.commands.get(command);
+
+    if (!c) {
+      console.log("Command not found");
+      return;
+    }
+
+    c.execute(msg, args, bot);
   } catch (error) {
     console.error(error);
     msg.reply("Tell Tyler something broke!");
