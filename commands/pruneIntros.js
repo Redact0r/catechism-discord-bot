@@ -6,6 +6,7 @@ module.exports = {
     execute: async (msg, args, client) => {
         console.log("!pruneIntros command executed");
         if (!utils.checkIfUserIsAuthorized(msg)) {
+            msg.reply("You are not authorized to use this command.");
             await msg.react("🚫");
             return
         }
