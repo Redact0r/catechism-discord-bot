@@ -1,4 +1,4 @@
-import utils from "../services/utils";
+const utils = require("../services/utils");
 
 export default {
     name: "!pruneIntros",
