@@ -127,6 +127,18 @@ const utils = {
     sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     },
+
+    LOGS_CHANNEL_ID: "891742946859311114",
+
+    /**
+     * Returns the link to a message
+     * @param msg {import('discord.js').Message}
+     * @returns {string}
+     */
+    getMessageLink(msg) {
+        return `https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+    },
+
     /**
      * Converts a number and unit to seconds
      * Uses the Go duration string format
