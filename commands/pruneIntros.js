@@ -4,6 +4,7 @@ module.exports = {
     name: "!pruneIntros",
     description: "Prune intros from the server",
     async execute(msg, args, client) {
+        console.log("!pruneIntros command executed");
         if (!utils.checkIfUserIsAuthorized(msg)) {
             await msg.react("🚫");
             return
