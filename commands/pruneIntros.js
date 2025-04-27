@@ -21,7 +21,7 @@ async function fetchMessages(channel, lastMessageId = null) {
             return [];
         }
 
-        const allMessages = messages.array();
+        const allMessages = messages.values();
         const lastMessage = messages.last();
 
         if (lastMessage) {
@@ -68,6 +68,10 @@ module.exports = {
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
             channel.send("See logs in <#891742946859311114>")
             const maleMessages = await fetchMessages(maleIntroChannel)
+            if (!maleMessages || maleMessages.length === 0) {
+                mLoadMsg.edit("No messages found in #introductions-male");
+                return
+            }
             for (const message of maleMessages) {
                 checkAndPruneMessage(message, users, logsChannel);
             }
@@ -75,6 +79,10 @@ module.exports = {
 
             const fLoadMsg = await channel.send("Removing messages from non-members in #introductions-female. <a:BlurpleLoadEmoji:1366141437808345108>");
             const femaleMessages = await fetchMessages(femaleIntroChannel)
+            if (!femaleMessages || femaleMessages.length === 0) {
+                fLoadMsg.edit("No messages found in #introductions-female");
+                return
+            }
             for (const message of femaleMessages) {
                 checkAndPruneMessage(message, users, logsChannel);
             }
