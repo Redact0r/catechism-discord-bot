@@ -80,6 +80,7 @@ bot.on("messageCreate", async (msg) => {
   }
 
   if (msg.content.startsWith("!")) {
+    console.info("Command received:", msg.content);
     args = msg.content.split(" ");
     command = args[0].toLowerCase().toString();
     users = bot.users;
