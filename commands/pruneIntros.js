@@ -38,7 +38,7 @@ module.exports = {
                 }
             });
             mLoadMsg.edit("Removing messages from non-members in #introduction-male. <:CheckEmoji:1366143203857924116>")
-            const fLoadMsg = channel.send("Removing messages from non-members in #introductions-female. <a:BlurpleLoadEmoji:1366141437808345108>");
+            const fLoadMsg = await channel.send("Removing messages from non-members in #introductions-female. <a:BlurpleLoadEmoji:1366141437808345108>");
             const femaleMessages = await femaleIntroChannel.messages.fetch()
             femaleMessages.forEach( (message) => {
                 if (!message.member) {
