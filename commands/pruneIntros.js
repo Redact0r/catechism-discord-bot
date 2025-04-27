@@ -2,9 +2,10 @@ const utils = require("../services/utils");
 
 function checkAndPruneMessage(message, users, logsChannel) {
     // Check if the message is not from a bot
+    console.log(message)
     console.log(message.author)
     console.log(message.author.id)
-    if (message.author.bot) return;
+    if (message?.author?.bot) return;
     // Check if the message author is not a member of the server
     if (!users.find((user) => user.id === message.author?.id)) {
         logsChannel.send(`Pruning message from non-member: ${message.author.username} - ${utils.getMessageLink(message)}`);
