@@ -28,24 +28,27 @@ module.exports = {
         }
 
         try {
+            const users = msg.guild.members.cache
+
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
             channel.send("See logs in <#891742946859311114>")
             const maleMessages = await maleIntroChannel.messages.fetch()
-            maleMessages.forEach( (message) => {
-                if (!message.member) {
+            for (const message of maleMessages) {
+                if (!users.find((user) => user.id === message.author.id)) {
                     logsChannel.send(`Pruning message from non-member: ${message.author.username} - ${utils.getMessageLink(message)}`);
                     // message.delete();
                 }
-            });
+            }
             mLoadMsg.edit("Removing messages from non-members in #introduction-male. <:CheckEmoji:1366143203857924116>")
+
             const fLoadMsg = await channel.send("Removing messages from non-members in #introductions-female. <a:BlurpleLoadEmoji:1366141437808345108>");
             const femaleMessages = await femaleIntroChannel.messages.fetch()
-            femaleMessages.forEach( (message) => {
-                if (!message.member) {
+            for (const message of femaleMessages) {
+                if (!users.find((user) => user.id === message.author.id)) {
                     logsChannel.send(`Pruning message from non-member: ${message.author.username} - ${utils.getMessageLink(message)}`);
                     // message.delete();
                 }
-            });
+            }
             fLoadMsg.edit("Removing messages from non-members in #introductions-female. <:CheckEmoji:1366143203857924116>")
 
             msg.reply("Introductions pruned successfully.");
