@@ -13,6 +13,14 @@ function checkAndPruneMessage(message, users, logsChannel) {
     }
 }
 
+async function fetchMessages(channel, lastMessageId = null) {
+    const messages = await channel.messages.fetch({ limit: 100, before: lastMessageId })
+    if (messages.size === 0) return [];
+    const allMessages = messages.filter(msg => !msg.author.bot);
+    if (messages.size < 100) return allMessages;
+    return allMessages.concat( await fetchMessages(channel, allMessages.last().id));
+}
+
 module.exports = {
     name: "!prune-intros",
     description: "Prune intros from the server",
@@ -45,14 +53,14 @@ module.exports = {
 
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
             channel.send("See logs in <#891742946859311114>")
-            const maleMessages = await maleIntroChannel.messages.fetch()
+            const maleMessages = await fetchMessages(maleIntroChannel)
             for (const message of maleMessages) {
                 checkAndPruneMessage(message, users, logsChannel);
             }
             mLoadMsg.edit("Removing messages from non-members in #introduction-male. <:CheckEmoji:1366143203857924116>")
 
             const fLoadMsg = await channel.send("Removing messages from non-members in #introductions-female. <a:BlurpleLoadEmoji:1366141437808345108>");
-            const femaleMessages = await femaleIntroChannel.messages.fetch()
+            const femaleMessages = await fetchMessages(femaleIntroChannel)
             for (const message of femaleMessages) {
                 checkAndPruneMessage(message, users, logsChannel);
             }
