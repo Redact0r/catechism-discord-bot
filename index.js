@@ -97,7 +97,9 @@ bot.on("messageCreate", async (msg) => {
 
     if (!bot.commands.has(command)) {
       console.log("Command not found");
+      const validCommandsString = Array.from(bot.commands.keys()).concat("\n")
       msg.reply("I don't know that command.");
+      msg.reply("Valid commands are: \n" + validCommandsString);
       return;
     }
 
