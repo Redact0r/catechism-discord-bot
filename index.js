@@ -99,7 +99,6 @@ bot.on("messageCreate", async (msg) => {
     const args = extracted.args;
     const command = extracted.command;
 
-
     // if (!bot.commands.has(command)) {
     //   console.log("Command not found");
     //   const validCommandsString = `

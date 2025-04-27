@@ -12,5 +12,5 @@ module.exports = {
     "!say": require("./say"),
     // "!studybreak": require("./studybreak"),
     "!chanTimer": require("./chanTimer"),
-    "!pruneIntros": require("./pruneIntros"),
+    "!prune-intros": require("./pruneIntros"),
 };

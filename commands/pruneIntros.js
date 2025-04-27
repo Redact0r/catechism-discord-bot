@@ -1,7 +1,7 @@
 const utils = require("../services/utils");
 
 module.exports = {
-    name: "!pruneIntros",
+    name: "!prune-intros",
     description: "Prune intros from the server",
     execute: async (msg, args, client) => {
         console.log("!pruneIntros command executed");
