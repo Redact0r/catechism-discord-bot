@@ -29,7 +29,7 @@ module.exports = {
         }
 
         try {
-            channel.send("Removing messages from non-members in #introduction-male.");
+            const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
             const maleMessages = await maleIntroChannel.messages.fetch()
             maleMessages.forEach( (message) => {
                 if (!message.member) {
@@ -37,7 +37,8 @@ module.exports = {
                     // message.delete();
                 }
             });
-            channel.send("Removing messages from non-members in #introductions-female.");
+            mLoadMsg.edit("Removing messages from non-members in #introduction-male. <:CheckEmoji:1366143203857924116>")
+            const fLoadMsg = channel.send("Removing messages from non-members in #introductions-female. <a:BlurpleLoadEmoji:1366141437808345108>");
             const femaleMessages = await femaleIntroChannel.messages.fetch()
             femaleMessages.forEach( (message) => {
                 if (!message.member) {
@@ -45,6 +46,7 @@ module.exports = {
                     // message.delete();
                 }
             });
+            fLoadMsg.edit("Removing messages from non-members in #introductions-female. <:CheckEmoji:1366143203857924116>")
 
             msg.reply("Introductions pruned successfully.");
         } catch (error) {
