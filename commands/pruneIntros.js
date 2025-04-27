@@ -33,6 +33,8 @@ module.exports = {
             const maleMessages = await maleIntroChannel.messages.fetch()
             maleMessages.forEach( (message) => {
                 if (!message.member) {
+                    console.log(message.author)
+                    return
                     logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
                     // message.delete();
                 }
