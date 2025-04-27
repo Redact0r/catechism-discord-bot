@@ -92,6 +92,8 @@ bot.on("messageCreate", async (msg) => {
   }
 
   if (!bot.commands.has(command)) {
+    console.log("Command not found");
+    console.log(bot.commands);
     // await msg.reply("I don't know what you're requesting!");
     return;
   }
