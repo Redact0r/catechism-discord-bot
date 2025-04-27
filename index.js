@@ -27,6 +27,27 @@ bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
 });
 
+function extractArgs(msg) {
+  let args, command;
+  if (msg.content.startsWith("+")) {
+    args = msg.content.split("#");
+    command = args.shift().toLowerCase().replace(/\s/g, "").toString();
+  }
+
+  if (msg.content.startsWith("!")) {
+    console.info("Command received:", msg.content);
+    args = msg.content.split(" ");
+    command = args[0].toLowerCase().toString();
+  }
+
+  if (args === undefined) {
+    args = msg.content;
+    command = args.toLowerCase().replace(/\s/g, "").toString();
+  }
+
+  return {args, command};
+}
+
 bot.on("messageCreate", async (msg) => {
   if (TEST_MODE && msg.author.id !== TESTER_ID) return;
 
@@ -60,8 +81,6 @@ bot.on("messageCreate", async (msg) => {
     return;
   }
 
-  const messageString = msg.content.toLowerCase();
-
   try {
     drinkReacts(msg)
     foodReacts(msg);
@@ -70,47 +89,32 @@ bot.on("messageCreate", async (msg) => {
     console.error(error);
   }
 
-  let args;
-  let command;
-  let users;
+  if (msg.content.startsWith("+") || msg.content.startsWith("!")) {
+    const extracted = extractArgs(msg);
+    const args = extracted.args;
+    const command = extracted.command;
 
-  if (msg.content.startsWith("+")) {
-    args = msg.content.split("#");
-    command = args.shift().toLowerCase().replace(/\s/g, "").toString();
-  }
 
-  if (msg.content.startsWith("!")) {
-    console.info("Command received:", msg.content);
-    args = msg.content.split(" ");
-    command = args[0].toLowerCase().toString();
-    users = bot.users;
-  }
-
-  if (args === undefined) {
-    args = msg.content;
-    command = args.toLowerCase().replace(/\s/g, "").toString();
-  }
-
-  if (!bot.commands.has(command)) {
-    console.log("Command not found");
-    console.log(bot.commands);
-    // await msg.reply("I don't know what you're requesting!");
-    return;
-  }
-
-  try {
-    console.log("Command received:", command);
-    console.log("Arguments received:", args);
-    const c = bot.commands.get(command);
-
-    if (!c) {
+    if (!bot.commands.has(command)) {
       console.log("Command not found");
+      msg.reply("I don't know that command.");
       return;
     }
 
-    c.execute(msg, args, bot);
-  } catch (error) {
-    console.error(error);
-    msg.reply("Tell Tyler something broke!");
+    try {
+      console.log("Command received:", command);
+      console.log("Arguments received:", args);
+      const c = bot.commands.get(command);
+
+      if (!c) {
+        console.log("Command not found");
+        return;
+      }
+
+      c.execute(msg, args, bot);
+    } catch (error) {
+      console.error(error);
+      msg.reply("Tell Tyler something broke!");
+    }
   }
 })
