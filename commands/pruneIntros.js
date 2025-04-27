@@ -16,9 +16,9 @@ function checkAndPruneMessage(message, users, logsChannel) {
 async function fetchMessages(channel, lastMessageId = null) {
     const messages = await channel.messages.fetch({ limit: 100, before: lastMessageId })
     if (messages.size === 0) return [];
-    const allMessages = messages.filter(msg => !msg.author.bot);
+    const allMessages = messages.filter(msg => !msg.author.bot).values();
     if (messages.size < 100) return allMessages;
-    return allMessages.concat( await fetchMessages(channel, allMessages.last().id));
+    return allMessages.concat( (await fetchMessages(channel, allMessages.last().id)).values() );
 }
 
 module.exports = {
