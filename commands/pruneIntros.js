@@ -18,7 +18,7 @@ async function fetchMessages(channel, lastMessageId = null) {
     if (messages.size === 0) return [];
     const allMessages = messages.filter(msg => !msg.author.bot).values();
     if (messages.size < 100) return allMessages;
-    return allMessages.concat( (await fetchMessages(channel, allMessages.last().id)).values() );
+    return allMessages.concat( (await fetchMessages(channel, messages.last().id)).values() );
 }
 
 module.exports = {
