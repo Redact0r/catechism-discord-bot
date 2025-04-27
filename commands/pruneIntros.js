@@ -4,7 +4,6 @@ module.exports = {
     name: "!prune-intros",
     description: "Prune intros from the server",
     execute: async (msg, args, client) => {
-        console.log("!pruneIntros command executed");
         if (!utils.checkIfUserIsAuthorized(msg)) {
             msg.reply("You are not authorized to use this command.");
             await msg.react("🚫");
@@ -30,6 +29,7 @@ module.exports = {
 
         try {
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
+            channel.send("See logs in <#891742946859311114>")
             const maleMessages = await maleIntroChannel.messages.fetch()
             maleMessages.forEach( (message) => {
                 if (!message.member) {
