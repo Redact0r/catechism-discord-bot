@@ -95,13 +95,16 @@ bot.on("messageCreate", async (msg) => {
     const command = extracted.command;
 
 
-    if (!bot.commands.has(command)) {
-      console.log("Command not found");
-      const validCommandsString = Array.from(bot.commands.keys()).concat("\n")
-      msg.reply("I don't know that command.");
-      msg.reply("Valid commands are: \n" + validCommandsString);
-      return;
-    }
+    // if (!bot.commands.has(command)) {
+    //   console.log("Command not found");
+    //   const validCommandsString = `
+    //   I don't know that command.
+    //   Valid commands are:
+    //   ${bot.commands.map((command) => command.name).join(`,
+    //   `)}`;
+    //   msg.reply(validCommandsString);
+    //   return;
+    // }
 
     try {
       console.log("Command received:", command);
