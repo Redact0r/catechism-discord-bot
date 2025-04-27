@@ -30,21 +30,25 @@ module.exports = {
 
         try {
             channel.send("Removing messages from non-members in #introduction-male.");
-            maleIntroChannel.messages.each(async (message) => {
-                if (!message.member) {
-                    logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
-                    // await message.delete();
-                }
-            })
-
+            maleIntroChannel.messages.fetch()
+                .then(async (messages) => {
+                    messages.forEach( (message) => {
+                        if (!message.member) {
+                            logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
+                            // message.delete();
+                        }
+                    });
+                })
             channel.send("Removing messages from non-members in #introductions-female.");
-            femaleIntroChannel.messages.each(async (message) => {
-                if (!message.member) {
-                    logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
-                    // await message.delete();
-                }
-            })
-
+            femaleIntroChannel.messages.fetch()
+                .then(async (messages) => {
+                    messages.forEach( (message) => {
+                        if (!message.member) {
+                            logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
+                            // message.delete();
+                        }
+                    });
+                })
 
             msg.reply("Introductions pruned successfully.");
         } catch (error) {
