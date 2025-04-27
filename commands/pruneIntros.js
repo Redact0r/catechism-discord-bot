@@ -30,25 +30,21 @@ module.exports = {
 
         try {
             channel.send("Removing messages from non-members in #introduction-male.");
-            maleIntroChannel.messages.fetch()
-                .then(async (messages) => {
-                    messages.forEach( (message) => {
-                        if (!message.member) {
-                            logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
-                            // message.delete();
-                        }
-                    });
-                })
+            const maleMessages = await maleIntroChannel.messages.fetch()
+            maleMessages.forEach( (message) => {
+                if (!message.member) {
+                    logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
+                    // message.delete();
+                }
+            });
             channel.send("Removing messages from non-members in #introductions-female.");
-            femaleIntroChannel.messages.fetch()
-                .then(async (messages) => {
-                    messages.forEach( (message) => {
-                        if (!message.member) {
-                            logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
-                            // message.delete();
-                        }
-                    });
-                })
+            const femaleMessages = await femaleIntroChannel.messages.fetch()
+            femaleMessages.forEach( (message) => {
+                if (!message.member) {
+                    logsChannel.send(`Pruning message from non-member: ${message.author.displayName} - ${utils.getMessageLink(message)}`);
+                    // message.delete();
+                }
+            });
 
             msg.reply("Introductions pruned successfully.");
         } catch (error) {
