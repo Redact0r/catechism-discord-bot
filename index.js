@@ -12,7 +12,12 @@ const { popebotReplies } = require("./popebot-replies");
 
 Object.keys(botCommands).map((key) => {
   console.log("Loading command: ", botCommands[key].name);
-  bot.commands.set(botCommands[key].name, botCommands[key]);
+  try {
+    bot.commands.set(botCommands[key].name, botCommands[key]);
+  }
+  catch (error) {
+      console.error("Error loading command: ", error);
+  }
 });
 
 const TOKEN = process.env.TOKEN;
