@@ -23,6 +23,18 @@ export function popebotReplies(msg) {
             msg.reply("A heretic? Confess and repent!")
                 .catch((error) => console.log(error));
     }
+
+    if (messageString.includes("sussy") || messageString.includes("sus")) {
+        msg.reply("Sussy baka!").catch((error) => console.log(error));
+    }
+
+    if (messageString.includes("hallelujah!")) {
+        msg.reply("Praise be!").catch((error) => console.log(error));
+    }
+
+    if (messageString.includes("achoo!")) {
+        msg.reply("God bless you.").catch((error) => console.log(error));
+    }
 }
 
 function filteredWordResponse(msg) {
