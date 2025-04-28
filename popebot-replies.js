@@ -24,7 +24,7 @@ export function popebotReplies(msg) {
                 .catch((error) => console.log(error));
     }
 
-    if (messageString.includes("sussy") || messageString.includes("sus")) {
+    if (messageString.includes("sussy") || messageString.split(" ").includes("sus")) {
         msg.reply("Sussy baka!").catch((error) => console.log(error));
     }
 
