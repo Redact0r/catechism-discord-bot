@@ -1,8 +1,8 @@
 require("dotenv").config();
 const {Client, Intents, Collection} = require("discord.js");
 const bot = new Client({
-    partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBER"],
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+    partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBERS"],
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
 });
 bot.commands = new Collection();
 const botCommands = require("./commands/");
@@ -27,8 +27,10 @@ bot
     .login(TOKEN)
     .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
 
-bot.on("ready", () => {
+bot.on("ready", async () => {
     console.info(`Logged in as ${bot.user.tag}!`);
+    const guild = bot.guilds.cache.find((g) => g.id === "890984994611265556");
+    await guild.members.fetch().catch(console.error);
 });
 
 function extractArgs(msg) {
