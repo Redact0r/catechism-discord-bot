@@ -116,8 +116,9 @@ bot.on("messageCreate", async (msg) => {
             }
 
             const guild = bot.guilds.cache.get(msg.guild.id)
-            const guildMembers = await guild.members.fetch();
-            console.log("Users in server", guildMembers)
+            await guild.members.fetch();
+            console.log("Users in server", guild.memberCount)
+            console.log("Useers", guild.members.cache.size)
             c.execute(msg, args, bot);
         } catch (error) {
             console.error(error);
