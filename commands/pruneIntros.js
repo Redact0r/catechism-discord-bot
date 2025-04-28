@@ -1,14 +1,15 @@
 const utils = require("../services/utils");
 
-function checkAndPruneMessage(message, users, logsChannel) {
+async function checkAndPruneMessage(message, users, logsChannel) {
     // Check if the message is not from a bot
     // console.log(message)
     console.log(message.author)
     console.log(message.author.id)
     if (message?.author?.bot) return;
     // Check if the message author is not a member of the server
-    if (!users.find((user) => user.id === message.author?.id)) {
-        logsChannel.send(`Pruning message from non-member: ${message.author.username} - ${utils.getMessageLink(message)}`);
+    const isMember = users.some((user) => user.id === message.author.id);
+    if (!isMember) {
+        await logsChannel.send(`Pruning message from non-member: ${message.author.username} - ${utils.getMessageLink(message)}`);
         // message.delete();
     }
 }
@@ -32,6 +33,17 @@ async function fetchMessages(channel, lastMessageId = null) {
     } catch (error) {
         console.error('Error fetching messages:', error);
         return [];
+    }
+}
+
+async function pruneMessagesInChannel(channel, loadMsg, users, logsChannel) {
+    const messages = await fetchMessages(channel)
+    if (!messages || messages.length === 0) {
+        loadMsg.edit(`No messages found in <#${channel.id}>`);
+        return;
+    }
+    for (const message of messages.values()) {
+        await checkAndPruneMessage(message, users, logsChannel);
     }
 }
 
@@ -67,14 +79,7 @@ module.exports = {
 
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
             channel.send("See logs in <#891742946859311114>")
-            const maleMessages = await fetchMessages(maleIntroChannel)
-            if (!maleMessages || maleMessages.length === 0) {
-                mLoadMsg.edit("No messages found in #introductions-male");
-                return
-            }
-            for await (const message of maleMessages.values()) {
-                await checkAndPruneMessage(message, users, logsChannel);
-            }
+            await pruneMessagesInChannel(maleIntroChannel, mLoadMsg, users, logsChannel);
             mLoadMsg.edit("Removing messages from non-members in #introduction-male. <:CheckEmoji:1366143203857924116>")
 
             const fLoadMsg = await channel.send("Removing messages from non-members in #introductions-female. <a:BlurpleLoadEmoji:1366141437808345108>");
