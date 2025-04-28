@@ -95,9 +95,7 @@ bot.on("messageCreate", async (msg) => {
   }
 
   if (msg.content.startsWith("+") || msg.content.startsWith("!")) {
-    const extracted = extractArgs(msg);
-    const args = extracted.args;
-    const command = extracted.command;
+    const {args, command} = extractArgs(msg);
 
     // if (!bot.commands.has(command)) {
     //   console.log("Command not found");

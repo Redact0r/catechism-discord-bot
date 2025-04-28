@@ -75,7 +75,7 @@ module.exports = {
         }
 
         try {
-            const users = msg.guild.members.cache
+            const users = client.users.cache
 
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
             channel.send("See logs in <#891742946859311114>")
