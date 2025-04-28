@@ -21,7 +21,7 @@ async function fetchMessages(channel, lastMessageId = null) {
             return [];
         }
 
-        const allMessages = messages.values();
+        const allMessages = messages;
         const lastMessage = messages.last();
 
         if (lastMessage) {
@@ -72,7 +72,7 @@ module.exports = {
                 mLoadMsg.edit("No messages found in #introductions-male");
                 return
             }
-            for (const message of maleMessages) {
+            for (const message of maleMessages.values()) {
                 checkAndPruneMessage(message, users, logsChannel);
             }
             mLoadMsg.edit("Removing messages from non-members in #introduction-male. <:CheckEmoji:1366143203857924116>")
@@ -83,7 +83,7 @@ module.exports = {
                 fLoadMsg.edit("No messages found in #introductions-female");
                 return
             }
-            for (const message of femaleMessages) {
+            for (const message of femaleMessages.values()) {
                 checkAndPruneMessage(message, users, logsChannel);
             }
             fLoadMsg.edit("Removing messages from non-members in #introductions-female. <:CheckEmoji:1366143203857924116>")
