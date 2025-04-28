@@ -2,15 +2,12 @@ const utils = require("../services/utils");
 
 async function checkAndPruneMessage(message, users, logsChannel) {
     // Check if the message is not from a bot
-    // console.log(message)
-    console.log(message.author)
-    console.log(message.author.id)
     if (message?.author?.bot) return;
     // Check if the message author is not a member of the server
     const isMember = users.some((user) => user.id === message.author.id);
     if (!isMember) {
         await logsChannel.send(`Pruning message from non-member: ${message.author.username} - ${utils.getMessageLink(message)}`);
-        // message.delete();
+        // await message.delete();
     }
 }
 
@@ -75,7 +72,9 @@ module.exports = {
         }
 
         try {
-            const users = client.users.cache
+            const users = msg.guild.members.cache
+            console.log("Users in server", users.length)
+            return
 
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");
             channel.send("See logs in <#891742946859311114>")
