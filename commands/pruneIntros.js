@@ -72,8 +72,8 @@ module.exports = {
         }
 
         try {
-            const users = client.guilds.cache.get(msg.guild.id).members.cache
-            console.log("Users in server", users.length)
+            const guild = client.guilds.cache.get(msg.guild.id)
+            console.log("Users in server", guild.members.cache.size)
             return
 
             const mLoadMsg = await channel.send("Removing messages from non-members in #introduction-male. <a:BlurpleLoadEmoji:1366141437808345108>");

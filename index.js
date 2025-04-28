@@ -56,10 +56,6 @@ function extractArgs(msg) {
 bot.on("messageCreate", async (msg) => {
   if (TEST_MODE && msg.author.id !== TESTER_ID) return;
 
-  const guild = bot.guilds.cache.get(msg.guild.id);
-  // Verify the bot can get the guild
-  console.debug("Guild ID: ", guild.id);
-
   // Log when a user changes their sex role to the #carl-log channel
   if (
     msg.channel.id === "905081710734114869" &&
@@ -116,8 +112,6 @@ bot.on("messageCreate", async (msg) => {
       console.log("Command received:", command);
       console.log("Arguments received:", args);
       const c = bot.commands.get(command);
-
-      const users = guild.members.cache
 
       if (!c) {
         console.log("Command not found");
