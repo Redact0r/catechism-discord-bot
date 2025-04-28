@@ -2,7 +2,7 @@ const utils = require("../services/utils");
 
 function checkAndPruneMessage(message, users, logsChannel) {
     // Check if the message is not from a bot
-    console.log(message)
+    // console.log(message)
     console.log(message.author)
     console.log(message.author.id)
     if (message?.author?.bot) return;
@@ -72,8 +72,8 @@ module.exports = {
                 mLoadMsg.edit("No messages found in #introductions-male");
                 return
             }
-            for (const message of maleMessages.values()) {
-                checkAndPruneMessage(message, users, logsChannel);
+            for await (const message of maleMessages.values()) {
+                await checkAndPruneMessage(message, users, logsChannel);
             }
             mLoadMsg.edit("Removing messages from non-members in #introduction-male. <:CheckEmoji:1366143203857924116>")
 
@@ -83,8 +83,8 @@ module.exports = {
                 fLoadMsg.edit("No messages found in #introductions-female");
                 return
             }
-            for (const message of femaleMessages.values()) {
-                checkAndPruneMessage(message, users, logsChannel);
+            for await (const message of femaleMessages.values()) {
+                await checkAndPruneMessage(message, users, logsChannel);
             }
             fLoadMsg.edit("Removing messages from non-members in #introductions-female. <:CheckEmoji:1366143203857924116>")
 
