@@ -42,6 +42,8 @@ function extractArgs(msg) {
   if (msg.content.startsWith("!")) {
     console.info("Command received:", msg.content);
     args = msg.content.split(" ");
+    // Remove the first element (the command)
+    args.shift();
     command = args[0].toLowerCase().toString();
   }
 
@@ -118,6 +120,8 @@ bot.on("messageCreate", async (msg) => {
         return;
       }
 
+      const guild = bot.guilds.cache.get(msg.guild.id)
+      console.log("Users in server", (await guild.members.fetch()).size)
       c.execute(msg, args, bot);
     } catch (error) {
       console.error(error);
