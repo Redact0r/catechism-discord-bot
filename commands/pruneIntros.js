@@ -72,7 +72,7 @@ module.exports = {
         }
 
         try {
-            const users = msg.guild.members.cache
+            const users = client.guilds.cache.get(msg.guild.id).members.cache
             console.log("Users in server", users.length)
             return
 
