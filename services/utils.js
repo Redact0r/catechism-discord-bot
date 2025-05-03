@@ -23,6 +23,7 @@ const utils = {
         SHERIFF_MENTIONABLE: "<@&890984994611265557>",
         DEPUTY: "891744347454844978",
         DEPUTY_MENTIONABLE: "<@&891744347454844978>",
+        QUARANTINED: "1333461375808176263",
     },
 
     randomAdjective() {

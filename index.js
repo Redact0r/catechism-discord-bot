@@ -126,10 +126,29 @@ bot.on("messageCreate", async (msg) => {
 })
 
 bot.on("guildMemberUpdate", async (oldMember, newMember) => {
+    /**
+     *
+     * @type {import('discord.js').TextChannel}
+     */
     const logChannel = newMember.guild.channels.cache.find(channel => channel.name === 'carl-log')
-    console.log(`User ${newMember.user.tag} updated their profile.`)
-    console.log("Notifying channel:", logChannel?.name)
     if (!logChannel) return;
+
+    // Check if the user changed their gender role
+    const isMale = oldMember.roles.cache.has(role => role.id === ROLES.MALE);
+    const isFemale = oldMember.roles.cache.has(role => role.id === ROLES.FEMALE);
+
+    const newIsMale = newMember.roles.cache.has(role => role.id === ROLES.MALE)
+    const newIsFemale = newMember.roles.cache.has(role => role.id === ROLES.FEMALE)
+
+    if ((isMale && newIsFemale) || (isFemale && newIsMale)) {
+        await logChannel
+            .send(
+                `Hey, ${ROLES.SHERIFF_MENTIONABLE} and ${ROLES.DEPUTY_MENTIONABLE}, @${newMember.user.username} changed their sex role!`
+            )
+            .catch((error) => console.log(error));
+        await newMember.roles.add(ROLES.QUARANTINED)
+    }
+
 
     if (oldMember.user.avatar !== newMember.user.avatar) {
         await logChannel.send({
