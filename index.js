@@ -55,28 +55,6 @@ function extractArgs(msg) {
 bot.on("messageCreate", async (msg) => {
     if (TEST_MODE && msg.author.id !== TESTER_ID) return;
 
-    // Log when a user changes their sex role to the #carl-log channel
-    if (
-        msg.channel.id === "905081710734114869" &&
-        msg.embeds[0] &&
-        msg.embeds[0].author
-    ) {
-        // console.log(msg.embeds[0]);
-        const msgContent = msg.embeds[0].description;
-        const msgAuthor = msg.embeds[0].author.name;
-
-        if (
-            msgContent.includes(ROLES.MALE_MENTIONABLE) &&
-            msgContent.includes(ROLES.FEMALE_MENTIONABLE)
-        ) {
-            msg.channel
-                .send(
-                    `Hey, ${ROLES.SHERIFF_MENTIONABLE} and ${ROLES.DEPUTY_MENTIONABLE}, @${msgAuthor} changed their sex role!`
-                )
-                .catch((error) => console.log(error));
-        }
-    }
-
     if (msg.author.bot) {
         return;
     }
