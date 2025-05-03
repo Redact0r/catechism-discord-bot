@@ -32,11 +32,9 @@ const RolesService = {
     // Check if the user changed their gender role
     const isMale = oldMember.roles.cache.has(ROLES.MALE)
     const isFemale = oldMember.roles.cache.has(ROLES.FEMALE);
-    console.debug(`Old isMale: ${isMale}, isFemale: ${isFemale}`, oldMember.user.username);
 
     const newIsMale = newMember.roles.cache.has(ROLES.MALE)
     const newIsFemale = newMember.roles.cache.has(ROLES.FEMALE)
-    console.debug(`New isMale: ${newIsMale}, isFemale: ${newIsFemale}`, newMember.user.username);
 
     if ((isMale && newIsFemale) || (isFemale && newIsMale)) {
       console.log("User changed sex role!", newMember.user.username);
