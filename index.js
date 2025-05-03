@@ -1,7 +1,7 @@
 require("dotenv").config();
 const {Client, Intents, Collection, MessageEmbed} = require("discord.js");
 const bot = new Client({
-    partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBERS"],
+    partials: ["USER", "REACTION", "GUILD_MEMBER", "MESSAGE", "CHANNEL", "GUILD_MEMBERS"],
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
 });
 bot.commands = new Collection();
@@ -115,9 +115,11 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
     // Check if the user changed their gender role
     const isMale = oldMember.roles.cache.has(role => role.id === ROLES.MALE);
     const isFemale = oldMember.roles.cache.has(role => role.id === ROLES.FEMALE);
+    console.debug(`Old isMale: ${isMale}, isFemale: ${isFemale}`);
 
     const newIsMale = newMember.roles.cache.has(role => role.id === ROLES.MALE)
     const newIsFemale = newMember.roles.cache.has(role => role.id === ROLES.FEMALE)
+    console.debug(`New isMale: ${newIsMale}, isFemale: ${newIsFemale}`);
 
     if ((isMale && newIsFemale) || (isFemale && newIsMale)) {
         console.log("User changed sex role!", newMember.user.username);
