@@ -1,5 +1,5 @@
 require("dotenv").config();
-const {Client, Intents, Collection} = require("discord.js");
+const {Client, Intents, Collection, MessageEmbed} = require("discord.js");
 const bot = new Client({
     partials: ["USER", "REACTION", "MESSAGE", "CHANNEL", "GUILD_MEMBERS"],
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
@@ -122,5 +122,27 @@ bot.on("messageCreate", async (msg) => {
             console.error(error);
             msg.reply("Tell Tyler something broke!");
         }
+    }
+})
+
+bot.on("guildMemberUpdate", async (oldMember, newMember) => {
+    const logChannel = newMember.guild.channels.cache.find(channel => channel.name === 'carl-log')
+    if (!logChannel) return;
+
+
+    if (oldMember.user.avatar !== newMember.user.avatar) {
+        await logChannel.send({
+            embeds: [new MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle('Avatar Change')
+                .addField('User', newMember.user.tag, true)
+                .addFields(
+                    { name: 'Old Avatar', value: `[Link](${oldMember.user.displayAvatarURL({ format: 'png', dynamic: true })})`, inline: true },
+                    { name: 'New Avatar', value: `[Link](${newMember.user.displayAvatarURL({ format: 'png', dynamic: true })})`, inline: true }
+                )
+                .setImage(newMember.user.displayAvatarURL({ size: 512 }))
+                .setTimestamp()
+            ]
+        });
     }
 })
