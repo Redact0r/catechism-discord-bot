@@ -9,6 +9,7 @@ const botCommands = require("./commands/");
 const {ROLES} = require("./services/utils");
 const {drinkReacts, foodReacts} = require("./popebot-reactions");
 const {popebotReplies} = require("./popebot-replies");
+const {handleSexRoleChanges} = require("./services/RolesService");
 
 Object.keys(botCommands).map((key) => {
     console.log("Loading command: ", botCommands[key].name);
@@ -109,43 +110,7 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
      * @type {import('discord.js').TextChannel}
      */
     const logChannel = newMember.guild.channels.cache.find(channel => channel.name === 'carl-log')
-    // if (!logChannel) return;
-    console.debug("Channel found: ", logChannel.name);
+    if (!logChannel) return;
 
-    // Check if the user changed their gender role
-    const isMale = oldMember.roles.cache.has(ROLES.MALE)
-    const isFemale = oldMember.roles.cache.has(ROLES.FEMALE);
-    console.debug(`Old isMale: ${isMale}, isFemale: ${isFemale}`, oldMember.roles.cache);
-
-    const newIsMale = newMember.roles.cache.has(ROLES.MALE)
-    const newIsFemale = newMember.roles.cache.has(ROLES.FEMALE)
-    console.debug(`New isMale: ${newIsMale}, isFemale: ${newIsFemale}`, newMember.roles.cache);
-
-    if ((isMale && newIsFemale) || (isFemale && newIsMale)) {
-        console.log("User changed sex role!", newMember.user.username);
-        await logChannel
-            .send(
-                `Hey, ${ROLES.SHERIFF_MENTIONABLE} and ${ROLES.DEPUTY_MENTIONABLE}, <@${newMember.user.id}> changed their sex role!`
-            )
-            .catch((error) => console.log(error));
-        await newMember.roles.add(ROLES.QUARANTINED)
-            .catch(console.error)
-    }
-
-
-    if (oldMember.user.avatar !== newMember.user.avatar) {
-        await logChannel.send({
-            embeds: [new MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle('Avatar Change')
-                .addField('User', newMember.user.tag, true)
-                .addFields(
-                    { name: 'Old Avatar', value: `[Link](${oldMember.user.displayAvatarURL({ format: 'png', dynamic: true })})`, inline: true },
-                    { name: 'New Avatar', value: `[Link](${newMember.user.displayAvatarURL({ format: 'png', dynamic: true })})`, inline: true }
-                )
-                .setImage(newMember.user.displayAvatarURL({ size: 512 }))
-                .setTimestamp()
-            ]
-        });
-    }
+    await handleSexRoleChanges(oldMember, newMember, logChannel);
 })
