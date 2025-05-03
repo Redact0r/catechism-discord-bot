@@ -115,11 +115,11 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
     // Check if the user changed their gender role
     const isMale = oldMember.roles.cache.has(role => role.id === ROLES.MALE);
     const isFemale = oldMember.roles.cache.has(role => role.id === ROLES.FEMALE);
-    console.debug(`Old isMale: ${isMale}, isFemale: ${isFemale}`);
+    console.debug(`Old isMale: ${isMale}, isFemale: ${isFemale}`, oldMember.roles.cache);
 
     const newIsMale = newMember.roles.cache.has(role => role.id === ROLES.MALE)
     const newIsFemale = newMember.roles.cache.has(role => role.id === ROLES.FEMALE)
-    console.debug(`New isMale: ${newIsMale}, isFemale: ${newIsFemale}`);
+    console.debug(`New isMale: ${newIsMale}, isFemale: ${newIsFemale}`, newMember.roles.cache);
 
     if ((isMale && newIsFemale) || (isFemale && newIsMale)) {
         console.log("User changed sex role!", newMember.user.username);
