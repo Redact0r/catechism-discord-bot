@@ -86,9 +86,9 @@ bot.on("messageCreate", async (msg) => {
     }
 
     try {
-        drinkReacts(msg)
-        foodReacts(msg);
-        popebotReplies(msg)
+        await drinkReacts(msg)
+        await foodReacts(msg);
+        await popebotReplies(msg)
     } catch (error) {
         console.error(error);
     }

@@ -74,9 +74,9 @@ export async function drinkReacts(msg) {
     }
 }
 
-export function foodReacts(msg) {
+export async function foodReacts(msg) {
     const messageString = msg.content.toLowerCase();
     if (messageString.includes("bread")) {
-        msg.react("🍞").catch((error) => console.log(error));
+        await msg.react("🍞").catch((error) => console.log(error));
     }
 }
