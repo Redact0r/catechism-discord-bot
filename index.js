@@ -119,12 +119,14 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
     const newIsFemale = newMember.roles.cache.has(role => role.id === ROLES.FEMALE)
 
     if ((isMale && newIsFemale) || (isFemale && newIsMale)) {
+        console.log("User changed sex role!", newMember.user.username);
         await logChannel
             .send(
-                `Hey, ${ROLES.SHERIFF_MENTIONABLE} and ${ROLES.DEPUTY_MENTIONABLE}, @${newMember.user.username} changed their sex role!`
+                `Hey, ${ROLES.SHERIFF_MENTIONABLE} and ${ROLES.DEPUTY_MENTIONABLE}, <@${newMember.user.id}> changed their sex role!`
             )
             .catch((error) => console.log(error));
         await newMember.roles.add(ROLES.QUARANTINED)
+            .catch(console.error)
     }
 
 
