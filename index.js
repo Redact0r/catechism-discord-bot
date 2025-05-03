@@ -127,8 +127,9 @@ bot.on("messageCreate", async (msg) => {
 
 bot.on("guildMemberUpdate", async (oldMember, newMember) => {
     const logChannel = newMember.guild.channels.cache.find(channel => channel.name === 'carl-log')
+    console.log(`User ${newMember.user.tag} updated their profile.`)
+    console.log("Notifying channel:", logChannel?.name)
     if (!logChannel) return;
-
 
     if (oldMember.user.avatar !== newMember.user.avatar) {
         await logChannel.send({
