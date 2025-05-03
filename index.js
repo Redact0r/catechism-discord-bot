@@ -113,12 +113,12 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
     console.debug("Channel found: ", logChannel.name);
 
     // Check if the user changed their gender role
-    const isMale = oldMember.roles.cache.has(role => role.id === ROLES.MALE);
-    const isFemale = oldMember.roles.cache.has(role => role.id === ROLES.FEMALE);
+    const isMale = oldMember.roles.cache.has(ROLES.MALE)
+    const isFemale = oldMember.roles.cache.has(ROLES.FEMALE);
     console.debug(`Old isMale: ${isMale}, isFemale: ${isFemale}`, oldMember.roles.cache);
 
-    const newIsMale = newMember.roles.cache.has(role => role.id === ROLES.MALE)
-    const newIsFemale = newMember.roles.cache.has(role => role.id === ROLES.FEMALE)
+    const newIsMale = newMember.roles.cache.has(ROLES.MALE)
+    const newIsFemale = newMember.roles.cache.has(ROLES.FEMALE)
     console.debug(`New isMale: ${newIsMale}, isFemale: ${newIsFemale}`, newMember.roles.cache);
 
     if ((isMale && newIsFemale) || (isFemale && newIsMale)) {
