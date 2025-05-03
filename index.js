@@ -109,7 +109,8 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
      * @type {import('discord.js').TextChannel}
      */
     const logChannel = newMember.guild.channels.cache.find(channel => channel.name === 'carl-log')
-    if (!logChannel) return;
+    // if (!logChannel) return;
+    console.debug("Channel found: ", logChannel.name);
 
     // Check if the user changed their gender role
     const isMale = oldMember.roles.cache.has(role => role.id === ROLES.MALE);
