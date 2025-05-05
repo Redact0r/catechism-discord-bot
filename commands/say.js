@@ -15,7 +15,10 @@ module.exports = {
       return client.channels.cache
         .get(channelToSendMessageTo)
         .send(message)
-        .then(() => msg.delete())
+        .then(async () => {
+          await msg.reply("Message sent!")
+          await msg.delete()
+        })
         .catch((error) => console.log(error));
     }
     else {
