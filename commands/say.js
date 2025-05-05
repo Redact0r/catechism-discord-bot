@@ -8,10 +8,10 @@ module.exports = {
 
     if (!authCheck) return;
 
-    const message = args.slice(2).join(" ");
+    const message = args.slice(1).join(" ");
 
-    if (args[1].startsWith("<#")) {
-      const channelToSendMessageTo = args[1].substring(2, args[1].length - 1);
+    if (args[0].startsWith("<#")) {
+      const channelToSendMessageTo = args[0].substring(2, args[0].length - 1);
       return client.channels.cache
         .get(channelToSendMessageTo)
         .send(message)

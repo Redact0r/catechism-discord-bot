@@ -11,22 +11,22 @@ module.exports = {
       console.log("User ID", msg.author.id);
       return
     }
-    if (args.length < 3) {
-      msg.reply(`Error, not enough arguments provided. Expected 3 arguments, received ${args.length}`);
-      console.log("Error, not enough arguments provided. Expected 3 arguments, received", args.length);
+    if (args.length < 2) {
+      msg.reply(`Error, not enough arguments provided. Expected 2 arguments, received ${args.length}`);
+      console.log("Error, not enough arguments provided. Expected 2 arguments, received", args.length);
       console.log("Arguments", args);
       return;
     }
 
     let messageID = args[1];
-    if (args[1].startsWith("<#")) {
+    if (args[0].startsWith("<#")) {
       // Extract message ID from <#message_id>
-      messageID = args[1].substring(2, args[1].length - 1);
+      messageID = args[0].substring(2, args[0].length - 1);
     } else {
-      messageID = args[1];
+      messageID = args[0];
     }
 
-    const messageText = args.splice(2).join(" ");
+    const messageText = args.splice(1).join(" ");
 
     console.log("Sending message to channel:", messageID);
     console.log("Message text:", messageText);

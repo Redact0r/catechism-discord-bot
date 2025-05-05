@@ -4,20 +4,20 @@ module.exports = {
     name: "!chantimer",
     description: "Set a timer",
     execute: async (msg, args, client) => {
-        if (args.length < 3) {
+        if (args.length < 2) {
             msg.reply("Error, not enough arguments provided. Expected 2 arguments, received " + args.length);
             console.log("Error, not enough arguments provided. Expected 2 arguments, received", args.length);
             console.log("Arguments", args);
             return;
         }
 
-        if (!args[1].startsWith('<#')) {
+        if (!args[0].startsWith('<#')) {
             msg.reply("Error, expected a channel argument");
             console.log("Error, expected a channel argument");
             console.log("Arguments", args);
             return
         }
-        const channel = args[1].substring(2, args[1].length - 1);
+        const channel = args[0].substring(2, args[0].length - 1);
         const channelToSendTo = client.channels.cache.get(channel);
 
         if (!channelToSendTo) {
@@ -30,7 +30,7 @@ module.exports = {
         // time should be formatted like Go duration strings
         // https://golang.org/pkg/time/#ParseDuration
         // e.g. 1s, 1m, 1h, 1d
-        const time = args[2];
+        const time = args[1];
         const parsedTime = parseDuration(time);
 
         console.log("Setting a timer for", parsedTime, "seconds");
