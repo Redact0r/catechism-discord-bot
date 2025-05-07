@@ -29,12 +29,12 @@ module.exports = {
     )
       return;
 
-    if (!args[1] || !args[1].startsWith("<@")) return;
+    if (!args[0] || !args[0].startsWith("<@")) return;
 
-    if (args[1].includes("750161264482975805"))
+    if (args[0].includes("750161264482975805"))
       return msg.react("896163532167610402");
 
-    const userIdString1 = args[1].replace("<@", "");
+    const userIdString1 = args[0].replace("<@", "");
     const userIdString = userIdString1.replace(">", "");
 
     if (userIdString === msg.author.id) return;
