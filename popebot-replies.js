@@ -19,7 +19,7 @@ export async function popebotReplies(msg) {
     if (messageString.includes("heresy") || messageString.includes("heretic")) {
         let chanceToSay = Math.floor(Math.random() * 100);
 
-        if (chanceToSay < 50)
+        if (chanceToSay >= 50)
             await msg.reply("A heretic? Confess and repent!")
                 .catch((error) => console.log(error));
     }
@@ -27,7 +27,7 @@ export async function popebotReplies(msg) {
     if (messageString.includes("sussy") || messageString.split(" ").includes("sus")) {
         // weighted random response
         let chanceToSay = Math.floor(Math.random() * 100);
-        if (chanceToSay < 75) {
+        if (chanceToSay >= 70) {
             await msg.reply("Sussy baka!").catch((error) => console.log(error));
         }
     }
