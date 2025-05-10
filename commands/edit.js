@@ -18,12 +18,10 @@ module.exports = {
       return;
     }
 
-    let messageID = args[1];
-    if (args[0].startsWith("<#")) {
+    let messageID = args[0];
+    if (messageID.startsWith("<#")) {
       // Extract message ID from <#message_id>
       messageID = args[0].substring(2, args[0].length - 1);
-    } else {
-      messageID = args[0];
     }
 
     const messageText = args.splice(1).join(" ");
