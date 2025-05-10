@@ -26,7 +26,7 @@ module.exports = {
 
     const messageText = args.splice(1).join(" ");
 
-    console.log("Sending message to channel:", messageID);
+    console.log("Sending message to channel:", messageID, "end");
     console.log("Message text:", messageText);
     if (!isNaN(parseInt(messageID))) {
       msg.channel.messages.fetch(messageID).then((m) => {

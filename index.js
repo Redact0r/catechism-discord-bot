@@ -44,11 +44,8 @@ function extractArgs(msg) {
     if (msg.content.startsWith("!")) {
         console.info("Command received:", msg.content);
         args = msg.content.split(" ");
-        command = args[0].toLowerCase().toString();
+        command = args.shift().toLowerCase().toString();
     }
-
-    // Remove the command from the args array
-    args.shift()
 
     return {args, command};
 }
