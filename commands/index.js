@@ -11,4 +11,5 @@ module.exports = {
     // "!studybreak": require("./studybreak"),
     "!chanTimer": require("./chanTimer"),
     "!prune-intros": require("./pruneIntros"),
+    "!quarantine": require("./quarantine"),
 };
