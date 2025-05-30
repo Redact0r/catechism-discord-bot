@@ -100,13 +100,13 @@ const utils = {
         let authorized = false;
 
         const officerRole = msg.member.roles.cache.find(
-            (role) => role.id == this.ROLES.SHERIFF
+            (role) => role.id === utils.ROLES.SHERIFF
         );
         const modRole = msg.member.roles.cache.find(
-            (role) => role.id == this.ROLES.DEPUTY
+            (role) => role.id === utils.ROLES.DEPUTY
         );
         const modRoleTest = msg.member.roles.cache.find(
-            (role) => role.name == "Moderator"
+            (role) => role.name === "Moderator"
         );
 
         if (TEST_MODE && modRoleTest) {
