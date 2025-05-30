@@ -3,7 +3,7 @@ const {ROLES, checkIfUserIsAuthorized} = require("../services/utils");
 module.exports = {
     name: "!quarantine",
     description: "Quarantine a user",
-    async execute(msg, args) {
+    async execute(msg, args, client) {
         if (!checkIfUserIsAuthorized(msg)) {
             await msg.react("🚫");
             console.log("User is not authorized to use this command");
