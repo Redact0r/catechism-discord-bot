@@ -12,4 +12,5 @@ module.exports = {
     "!chanTimer": require("./chanTimer"),
     "!prune-intros": require("./pruneIntros"),
     "!quarantine": require("./quarantine"),
+    "!festa-watch": require("./festa-watch"),
 };

@@ -130,6 +130,7 @@ const utils = {
     },
 
     LOGS_CHANNEL_ID: "891742946859311114",
+    PROD_LOGS_CHANNEL_ID: "1378931217176461404",
 
     /**
      * Returns the link to a message
@@ -217,6 +218,34 @@ const utils = {
         }
         time += `${seconds}s`;
         return time;
+    },
+
+    festaJuninaHelper: {
+        _festaWatchStatusActive: false,
+
+        set festaWatchStatus(bool) {
+            this._festaWatchStatusActive = bool;
+        },
+
+        get festaWatchStatus() {
+            return this._festaWatchStatusActive;
+        },
+
+        _festaIntervalIds: new Map(),
+
+        set festaIntervalIds(id) {
+            if (!this._festaIntervalIds) {
+                this._festaIntervalIds = new Map();
+            }
+            this._festaIntervalIds.set(id.guildId, id);
+        },
+
+        get festaIntervalIds() {
+            if (!this._festaIntervalIds) {
+                this._festaIntervalIds = new Map();
+            }
+            return this._festaIntervalIds;
+        }
     }
 };
 
