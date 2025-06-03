@@ -10,6 +10,24 @@ module.exports = {
         }
         await msg.react("<a:BlurpleLoadEmoji:1366141437808345108>");
 
+        if (args[0] === "stop") {
+            if (!festaJuninaHelper.festaWatchStatus) {
+                await msg.reply("Festa Watch is not currently running on this server.");
+                return;
+            }
+
+            festaJuninaHelper.festaWatchStatus = false;
+
+            const intervalId = festaJuninaHelper.festaIntervalIds.get(msg.guild.id);
+            if (intervalId) {
+                clearInterval(intervalId);
+                festaJuninaHelper.festaIntervalIds.delete(msg.guild.id);
+            }
+
+            await msg.reply("Festa Watch has been stopped.");
+            return;
+        }
+
         if (festaJuninaHelper.festaWatchStatus) {
             await msg.reply("Festa Watch is already running on this server.");
             return;
