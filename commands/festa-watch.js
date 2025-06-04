@@ -74,13 +74,13 @@ async function processQueue(msg) {
 
     const messages = await queueChannel.messages.fetch({ limit: 100 });
     if (messages.size === 0) {
-        msg.reply("No letters found in the queue channel.");
+        logsChannel.send("No letters found in the queue channel. Sleeping for 10 minutes...");
         return;
     }
     const sortedMessages = messages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
     const oldestMessage = sortedMessages.first();
     if (!oldestMessage) {
-        msg.reply("No letters found in the queue channel.");
+        logsChannel.send("No letters found in the queue channel. Sleeping for 10 minutes...");
         return;
     }
 
