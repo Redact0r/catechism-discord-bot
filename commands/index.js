@@ -13,4 +13,5 @@ module.exports = {
     "!prune-intros": require("./pruneIntros"),
     "!quarantine": require("./quarantine"),
     "!festa-watch": require("./festa-watch"),
+    "!channel": require("./channel"),
 };
