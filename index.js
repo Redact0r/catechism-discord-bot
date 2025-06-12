@@ -51,6 +51,26 @@ function extractArgs(msg) {
 }
 
 bot.on("messageCreate", async (msg) => {
+    if (msg.content.startsWith("!")) {
+        const {args, command} = extractArgs(msg);
+        if (command === "!debug") {
+            // Print debug information about the user calling the command
+            const userInfo = `User: ${msg.author.username} (${msg.author.id})
+            Joined at: ${msg.member.joinedAt}
+            Roles: ${msg.member.roles.cache.map(role => role.name).join(", ")}
+            Role IDs: ${msg.member.roles.cache.map(role => role.id).join(", ")}`;
+            console.log(userInfo);
+            // send as an embed
+            const embed = new MessageEmbed()
+                .setTitle("Debug Information")
+                .setDescription(userInfo)
+                .setColor("#0099ff")
+                .setTimestamp();
+            await msg.reply({embeds: [embed]});
+
+            return
+        }
+    }
     if (TEST_MODE && msg.author.id !== TESTER_ID) return;
 
     if (msg.author.bot) {

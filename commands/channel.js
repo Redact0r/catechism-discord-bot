@@ -5,7 +5,7 @@ module.exports = {
     async execute(message, args) {
         const logsChannel = message.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID);
         // Check if the user has permission to manage channels
-        if (!checkIfUserIsAuthorized(message) || !message.author.roles.cache.has(ROLES.COMMUNITY_MANAGER)) {
+        if (!checkIfUserIsAuthorized(message) || !message.member.roles.cache.has(ROLES.COMMUNITY_MANAGER)) {
             logsChannel.send("Unauthorized access attempt to !channel command by " + message.author.username);
             return message.reply("You do not have permission to use this command.");
         }
