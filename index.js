@@ -6,7 +6,7 @@ const bot = new Client({
 });
 bot.commands = new Collection();
 const botCommands = require("./commands/");
-const {ROLES} = require("./services/utils");
+const {ROLES, sleep, CHANNELS} = require("./services/utils");
 const {drinkReacts, foodReacts} = require("./popebot-reactions");
 const {popebotReplies} = require("./popebot-replies");
 const {handleSexRoleChanges} = require("./services/RolesService");
@@ -131,3 +131,48 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
 
     await handleSexRoleChanges(oldMember, newMember, logChannel);
 })
+
+bot.on("channelCreate", async (channel) => {
+    // Check if the channel has prefix "ticket-"
+    // If it does, we want to check if the user has sent a message in the channel
+    // If they have, we want to see if the message asks for verification
+    // If it does, we want to send a message to the channel giving them instructions
+    await sleep(5000); // Wait for 1 second to ensure the channel is fully created
+    if (channel.name.startsWith("ticket-")) {
+        // the second half of the channel name is the username
+        const username = channel.name.split("ticket-")[1];
+        const instructions = `Hello ${username},\n\nTo verify your account, please see below:\n
+        For your guidance, an intro is required prior to sending any DMs (no need to add a selfie), so please proceed to ${CHANNELS.MALE_INTROS_MENTIONABLE} or ${CHANNELS.FEMALE_INTROS_MENTIONABLE} and write one up. \n\nTo access the opposite sex’s introductions and selfies, you’ll need to be video verified. You may coordinate with a mod or verifier here for a schedule`;
+
+        const messages = await channel.messages.fetch({limit: 10});
+        const verifyWords = ["verify", "verification", "verified", "verifiy", "verifcation", "verifed", "verfy", "verifiction", "verifiyed", "verifiycation"];
+        // Check the second message's embeds for the verification words
+        const hasVerificationMessage = messages.some(msg =>
+            msg.embeds.some(embed => {
+                return embed.fields && verifyWords.some(word => embed.fields.some(field => field.value.toLowerCase().includes(word)))
+            }) ||
+            msg.content && verifyWords.some(word => msg.content.toLowerCase().includes(word))
+        );
+
+        if (hasVerificationMessage) {
+            await channel.send({
+                embeds: [
+                    {
+                        title: "Verification Instructions",
+                        description: instructions,
+                        color: "#0099ff",
+                        timestamp: new Date(),
+                        footer: {
+                            text: "Please follow the instructions to verify your account."
+                        }
+                    }
+                ]
+            });
+            console.log(`Sent verification instructions to ${channel.name}`);
+        } else {
+            console.log(`No verification message found in ${channel.name}`);
+        }
+
+    }
+})
+

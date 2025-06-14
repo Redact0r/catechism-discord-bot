@@ -13,7 +13,10 @@ const utils = {
             return users.get(mention);
         }
     },
-
+    CHANNELS: {
+        MALE_INTROS_MENTIONABLE: "<#1110735496004509706>",
+        FEMALE_INTROS_MENTIONABLE: "<#1110735640473112666>",
+    },
     ROLES: {
         FEMALE: "891419366745342012",
         FEMALE_MENTIONABLE: "<@&891419366745342012>",
