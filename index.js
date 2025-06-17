@@ -141,7 +141,7 @@ bot.on("channelCreate", async (channel) => {
     if (channel.name.startsWith("ticket-")) {
         // the second half of the channel name is the username
         const username = channel.name.split("ticket-")[1];
-        const user = channel.guild.members.cache.find(member => member.user.username === username.toLowerCase() || member.user.tag.toLowerCase() === username.toLowerCase());
+        const user = channel.members.find(member => member.user.username === username.toLowerCase() || member.user.tag.toLowerCase() === username.toLowerCase());
         const instructions = `Hello <@${user.user.id}>,\n\nTo verify your account, please see below:\n
     An intro is required prior to sending any DMs (no need to add a selfie), so please proceed to ${CHANNELS.MALE_INTROS_MENTIONABLE} or ${CHANNELS.FEMALE_INTROS_MENTIONABLE} and write one up. \n\nTo access the opposite sex’s introductions and selfies, you’ll need to be video verified. You may coordinate with a mod or verifier here.\n\n **Sending DMs without an intro is a bannable offense**, so please make sure to follow the rules.\n\nThank you!`;
 
