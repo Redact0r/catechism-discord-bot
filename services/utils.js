@@ -151,7 +151,6 @@ export function getMessageLink(msg) {
     return `https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 }
 
-
 /**
  * Converts a number and unit to seconds
  * Uses the Go duration string format
@@ -181,7 +180,6 @@ export function convertToSeconds(currentNumber, currentUnit) {
     return seconds;
 }
 
-
 /**
  * time should be formatted like Go duration strings
  * https://golang.org/pkg/time/#ParseDuration
@@ -199,7 +197,7 @@ export function parseDuration(time) {
             // If we have a number and a unit, add the time to the duration
             currentUnit += time[i];
             if (currentNumber && currentUnit) {
-                duration += utils.convertToSeconds(currentNumber, currentUnit);
+                duration += convertToSeconds(currentNumber, currentUnit);
                 currentNumber = "";
                 currentUnit = "";
             }

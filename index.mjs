@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config()
 
-import {Client, IntentsBitField, Collection, Partials} from "discord.js";
+import {Client, GatewayIntentBits, Collection, Partials} from "discord.js";
 import {ROLES, sleep, CHANNELS} from "./services/utils.js";
 import {drinkReacts, foodReacts} from "./popebot-reactions.js";
 import {popebotReplies} from "./popebot-replies.js";
@@ -15,7 +15,12 @@ import {RolesService} from "./services/RolesService.js";
 
 const bot = new Client({
     partials: [Partials.User, Partials.Reaction, Partials.GuildMember, Partials.Message, Partials.Channel],
-    intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.GuildMembers],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.MessageContent
+    ],
 });
 bot.commands = new Collection();
 
@@ -53,8 +58,10 @@ for (const folder of commandFolders) {
 }
 
 const TOKEN = process.env.TOKEN;
-const TEST_MODE = process.env.TEST_MODE;
+const TEST_MODE = process.env.TEST_MODE.toLowerCase() === 'true' || process.env.TEST_MODE === '1';
 const TESTER_ID = process.env.TESTER_ID;
+
+console.debug({TEST_MODE, TESTER_ID});
 
 bot
     .login(TOKEN)
@@ -63,7 +70,8 @@ bot
 bot.on(Events.ClientReady, async () => {
     console.info(`Logged in as ${bot.user.tag}!`);
     const guild = bot.guilds.cache.find((g) => g.id === "890984994611265556");
-    await guild.members.fetch().catch(console.error);
+    await guild.members.fetch().catch(console.error)
+        .then(console.info(`Fetched ${guild.members.cache.size} members from ${guild.name}`));
 });
 
 function extractArgs(msg) {
@@ -103,13 +111,18 @@ bot.on(Events.MessageCreate, async (msg) => {
     //         return
     //     }
     // }
-    if (TEST_MODE && msg.author.id !== TESTER_ID) return;
+    if (TEST_MODE && msg.author.id != TESTER_ID) {
+        console.debug(`[DEBUG] Test mode is enabled. Ignoring message from ${msg.author.tag}`);
+        return;
+    }
 
     if (msg.author.bot) {
+        // console.debug(`[DEBUG] Ignoring message from bot: ${msg.author.tag}`);
         return;
     }
 
     if (process.env.TESTMODE && msg.guild.id !== "750160687237431307") {
+        // console.debug(`[DEBUG] Test mode is enabled. Ignoring message from guild: ${msg.guild.name}`);
         return;
     }
 
@@ -121,6 +134,7 @@ bot.on(Events.MessageCreate, async (msg) => {
         console.error(error);
     }
 
+    // console.debug(`[DEBUG] Message received from ${msg.author.tag} in ${msg.guild.name}: ${msg.content}`);
     if (msg.content.startsWith("+") || msg.content.startsWith("!")) {
         const {args, command} = extractArgs(msg);
 
