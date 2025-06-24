@@ -1,7 +1,10 @@
-const {checkIfUserIsAuthorized, ROLES, PROD_LOGS_CHANNEL_ID} = require('../services/utils');
-module.exports = {
+import {checkIfUserIsAuthorized, PROD_LOGS_CHANNEL_ID, ROLES} from "../services/utils.js";
+import {ApplicationCommandType} from "discord.js";
+
+export default {
     name: "!channel",
     description: "Manage channel settings",
+    type: ApplicationCommandType.Chat_Input,
     async execute(message, args) {
         const logsChannel = message.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID);
         // Check if the user has permission to manage channels

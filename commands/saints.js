@@ -1,6 +1,6 @@
-const fetch = require("node-fetch");
+import got from "got";
 
-module.exports = {
+export default {
   name: "!saint",
   description: "Saint of the day",
   async execute(msg, args) {
@@ -19,9 +19,8 @@ module.exports = {
 
     const url = `http://calapi.inadiutorium.cz/api/v0/en/calendars/default/${year}/${month}/${day}`;
     try {
-      const response = await fetch(url);
-      const json = await response.json();
-      let celebrations = json.celebrations;
+      const {data} = await got(url).json();
+      let celebrations = data.celebrations;
       let celebrationsList = celebrations.map((c) => c.title);
       if (celebrationsList.length === 1) {
         return msg.reply(`Today is ${celebrationsList[0]}.`);

@@ -1,4 +1,5 @@
-const bigString = require("./bigString");
+import {bigString} from "./bigString.js";
+
 let array = [];
 
 function splitParagraph(str) {
@@ -23,8 +24,6 @@ function bigStringToSmallStrings(bigStr) {
   return array;
 }
 
-let testStr = bigString.bigString;
+let ccc = bigStringToSmallStrings(bigString);
 
-let ccc = bigStringToSmallStrings(testStr);
-
-module.exports = { ccc };
+export { ccc };

@@ -1,6 +1,6 @@
-const utils = require("../services/utils");
+import utils from "../services/utils.js";
 
-module.exports = {
+export default {
   name: "!say",
   description: "let's a mod talk through the bot",
   execute(msg, args, client) {

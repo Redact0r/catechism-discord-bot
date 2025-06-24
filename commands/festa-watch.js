@@ -1,5 +1,6 @@
-const {checkIfUserIsAuthorized, PROD_LOGS_CHANNEL_ID, getMessageLink, festaJuninaHelper} = require("../services/utils");
-module.exports = {
+import {checkIfUserIsAuthorized, festaJuninaHelper, getMessageLink, PROD_LOGS_CHANNEL_ID} from "../services/utils.js";
+
+export default {
     name: "!festa-watch",
     description: "Post festa junina messages in the specified channel",
     async execute(msg, args, client) {

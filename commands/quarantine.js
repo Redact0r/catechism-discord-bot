@@ -1,6 +1,6 @@
-const {ROLES, checkIfUserIsAuthorized} = require("../services/utils");
+import {checkIfUserIsAuthorized, ROLES} from "../services/utils.js";
 
-module.exports = {
+export default {
     name: "!quarantine",
     description: "Quarantine a user",
     async execute(msg, args, client) {

@@ -1,6 +1,4 @@
-const {default: fetch} = require("node-fetch");
-
-module.exports = {
+export default {
     name: "!compliment",
     description: "Compliments a user",
     async execute(msg, args) {

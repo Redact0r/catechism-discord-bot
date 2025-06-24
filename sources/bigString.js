@@ -5497,4 +5497,4 @@ Paragraph 2863. When we say "lead us not into temptation" we are asking God not 
 Paragraph 2864. In the last petition, "but deliver us from evil," Christians pray to God with the Church to show forth the victory, already won by Christ, over the "ruler of this world," Satan, the angel personally opposed to God and to his plan of salvation.
 Paragraph 2865. By the final "Amen," we express our "fiat" concerning the seven petitions: "So be it."`;
 
-module.exports = { bigString };
+export { bigString };
