@@ -71,7 +71,7 @@ bot.on(Events.ClientReady, async () => {
     console.info(`Logged in as ${bot.user.tag}!`);
     const guild = bot.guilds.cache.find((g) => g.id === "890984994611265556");
     await guild.members.fetch().catch(console.error)
-        .then(console.info(`Fetched ${guild.members.cache.size} members from ${guild.name}`));
+        .then(() => console.info(`Fetched ${guild.members.cache.size} members from ${guild.name}`));
 });
 
 function extractArgs(msg) {
