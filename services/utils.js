@@ -107,10 +107,10 @@ export function checkIfUserIsAuthorized(msg) {
     let authorized = false;
 
     const officerRole = msg.member.roles.cache.find(
-        (role) => role.id === utils.ROLES.SHERIFF
+        (role) => role.id === ROLES.SHERIFF
     );
     const modRole = msg.member.roles.cache.find(
-        (role) => role.id === utils.ROLES.DEPUTY
+        (role) => role.id === ROLES.DEPUTY
     );
     const modRoleTest = msg.member.roles.cache.find(
         (role) => role.name === "Moderator"

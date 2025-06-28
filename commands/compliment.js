@@ -120,7 +120,7 @@ export default {
             return msg.reply("I'm flattered.");
 
         if (args[0] && args[0].startsWith("<@"))
-            return msg.channel.send(`${args[1]} ${compliment}`);
+            return msg.channel.send(`${args[0]} ${compliment}`);
 
         return msg.reply(compliment);
     },

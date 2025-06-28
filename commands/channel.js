@@ -1,5 +1,5 @@
 import {checkIfUserIsAuthorized, PROD_LOGS_CHANNEL_ID, ROLES} from "../services/utils.js";
-import {ApplicationCommandType} from "discord.js";
+import {ApplicationCommandType, PermissionFlagsBits} from "discord.js";
 
 export default {
     name: "!channel",
@@ -32,7 +32,7 @@ export default {
             logsChannel.send(`Channel ${channel} is being hidden by ${message.author.username}.`);
             // Hide the channel
             await channel.permissionOverwrites.edit(message.guild.roles.everyone, {
-                VIEW_CHANNEL: false,
+                ViewChannel: false,
             });
             return message.reply(`Channel ${channel} has been hidden.`);
         } else if (subcommand === "show") {
@@ -40,7 +40,7 @@ export default {
             logsChannel.send(`Channel ${channel} is being made visible by ${message.author.username}.`);
             // Show the channel
             await channel.permissionOverwrites.edit(message.guild.roles.everyone, {
-                VIEW_CHANNEL: true,
+                ViewChannel: true,
             });
             return message.reply(`Channel ${channel} is now visible.`);
         } else {

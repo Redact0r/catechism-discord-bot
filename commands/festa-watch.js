@@ -9,9 +9,9 @@ export default {
             await msg.react("🚫");
             return;
         }
-        await msg.react("<a:BlurpleLoadEmoji:1366141437808345108>");
 
         if (args[0] === "stop") {
+            await msg.react("<:CheckEmoji:1366143203857924116>")
             if (!festaJuninaHelper.festaWatchStatus) {
                 await msg.reply("Festa Watch is not currently running on this server.");
                 return;
@@ -35,6 +35,7 @@ export default {
         }
 
         festaJuninaHelper.festaWatchStatus = true;
+        await msg.react("<a:BlurpleLoadEmoji:1366141437808345108>");
 
         let logsChannel = msg.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID);
         if (!logsChannel) {
