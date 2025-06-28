@@ -1,23 +1,27 @@
-const fetch = require("node-fetch");
+import got from "got";
 
-module.exports = {
-  name: "!dadjoke",
-  description: "Tells a dad joke",
-  async execute(msg, args) {
-    function getDadJoke() {
-      return fetch("https://icanhazdadjoke.com/", {
-        method: "GET",
-        headers: { Accept: "application/json" },
-      })
-        .then((res) =>
-          res.ok ? res.json() : new Error("Something's wrong with the API")
-        )
-        .then((data) => data["joke"])
-        .catch((err) => console.error(err));
-    }
+export default {
+    name: "!dadjoke",
+    description: "Tells a dad joke",
+    async execute(msg, args) {
+        async function getDadJoke() {
+            const {joke, status} = await got("https://icanhazdadjoke.com/", {
+                method: "GET",
+                headers: {Accept: "application/json"},
+            }).json()
+            if (!joke) {
+                console.error({
+                    message: "Failed to fetch dad joke",
+                    status,
+                    joke,
+                })
+            }
 
-    let dadJoke = await getDadJoke();
+            return joke;
+        }
 
-    return msg.channel.send(dadJoke);
-  },
+        let dadJoke = await getDadJoke();
+
+        return msg.channel.send(dadJoke);
+    },
 };

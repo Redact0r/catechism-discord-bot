@@ -1,7 +1,10 @@
-const {checkIfUserIsAuthorized, ROLES, PROD_LOGS_CHANNEL_ID} = require('../services/utils');
-module.exports = {
+import {checkIfUserIsAuthorized, PROD_LOGS_CHANNEL_ID, ROLES} from "../services/utils.js";
+import {ApplicationCommandType, PermissionFlagsBits} from "discord.js";
+
+export default {
     name: "!channel",
     description: "Manage channel settings",
+    type: ApplicationCommandType.Chat_Input,
     async execute(message, args) {
         const logsChannel = message.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID);
         // Check if the user has permission to manage channels
@@ -29,7 +32,7 @@ module.exports = {
             logsChannel.send(`Channel ${channel} is being hidden by ${message.author.username}.`);
             // Hide the channel
             await channel.permissionOverwrites.edit(message.guild.roles.everyone, {
-                VIEW_CHANNEL: false,
+                ViewChannel: false,
             });
             return message.reply(`Channel ${channel} has been hidden.`);
         } else if (subcommand === "show") {
@@ -37,7 +40,7 @@ module.exports = {
             logsChannel.send(`Channel ${channel} is being made visible by ${message.author.username}.`);
             // Show the channel
             await channel.permissionOverwrites.edit(message.guild.roles.everyone, {
-                VIEW_CHANNEL: true,
+                ViewChannel: true,
             });
             return message.reply(`Channel ${channel} is now visible.`);
         } else {

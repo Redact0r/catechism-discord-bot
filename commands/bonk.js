@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   name: "!bonk",
   description: "Bonks a user's last message",
   async execute(msg, args) {

@@ -1,6 +1,4 @@
-const { Message } = require("discord.js");
-
-module.exports = {
+export default {
   name: "!remindme",
   description: "allows users to set reminder",
   execute(msg, args) {

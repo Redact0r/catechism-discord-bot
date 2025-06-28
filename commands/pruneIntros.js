@@ -1,4 +1,4 @@
-const utils = require("../services/utils");
+import utils from "../services/utils.js";
 
 /**
  *
@@ -59,7 +59,7 @@ async function pruneMessagesInChannel(channel, loadMsg, users, logsChannel) {
     }
 }
 
-module.exports = {
+export default {
     name: "!prune-intros",
     description: "Prune intros from the server",
     execute: async (msg, args, client) => {

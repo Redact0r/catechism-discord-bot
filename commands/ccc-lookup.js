@@ -1,8 +1,6 @@
-const data = require("../sources/ccc");
+import {ccc} from "../sources/ccc.js";
 
-const ccc = data.ccc;
-
-module.exports = {
+export default {
   name: "+ccc",
   description: "Lookup a paragraph in the catechism",
   execute(msg, args) {

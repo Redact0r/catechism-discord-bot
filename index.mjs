@@ -1,37 +1,77 @@
-require("dotenv").config();
-const {Client, Intents, Collection, MessageEmbed} = require("discord.js");
+import * as fs from "node:fs";
+import * as path from "path";
+import * as url from "url";
+import {Events} from "discord.js";
+import * as dotenv from "dotenv";
+
+dotenv.config()
+
+import {Client, GatewayIntentBits, Collection, Partials} from "discord.js";
+import {ROLES, sleep, CHANNELS} from "./services/utils.js";
+import {drinkReacts, foodReacts} from "./popebot-reactions.js";
+import {popebotReplies} from "./popebot-replies.js";
+import {RolesService} from "./services/RolesService.js";
+
+
 const bot = new Client({
-    partials: ["USER", "REACTION", "GUILD_MEMBER", "MESSAGE", "CHANNEL", "GUILD_MEMBERS"],
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS],
+    partials: [Partials.User, Partials.Reaction, Partials.GuildMember, Partials.Message, Partials.Channel],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.MessageContent
+    ],
 });
 bot.commands = new Collection();
-const botCommands = require("./commands/");
-const {ROLES, sleep, CHANNELS} = require("./services/utils");
-const {drinkReacts, foodReacts} = require("./popebot-reactions");
-const {popebotReplies} = require("./popebot-replies");
-const {handleSexRoleChanges} = require("./services/RolesService");
 
-Object.keys(botCommands).map((key) => {
-    console.log("Loading command: ", botCommands[key].name);
-    try {
-        bot.commands.set(botCommands[key].name, botCommands[key]);
-    } catch (error) {
-        console.error("Error loading command: ", error);
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const foldersPath = path.join(__dirname, 'commands');
+const commandFolders = fs.readdirSync(foldersPath);
+
+async function loadCommand(commandsPath, file) {
+    const filePath = path.join(commandsPath, file);
+    const command = await import(filePath);
+    // Set a new item in the Collection with the key as the command name and the value as the exported module
+    if (command.default && 'name' in command.default && 'execute' in command.default) {
+        bot.commands.set(command.default.name, command.default);
+    } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "name" or "execute" property.`);
     }
-});
+}
+
+for (const folder of commandFolders) {
+    // Check if the folder is a directory
+    const folderPath = path.join(foldersPath, folder);
+    if (!fs.statSync(folderPath).isDirectory()) {
+        // This is a standalone command file, not a folder. Load it
+        if (folder.endsWith('.js')) {
+            console.log("Loading command file:", folder);
+            await loadCommand(foldersPath, folder);
+        }
+    } else if (fs.statSync(folderPath).isDirectory()) {
+        const commandsPath = path.join(foldersPath, folder);
+        const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+        for (const file of commandFiles) {
+            await loadCommand(commandsPath, file);
+        }
+    }
+}
 
 const TOKEN = process.env.TOKEN;
-const TEST_MODE = process.env.TEST_MODE;
+const TEST_MODE = process.env.TEST_MODE.toLowerCase() === 'true' || process.env.TEST_MODE === '1';
 const TESTER_ID = process.env.TESTER_ID;
+
+console.debug({TEST_MODE, TESTER_ID});
 
 bot
     .login(TOKEN)
     .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
 
-bot.on("ready", async () => {
+bot.on(Events.ClientReady, async () => {
     console.info(`Logged in as ${bot.user.tag}!`);
     const guild = bot.guilds.cache.find((g) => g.id === "890984994611265556");
-    await guild.members.fetch().catch(console.error);
+    await guild.members.fetch().catch(console.error)
+        .then(() => console.info(`Fetched ${guild.members.cache.size} members from ${guild.name}`));
 });
 
 function extractArgs(msg) {
@@ -50,7 +90,7 @@ function extractArgs(msg) {
     return {args, command};
 }
 
-bot.on("messageCreate", async (msg) => {
+bot.on(Events.MessageCreate, async (msg) => {
     // if (msg.content.startsWith("!")) {
     //     const {args, command} = extractArgs(msg);
     //     if (command === "!debug") {
@@ -71,13 +111,18 @@ bot.on("messageCreate", async (msg) => {
     //         return
     //     }
     // }
-    if (TEST_MODE && msg.author.id !== TESTER_ID) return;
+    if (TEST_MODE && msg.author.id != TESTER_ID) {
+        console.debug(`[DEBUG] Test mode is enabled. Ignoring message from ${msg.author.tag}`);
+        return;
+    }
 
     if (msg.author.bot) {
+        // console.debug(`[DEBUG] Ignoring message from bot: ${msg.author.tag}`);
         return;
     }
 
     if (process.env.TESTMODE && msg.guild.id !== "750160687237431307") {
+        // console.debug(`[DEBUG] Test mode is enabled. Ignoring message from guild: ${msg.guild.name}`);
         return;
     }
 
@@ -89,6 +134,7 @@ bot.on("messageCreate", async (msg) => {
         console.error(error);
     }
 
+    // console.debug(`[DEBUG] Message received from ${msg.author.tag} in ${msg.guild.name}: ${msg.content}`);
     if (msg.content.startsWith("+") || msg.content.startsWith("!")) {
         const {args, command} = extractArgs(msg);
 
@@ -121,7 +167,7 @@ bot.on("messageCreate", async (msg) => {
     }
 })
 
-bot.on("guildMemberUpdate", async (oldMember, newMember) => {
+bot.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
     /**
      *
      * @type {import('discord.js').TextChannel}
@@ -129,10 +175,10 @@ bot.on("guildMemberUpdate", async (oldMember, newMember) => {
     const logChannel = newMember.guild.channels.cache.find(channel => channel.name === 'carl-log')
     if (!logChannel) return;
 
-    await handleSexRoleChanges(oldMember, newMember, logChannel);
+    await RolesService.handleSexRoleChanges(oldMember, newMember, logChannel);
 })
 
-bot.on("channelCreate", async (channel) => {
+bot.on(Events.ChannelCreate, async (channel) => {
     // Check if the channel has prefix "ticket-"
     // If it does, we want to check if the user has sent a message in the channel
     // If they have, we want to see if the message asks for verification

@@ -1,7 +1,7 @@
-const {sleep, parseDuration, parseSecondsToDuration} = require("../services/utils");
+import {parseDuration, parseSecondsToDuration, sleep} from "../services/utils.js";
 
-module.exports = {
-    name: "!chantimer",
+export default {
+    name: "!timer",
     description: "Set a timer",
     execute: async (msg, args, client) => {
         if (args.length < 2) {
@@ -26,6 +26,10 @@ module.exports = {
             console.log("Arguments", args);
             return;
         }
+
+        // TODO: return an id
+        //  Use a start and stop subcommand to start and stop the timer
+        //  Have better state management for the timer so that multiple timers can be set, stopped, resumed, updated, etc.
 
         // time should be formatted like Go duration strings
         // https://golang.org/pkg/time/#ParseDuration

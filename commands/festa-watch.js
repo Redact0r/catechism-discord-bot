@@ -1,5 +1,6 @@
-const {checkIfUserIsAuthorized, PROD_LOGS_CHANNEL_ID, getMessageLink, festaJuninaHelper} = require("../services/utils");
-module.exports = {
+import {checkIfUserIsAuthorized, festaJuninaHelper, getMessageLink, PROD_LOGS_CHANNEL_ID} from "../services/utils.js";
+
+export default {
     name: "!festa-watch",
     description: "Post festa junina messages in the specified channel",
     async execute(msg, args, client) {
@@ -8,9 +9,9 @@ module.exports = {
             await msg.react("🚫");
             return;
         }
-        await msg.react("<a:BlurpleLoadEmoji:1366141437808345108>");
 
         if (args[0] === "stop") {
+            await msg.react("<:CheckEmoji:1366143203857924116>")
             if (!festaJuninaHelper.festaWatchStatus) {
                 await msg.reply("Festa Watch is not currently running on this server.");
                 return;
@@ -34,6 +35,7 @@ module.exports = {
         }
 
         festaJuninaHelper.festaWatchStatus = true;
+        await msg.react("<a:BlurpleLoadEmoji:1366141437808345108>");
 
         let logsChannel = msg.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID);
         if (!logsChannel) {

@@ -1,6 +1,4 @@
-const {default: fetch} = require("node-fetch");
-
-module.exports = {
+export default {
     name: "!compliment",
     description: "Compliments a user",
     async execute(msg, args) {
@@ -122,7 +120,7 @@ module.exports = {
             return msg.reply("I'm flattered.");
 
         if (args[0] && args[0].startsWith("<@"))
-            return msg.channel.send(`${args[1]} ${compliment}`);
+            return msg.channel.send(`${args[0]} ${compliment}`);
 
         return msg.reply(compliment);
     },
