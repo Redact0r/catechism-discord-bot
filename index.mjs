@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "path";
 import * as url from "url";
-import {Events} from "discord.js";
+import {Colors, EmbedBuilder, Events} from "discord.js";
 import * as dotenv from "dotenv";
 
 dotenv.config()
@@ -183,7 +183,8 @@ bot.on(Events.ChannelCreate, async (channel) => {
     // If it does, we want to check if the user has sent a message in the channel
     // If they have, we want to see if the message asks for verification
     // If it does, we want to send a message to the channel giving them instructions
-    await sleep(5000); // Wait for 1 second to ensure the channel is fully created
+    console.log(`[DEBUG] Channel created: ${channel.name}`);
+    await sleep(1000 * 5); // Wait for 5 seconds to ensure the channel is fully created
     if (channel.name.startsWith("ticket-")) {
         // the second half of the channel name is the username
         let username = channel.name.split("ticket-")[1];
@@ -204,22 +205,20 @@ bot.on(Events.ChannelCreate, async (channel) => {
         );
 
         if (hasVerificationMessage) {
+            const embed = new EmbedBuilder()
+                .setColor(Colors.Blue)
+                .setTitle("Verification Instructions")
+                .setDescription(instructions)
+                .setTimestamp(new Date())
+                .setFooter({text: "Please follow the instructions to verify your account."});
             await channel.send({
                 embeds: [
-                    {
-                        title: "Verification Instructions",
-                        description: instructions,
-                        color: "#0099ff",
-                        timestamp: new Date(),
-                        footer: {
-                            text: "Please follow the instructions to verify your account."
-                        }
-                    }
+                    embed
                 ]
             });
-            console.log(`Sent verification instructions to ${channel.name}`);
+            console.log(`[INFO] Sent verification instructions to ${channel.name}`);
         } else {
-            console.log(`No verification message found in ${channel.name}`);
+            console.log(`[INFO] No verification message found in ${channel.name}`);
         }
 
     }
