@@ -18,13 +18,20 @@ export default {
       return;
     }
 
-    let messageID = args[0];
+    let messageID = args.shift();
     if (messageID.startsWith("<#")) {
       // Extract message ID from <#message_id>
       messageID = args[0].substring(2, args[0].length - 1);
+    } else {
+        // If the first argument is not a mention, it should be a message ID
+        if (isNaN(parseInt(messageID))) {
+            msg.reply("Error, first argument must be a message ID or a mention.");
+            console.log("Error, first argument must be a message ID or a mention.");
+            return;
+        }
     }
 
-    const messageText = args.splice(1).join(" ");
+    const messageText = args.join(" ");
 
     console.log("Sending message to channel:", messageID, "end");
     console.log("Message text:", messageText);
