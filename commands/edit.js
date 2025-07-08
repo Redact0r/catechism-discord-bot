@@ -44,7 +44,7 @@ export default {
       }
     }
 
-    const messageText = msg.content.split(" ").slice(2).join(" ");
+    const messageText = msg.content.split(" ").slice(3).join(" ");
 
     console.log("Sending message to channel:", messageID);
     console.log("Message text:", messageText);
@@ -55,7 +55,7 @@ export default {
       return;
     }
 
-    const message = await channel.messages.fetch(messageText)
+    const message = await channel.messages.fetch(messageID)
     message.edit(messageText).catch((err) => {
       console.error(err);
       if (err.status === 404) {
