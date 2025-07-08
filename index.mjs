@@ -83,7 +83,7 @@ function extractArgs(msg) {
 
     if (msg.content.startsWith("!")) {
         console.info("Command received:", msg.content);
-        args = msg.content.split(" ");
+        args = msg.content.split(/\s+/);
         command = args.shift().toLowerCase().toString();
     }
 

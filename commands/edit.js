@@ -33,7 +33,7 @@ export default {
 
     const messageText = args.join(" ");
 
-    console.log("Sending message to channel:", messageID, "end");
+    console.log("Sending message to channel:", messageID);
     console.log("Message text:", messageText);
     if (!isNaN(parseInt(messageID))) {
       msg.channel.messages.fetch(messageID).then((m) => {
