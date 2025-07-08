@@ -21,7 +21,7 @@ export default {
     let channelID = args.shift();
     if (channelID.startsWith("<#")) {
       // Extract channel ID from <#channel_id>
-      channelID = args[0].substring(2, args[0].length - 1);
+      channelID = channelID.substring(2, channelID.length - 1);
     } else {
       // If the first argument is not a mention, it should be a channel ID
       if (isNaN(parseInt(channelID))) {
@@ -34,7 +34,7 @@ export default {
     let messageID = args.shift();
     if (messageID.startsWith("<#")) {
       // Extract message ID from <#message_id>
-      messageID = args[0].substring(2, args[0].length - 1);
+      messageID = messageID.substring(2, messageID.length - 1);
     } else {
       // If the second argument is not a mention, it should be a message ID
       if (isNaN(parseInt(messageID))) {
