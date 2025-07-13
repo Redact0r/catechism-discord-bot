@@ -262,6 +262,41 @@ export const festaJuninaHelper = {
     }
 }
 
+export const speedDateHelper = {
+    _maleStatusList: [],
+
+    get maleStatusList() {
+        return this._maleStatusList;
+    },
+
+    set maleStatusList(val) {
+        this._maleStatusList = val;
+    },
+
+    getMaleInList(username) {
+        return this._maleStatusList.find((status) => status.username === username);
+    },
+
+    set updateMaleInList(val) {
+        if (!this._maleStatusList) {
+            this._maleStatusList = [];
+        }
+        // Check if the value is already in the list
+        const existingIndex = this._maleStatusList.findIndex(item => item.username === val.username);
+        if (existingIndex !== -1) {
+            // Update the existing entry
+            this._maleStatusList[existingIndex].rooms = val.rooms;
+        }
+        else {
+            // Add the new entry
+            this._maleStatusList.push(val);
+        }
+
+        // Sort the list by username
+        this._maleStatusList.sort((a, b) => a.username.localeCompare(b.username));
+    },
+}
+
 export default {
     CHANNELS,
     ROLES,
@@ -276,5 +311,6 @@ export default {
     convertToSeconds,
     parseDuration,
     parseSecondsToDuration,
-    festaJuninaHelper
+    festaJuninaHelper,
+    speedDateHelper,
 }
