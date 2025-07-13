@@ -28,7 +28,8 @@ export default {
         matrixMessage += "```";
 
         await message.channel.send(matrixMessage);
-    }, getWomensRooms(message) {
+    },
+    getWomensRooms(message) {
         // Get all the women in their respective rooms
         let womenRooms = message.guild.channels.cache.filter(channel => {
             // console.debug(`[DEBUG] Checking channel: ${channel.name}, isVoiceBased: ${channel.isVoiceBased()}`);
@@ -40,9 +41,13 @@ export default {
             const numB = b.name.split("-").pop();
             return parseInt(numA) - parseInt(numB);
         });
-    }, async execute(message, args, client) {
-        // Add a command to collect the list of males in the waiting room
-        // This should output a matrix message with the list of names and which rooms/women they have interacted with
+    },
+
+    async execute(message, args, client) {
+        // Check if the user has the required role to execute this command
+        if (!message.member.roles.cache.some(role => role.id === ROLES.SHERIFF || role.id === ROLES.COMMUNITY_MANAGER || role.id === ROLES.DEPUTY)) {
+            return message.reply("You do not have permission to use this command.");
+        }
         if (!args[0]) {
             return message.reply("Please provide a valid command argument.");
         }
@@ -163,6 +168,28 @@ export default {
             // return message.channel.send(matrixMessage);
         } else if (args[0] === "status") {
             // Logic to check the status of the speed date
+            // This should walk every speed date room and check the male that is currently in the room and
+            // update the maleStatusList with the room they are currently in
+            const womenRooms = this.getWomensRooms(message);
+            if (womenRooms.size === 0) {
+                return message.reply("No speed date rooms found.");
+            }
+            console.debug(`[DEBUG] Found speed date rooms:`, womenRooms);
+            // Iterate through each room and check the members
+            for (const room of womenRooms) {
+                console.debug(`[DEBUG] Checking room: ${room.name}`);
+                const membersInRoom = room.members.filter(member => member.roles.cache.some(role => role.id === ROLES.MALE) && !member.roles.cache.includes(ROLES.COMMUNITY_MANAGER) || !member.roles.cache.includes(ROLES.SHERIFF));
+                console.debug(`[DEBUG] Members in room ${room.name}:`, membersInRoom);
+                if (membersInRoom.size > 0) {
+                    // Update the maleStatusList with the room they are currently in
+                    for (const member of membersInRoom) {
+                        const male = speedDateHelper.maleStatusList.find(m => m.username === member.user.username);
+                        male.rooms.find(roomStatus => roomStatus.roomName === room.name).visited = true;
+                    }
+                }
+
+            }
+
             return message.reply("Checking the status of the speed date...");
         }
     }
