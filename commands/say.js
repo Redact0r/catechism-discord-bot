@@ -8,7 +8,7 @@ export default {
 
     if (!authCheck) return;
 
-    const message = args.slice(1).join(" ");
+    const message = msg.content.split(" ").slice(2).join(" ");
 
     if (args[0].startsWith("<#")) {
       const channelToSendMessageTo = args[0].substring(2, args[0].length - 1);
