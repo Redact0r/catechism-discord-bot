@@ -159,10 +159,15 @@ bot.on(Events.MessageCreate, async (msg) => {
                 return;
             }
 
+            if ('enabledInProd' in c && !c.enabledInProd && !TEST_MODE) {
+                console.log(`[DEBUG] Command ${command} is disabled in production mode.`);
+                await msg.reply("This command is disabled in production mode.");
+                return;
+            }
             c.execute(msg, args, bot);
         } catch (error) {
             console.error(error);
-            msg.reply("Tell Tyler something broke!");
+            await msg.reply("Tell Tyler, Noah, or someone that something broke!");
         }
     }
 })

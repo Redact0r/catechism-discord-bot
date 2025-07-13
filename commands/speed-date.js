@@ -7,6 +7,7 @@ const WAITING_ROOM_CHANNEL_ID = "1393591760260825199"
 
 export default {
     name: "!speed-date",
+    enabledInProd: false,
     async outputTableToChat(womenRooms, message) {
         // Create a matrix message with the list of names
         let matrixMessage = "**Speed Date Status**\n";
