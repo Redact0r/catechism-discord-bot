@@ -12,7 +12,9 @@ import {drinkReacts, foodReacts} from "./popebot-reactions.js";
 import {popebotReplies} from "./popebot-replies.js";
 import {RolesService} from "./services/RolesService.js";
 
-
+const TOKEN = process.env.TOKEN;
+const TEST_MODE = process.env.TEST_MODE.toLowerCase() === 'true' || process.env.TEST_MODE === '1';
+const TESTER_ID = process.env.TESTER_ID;
 const bot = new Client({
     partials: [Partials.User, Partials.Reaction, Partials.GuildMember, Partials.Message, Partials.Channel],
     intents: [
@@ -60,10 +62,6 @@ for (const folder of commandFolders) {
         }
     }
 }
-
-const TOKEN = process.env.TOKEN;
-const TEST_MODE = process.env.TEST_MODE.toLowerCase() === 'true' || process.env.TEST_MODE === '1';
-const TESTER_ID = process.env.TESTER_ID;
 
 console.debug({TEST_MODE, TESTER_ID});
 
