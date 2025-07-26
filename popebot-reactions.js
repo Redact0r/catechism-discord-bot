@@ -4,6 +4,7 @@ const requestWords = [
     "fetch",
     "give",
     "pour",
+    "need",
 ]
 
 const targetWords = [
