@@ -31,6 +31,10 @@ const commandFolders = fs.readdirSync(foldersPath);
 async function loadCommand(commandsPath, file) {
     const filePath = path.join(commandsPath, file);
     const command = await import(filePath);
+    if ('enabledInProd' in command && !command.enabledInProd && !TEST_MODE) {
+        console.log(`[DEBUG] Command ${command} is disabled in production mode.`);
+        return;
+    }
     // Set a new item in the Collection with the key as the command name and the value as the exported module
     if (command.default && 'name' in command.default && 'execute' in command.default) {
         bot.commands.set(command.default.name, command.default);
@@ -159,11 +163,6 @@ bot.on(Events.MessageCreate, async (msg) => {
                 return;
             }
 
-            if ('enabledInProd' in c && !c.enabledInProd && !TEST_MODE) {
-                console.log(`[DEBUG] Command ${command} is disabled in production mode.`);
-                await msg.reply("This command is disabled in production mode.");
-                return;
-            }
             c.execute(msg, args, bot);
         } catch (error) {
             console.error(error);
