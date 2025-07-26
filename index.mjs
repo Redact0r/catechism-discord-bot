@@ -34,8 +34,7 @@ console.debug({TEST_MODE, TESTER_ID});
 async function loadCommand(commandsPath, file) {
     const filePath = path.join(commandsPath, file);
     const command = await import(filePath);
-    console.debug({TEST_MODE, TESTER_ID, command});
-    if (coammand.default && 'enabledInProd' in command.default && !command.default.enabledInProd && !TEST_MODE) {
+    if (command.default && 'enabledInProd' in command.default && !command.default.enabledInProd && !TEST_MODE) {
         console.log(`[DEBUG] Command ${command.name} is disabled in production mode.`);
         return;
     }
