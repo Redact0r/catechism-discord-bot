@@ -30,11 +30,13 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
+console.debug({TEST_MODE, TESTER_ID});
 async function loadCommand(commandsPath, file) {
     const filePath = path.join(commandsPath, file);
     const command = await import(filePath);
+    console.debug({TEST_MODE, TESTER_ID, command});
     if ('enabledInProd' in command && !command.enabledInProd && !TEST_MODE) {
-        console.log(`[DEBUG] Command ${command} is disabled in production mode.`);
+        console.log(`[DEBUG] Command ${command.name} is disabled in production mode.`);
         return;
     }
     // Set a new item in the Collection with the key as the command name and the value as the exported module
@@ -63,7 +65,6 @@ for (const folder of commandFolders) {
     }
 }
 
-console.debug({TEST_MODE, TESTER_ID});
 
 bot
     .login(TOKEN)
