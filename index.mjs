@@ -35,7 +35,7 @@ async function loadCommand(commandsPath, file) {
     const filePath = path.join(commandsPath, file);
     const command = await import(filePath);
     if (command.default && 'enabledInProd' in command.default && !command.default.enabledInProd && !TEST_MODE) {
-        console.log(`[DEBUG] Command ${command.name} is disabled in production mode.`);
+        console.log(`[DEBUG] Command ${command.default.name} is disabled in production mode.`);
         return;
     }
     // Set a new item in the Collection with the key as the command name and the value as the exported module
