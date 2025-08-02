@@ -264,6 +264,15 @@ export const festaJuninaHelper = {
 
 export const speedDateHelper = {
     _maleStatusList: [],
+    backupChannelId: "1401050631300714576",
+
+    _lastBackupMsgId: null,
+    get lastBackupMsgId() {
+        return this._lastBackupMsgId;
+    },
+    set lastBackupMsgId(val) {
+        this._lastBackupMsgId = val;
+    },
 
     get maleStatusList() {
         return this._maleStatusList;
