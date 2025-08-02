@@ -267,6 +267,15 @@ export default {
                 }
                 await this.handleUpdateCommand(message);
                 break;
+            case "reset":
+                if (args.length > 1) {
+                    return message.reply("Too many arguments. Usage: `!speed-date reset`");
+                }
+                // Reset the maleStatusList
+                speedDateHelper.maleStatusList = [];
+                speedDateHelper.lastBackupMsgId = null;
+                await message.reply("Speed date status has been reset.");
+                break;
             default:
                 return message.reply("Invalid command argument. Valid arguments are: `init`, `status`, `update`.");
         }
