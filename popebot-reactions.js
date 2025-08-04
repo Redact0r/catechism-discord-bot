@@ -5,6 +5,11 @@ const requestWords = [
     "give",
     "pour",
     "need",
+    "i need",
+    "i want",
+    "i'll have",
+    "i'll take",
+    "i'd like",
 ]
 
 const targetWords = [
@@ -36,6 +41,7 @@ export async function drinkReacts(msg) {
         "milk": "🥛",
         "coffee": "☕",
         "tea": "🍵",
+        "seltzer": "🥤",
     }
 
     await applyReactions(bvgWords, requestWords, messageString, targetWords, msg);
@@ -76,11 +82,13 @@ async function applyReactions(emojiMap, requestWords, messageString, targetWords
         console.debug("Request word found in message:", messageString);
 
         // Find the first request word in the message and get the next word, check if it's a target word
-        const requestWord = requestWords.find(word => messageString.includes(word));
-        const requestWordIndex = messageString.indexOf(requestWord);
+        const requestWord = requestWords.find(word => messageString.includes(word) || messageString.includes("popebot " + word));
+        // console.debug("Request word found in message:", requestWord);
+        const requestWordIndex = messageString.split(" ").indexOf(requestWord);
         const messageList = messageString.split(" ")
         const nextWord = messageList[requestWordIndex + 1];
-        console.debug("Next word after request word:", nextWord, "Request word index:", requestWordIndex);
+        // console.debug("Next word after request word:", nextWord, "Request word index:", requestWordIndex);
+        // console.debug("Message list:", messageList);
 
         // If the next word is undefined, return
         if (nextWord === undefined) {
@@ -90,11 +98,11 @@ async function applyReactions(emojiMap, requestWords, messageString, targetWords
 
         // Check if the next word is a target word
         if (targetWords.some(word => nextWord.includes(word))) {
-            console.debug("Target word after request word:", nextWord);
+            // console.debug("Target word after request word:", nextWord);
 
             // Get all the beverage words in the message
             const keysInMessage = emojiKeys.filter(word => messageString.includes(word));
-            console.debug("Emoji key words in message:", keysInMessage);
+            // console.debug("Emoji key words in message:", keysInMessage);
 
             // If there are multiple beverage words, react with all of them
             if (keysInMessage.length > 0) {
