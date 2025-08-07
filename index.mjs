@@ -87,11 +87,19 @@ const rest = new REST().setToken(TOKEN);
     try {
         console.log(`Started refreshing ${slashCommands.length} application (/) commands.`);
 
-        // The put method is used to fully refresh all commands in the guild with the current set
-        const data = await rest.put(
-            Routes.applicationGuildCommands(clientId),
-            { body: slashCommands },
-        );
+        if (!TEST_MODE) {
+            // The put method is used to fully refresh all commands in the guild with the current set
+            const data = await rest.put(
+                Routes.applicationCommands(clientId),
+                {body: slashCommands},
+            );
+        } else {
+            // The put method is used to fully refresh all commands in the guild with the current set
+            const data = await rest.put(
+                Routes.applicationGuildCommands(clientId, guildId),
+                {body: slashCommands},
+            );
+        }
 
         console.log(`Successfully reloaded ${data.length} application (/) commands.`);
     } catch (error) {
