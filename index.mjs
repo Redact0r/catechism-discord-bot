@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "path";
 import * as url from "url";
-import {Colors, EmbedBuilder, Events} from "discord.js";
+import {Colors, EmbedBuilder, Events, REST, Routes} from "discord.js";
 import * as dotenv from "dotenv";
 
 dotenv.config()
@@ -15,6 +15,8 @@ import {RolesService} from "./services/RolesService.js";
 const TOKEN = process.env.TOKEN;
 const TEST_MODE = process.env.TEST_MODE.toLowerCase() === 'true' || process.env.TEST_MODE === '1';
 const TESTER_ID = process.env.TESTER_ID;
+const clientId = process.env.CLIENT_ID;
+const guildId = process.env.GUILD_ID || "";
 const bot = new Client({
     partials: [Partials.User, Partials.Reaction, Partials.GuildMember, Partials.Message, Partials.Channel],
     intents: [
@@ -30,6 +32,7 @@ bot.commands = new Collection();
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
+const slashCommands = [];
 
 console.debug({TEST_MODE, TESTER_ID});
 async function loadCommand(commandsPath, file) {
@@ -38,6 +41,12 @@ async function loadCommand(commandsPath, file) {
     if (command.default && 'enabledInProd' in command.default && !command.default.enabledInProd && !TEST_MODE) {
         console.log(`[DEBUG] Command ${command.default.name} is disabled in production mode.`);
         return;
+    }
+    if (command.default && 'data' in command.default) {
+        // If the command has a data property, it's a slash command
+        slashCommands.push(command.default.data.toJSON());
+        bot.commands.set(command.default.data.name, command.default);
+        return
     }
     // Set a new item in the Collection with the key as the command name and the value as the exported module
     if (command.default && 'name' in command.default && 'execute' in command.default) {
@@ -69,6 +78,27 @@ for (const folder of commandFolders) {
 bot
     .login(TOKEN)
     .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
+
+// Construct and prepare an instance of the REST module
+const rest = new REST().setToken(TOKEN);
+
+// and deploy your commands!
+(async () => {
+    try {
+        console.log(`Started refreshing ${slashCommands.length} application (/) commands.`);
+
+        // The put method is used to fully refresh all commands in the guild with the current set
+        const data = await rest.put(
+            Routes.applicationGuildCommands(clientId),
+            { body: slashCommands },
+        );
+
+        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+    } catch (error) {
+        // And of course, make sure you catch and log any errors!
+        console.error(error);
+    }
+})();
 
 bot.on(Events.ClientReady, async () => {
     console.info(`Logged in as ${bot.user.tag}!`);
@@ -166,6 +196,33 @@ bot.on(Events.MessageCreate, async (msg) => {
         } catch (error) {
             console.error(error);
             await msg.reply("Tell Tyler, Noah, or someone that something broke!");
+        }
+    }
+})
+
+bot.on(Events.InteractionCreate, async (interaction) => {
+    if (TEST_MODE && interaction.user.id !== TESTER_ID) {
+        console.debug(`[DEBUG] Test mode is enabled. Ignoring interaction from ${interaction.user.tag}`);
+        return;
+    }
+
+    if (interaction.isCommand()) {
+        console.debug("[DEBUG] Interaction is a command", interaction.commandName);
+        const command = bot.commands.get(interaction.commandName);
+        if (!command) {
+            console.log("Command not found");
+            await interaction.reply({
+                content: `I don't know that command. Valid commands are: ${bot.commands.map((c) => c.name).join(', ')}`,
+                ephemeral: true
+            });
+            return;
+        }
+
+        try {
+            await command.execute(interaction, bot);
+        } catch (error) {
+            console.error(error);
+            await interaction.reply("Tell Tyler, Noah, or someone that something broke!");
         }
     }
 })
