@@ -44,7 +44,7 @@ export default {
       }
     }
 
-    const messageText = msg.content.split(" ").slice(3).join(" ");
+    const messageText = args.join(" ");
 
     console.log("Sending message to channel:", messageID);
     console.log("Message text:", messageText);
