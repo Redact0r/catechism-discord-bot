@@ -99,9 +99,8 @@ const rest = new REST().setToken(TOKEN);
                 Routes.applicationGuildCommands(clientId, guildId),
                 {body: slashCommands},
             );
+            console.log(`Successfully reloaded ${data.length} application (/) commands.`);
         }
-
-        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
     } catch (error) {
         // And of course, make sure you catch and log any errors!
         console.error(error);
