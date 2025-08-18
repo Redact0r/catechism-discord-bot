@@ -1,5 +1,5 @@
 import {SlashCommandBuilder, userMention} from "discord.js";
-import {PROD_LOGS_CHANNEL_ID, ROLES} from "../../services/utils.js";
+import {CHANNELS, PROD_LOGS_CHANNEL_ID, ROLES} from "../../services/utils.js";
 
 export default {
     name: "joey-patrol",
@@ -21,7 +21,8 @@ export default {
         const subCommand = interaction.options.getSubcommand();
         const user = interaction.options.getUser("user");
         const guild = client.guilds.cache.get(interaction.guild.id);
-        const logsChannel = await guild.channels.fetch(PROD_LOGS_CHANNEL_ID);
+        const logsChannel = await guild.channels.fetch(CHANNELS.LOGS_CHANNEL_ID);
+        const bansChannel = await guild.channels.fetch(CHANNELS.BANNED_USERS_CHANNEL);
         await guild.members.fetch(); // Fetch all members to ensure roles are up to date
         const requestingMember = await guild.members.fetch(interaction.user.id);
         if (!requestingMember) {
@@ -54,7 +55,9 @@ export default {
                 }
 
                 await member.ban({reason: "Suspected Joey alt"});
-                await logsChannel.send(`User ${userMention(user.id)} (${user.id}) has been banned by ${userMention(requestingMember.id)} (${requestingMember.id}) for suspected Joey alt.`);
+                const msg = `User ${userMention(user.id)} (${user.id}) has been banned by ${userMention(requestingMember.id)} (${requestingMember.id}) for suspected Joey alt.`
+                await logsChannel.send(msg);
+                await bansChannel.send(msg);
                 await interaction.reply({content: `User ${user.username} has been banned.`});
             } catch (err) {
                 console.error(err);
