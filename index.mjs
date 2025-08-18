@@ -35,6 +35,7 @@ const commandFolders = fs.readdirSync(foldersPath);
 const slashCommands = [];
 
 console.debug({TEST_MODE, TESTER_ID});
+
 async function loadCommand(commandsPath, file) {
     const filePath = path.join(commandsPath, file);
     const command = await import(filePath);
@@ -209,6 +210,7 @@ bot.on(Events.MessageCreate, async (msg) => {
 
 bot.on(Events.InteractionCreate, async (interaction) => {
     if (TEST_MODE && interaction.user.id !== TESTER_ID) {
+        await interaction.reply("Test mode is enabled. You are not allowed to use this command.");
         console.debug(`[DEBUG] Test mode is enabled. Ignoring interaction from ${interaction.user.tag}`);
         return;
     }
@@ -290,4 +292,22 @@ bot.on(Events.ChannelCreate, async (channel) => {
 
     }
 })
+
+const exitListener = async (msg) => {
+    console.log("Exit signal received:", msg);
+    console.log("Bot is shutting down...");
+    if (TEST_MODE) {
+        await rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: []})
+            .catch(console.error);
+    }
+    await rest.put(Routes.applicationCommands(clientId), {body: []})
+        .catch(console.error);
+    console.log('Successfully deleted all application commands.')
+    process.exit()
+}
+
+process.on("SIGINT", exitListener);
+process.on("SIGTERM", exitListener);
+process.on("SIGQUIT", exitListener);
+process.on("SIGHUP", exitListener);
 
