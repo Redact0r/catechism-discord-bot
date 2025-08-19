@@ -276,6 +276,29 @@ export default {
                 speedDateHelper.lastBackupMsgId = null;
                 await message.reply("Speed date status has been reset.");
                 break;
+            case "broadcast":
+                if (args.length < 2) {
+                    return message.reply("Please provide a message to broadcast. Usage: `!speed-date broadcast <message>`");
+                }
+                const broadcastMessage = args.slice(1).join(" ");
+                const womenRooms = this.getWomensRooms(message);
+                if (womenRooms.size === 0) {
+                    return message.reply("No speed date rooms found.");
+                }
+                // Iterate through each room and send the broadcast message
+                for (const [roomId, room] of womenRooms) {
+                    console.debug(`[DEBUG] Broadcasting to room: ${room.name}`);
+                    await room.send(broadcastMessage)
+                }
+                // Send message to the waiting room channel
+                const waitingRoomChannel = message.guild.channels.cache.get(WAITING_ROOM_CHANNEL_ID);
+                if (waitingRoomChannel) {
+                    console.debug(`[DEBUG] Broadcasting to waiting room: ${waitingRoomChannel.name}`);
+                    await waitingRoomChannel.send(broadcastMessage);
+                }
+
+                await message.react("1366143203857924116")
+                break;
             default:
                 return message.reply("Invalid command argument. Valid arguments are: `init`, `status`, `update`.");
         }
