@@ -251,9 +251,9 @@ bot.on(Events.GuildMemberAdd, async (member) => {
     if (member.user.bot) return;
 
     // Parse member's joined timestamp and compare it to current time, if it is less than 1 week automatically quarrantine them
-    const joinedAt = member.joinedAt;
+    const createdAt = member.user.createdAt;
     const now = new Date();
-    const diff = now - joinedAt;
+    const diff = now - createdAt;
     const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
     const logChannel = member.guild.channels.cache.get(CHANNELS.LOGS_CHANNEL_ID)
