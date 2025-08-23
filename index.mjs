@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "path";
 import * as url from "url";
-import {Colors, EmbedBuilder, Events, REST, Routes} from "discord.js";
+import {Colors, EmbedBuilder, Events, REST, Routes, userMention} from "discord.js";
 import * as dotenv from "dotenv";
 
 dotenv.config()
@@ -245,6 +245,23 @@ bot.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
     if (!logChannel) return;
 
     await RolesService.handleSexRoleChanges(oldMember, newMember, logChannel);
+})
+
+bot.on(Events.GuildMemberAdd, async (member) => {
+    if (member.user.bot) return;
+
+    // Parse member's joined timestamp and compare it to current time, if it is less than 1 week automatically quarrantine them
+    const joinedAt = member.joinedAt;
+    const now = new Date();
+    const diff = now - joinedAt;
+    const oneWeek = 1000 * 60 * 60 * 24 * 7;
+
+    const logChannel = member.guild.channels.cache.get(CHANNELS.LOGS_CHANNEL_ID)
+    if (diff < oneWeek) {
+        await member.roles.add(ROLES.QUARANTINED);
+        await logChannel.send(`User ${member.user.tag} (${userMention(member.id)}) has been automatically quarantined for joining less than a week ago.`);
+        console.log(`[INFO] Quarantined new member ${member.user.tag} (${member.id}) who joined less than a week ago.`);
+    }
 })
 
 bot.on(Events.ChannelCreate, async (channel) => {
