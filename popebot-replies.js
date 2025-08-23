@@ -1,4 +1,3 @@
-
 export async function popebotReplies(msg) {
     const messageString = msg.content.toLowerCase();
     let chanceToSay = Math.floor(Math.random() * 100);
@@ -10,26 +9,21 @@ export async function popebotReplies(msg) {
     }
 
     if (messageString.includes("no cap")) {
-        switch (chanceToSay) {
-            case (chanceToSay <= 20):
-                await msg.reply("Cap.").catch((error) => console.log(error));
-                break;
-            case (chanceToSay > 20 && chanceToSay <= 40):
-                await msg.reply("No cap.").catch((error) => console.log(error));
-                break;
-            case (chanceToSay > 40 && chanceToSay <= 60):
-                await msg.reply("Big cap.").catch((error) => console.log(error));
-                break;
-            case (chanceToSay > 60 && chanceToSay <= 80):
-                await msg.reply("No cap fr.").catch((error) => console.log(error));
-                break;
-            case (chanceToSay > 80 && chanceToSay <= 100):
-                await msg.reply("Fr fr.").catch((error) => console.log(error));
-                break;
-            default:
-                await msg.reply("Cap.").catch((error) => console.log(error));
+        if (chanceToSay <= 5) {
+            await msg.reply("Ultra rare: The Pope approves!").catch((error) => console.log(error));
+        } else if (chanceToSay <= 20) {
+            await msg.reply("Cap.").catch((error) => console.log(error));
+        } else if (chanceToSay <= 40) {
+            await msg.reply("No cap.").catch((error) => console.log(error));
+        } else if (chanceToSay <= 60) {
+            await msg.reply("Big cap.").catch((error) => console.log(error));
+        } else if (chanceToSay <= 80) {
+            await msg.reply("No cap fr.").catch((error) => console.log(error));
+        } else {
+            await msg.reply("Fr fr.").catch((error) => console.log(error));
         }
     }
+
 
     if (messageString.includes("heresy") || messageString.includes("heretic")) {
         if (chanceToSay >= 50) {
