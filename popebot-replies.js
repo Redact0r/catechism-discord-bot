@@ -1,32 +1,44 @@
 
 export async function popebotReplies(msg) {
     const messageString = msg.content.toLowerCase();
+    let chanceToSay = Math.floor(Math.random() * 100);
 
     await filteredWordResponse(msg)
-
-    if (messageString.includes("smite")) {
-        await msg.channel.send("Exorcizamus te!").catch((error) => console.log(error));
-    }
 
     if (messageString.includes("thank") && messageString.includes("popebot")) {
         await msg.reply("You're welcome, my dude.").catch((error) => console.log(error));
     }
 
-    if (messageString.includes("no cap") && messageString.includes("popebot")) {
-        await msg.reply("fr fr").catch((error) => console.log(error));
+    if (messageString.includes("no cap")) {
+        switch (chanceToSay) {
+            case (chanceToSay <= 20):
+                await msg.reply("Cap.").catch((error) => console.log(error));
+                break;
+            case (chanceToSay > 20 && chanceToSay <= 40):
+                await msg.reply("No cap.").catch((error) => console.log(error));
+                break;
+            case (chanceToSay > 40 && chanceToSay <= 60):
+                await msg.reply("Big cap.").catch((error) => console.log(error));
+                break;
+            case (chanceToSay > 60 && chanceToSay <= 80):
+                await msg.reply("No cap fr.").catch((error) => console.log(error));
+                break;
+            case (chanceToSay > 80 && chanceToSay <= 100):
+                await msg.reply("Fr fr.").catch((error) => console.log(error));
+                break;
+            default:
+                await msg.reply("Cap.").catch((error) => console.log(error));
+        }
     }
 
     if (messageString.includes("heresy") || messageString.includes("heretic")) {
-        let chanceToSay = Math.floor(Math.random() * 100);
-
-        if (chanceToSay >= 50)
+        if (chanceToSay >= 50) {
             await msg.reply("A heretic? Confess and repent!")
                 .catch((error) => console.log(error));
+        }
     }
 
     if (messageString.includes("sussy") || messageString.split(" ").includes("sus")) {
-        // weighted random response
-        let chanceToSay = Math.floor(Math.random() * 100);
         if (chanceToSay >= 70) {
             await msg.reply("Sussy baka!").catch((error) => console.log(error));
         }
