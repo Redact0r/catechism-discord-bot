@@ -19,13 +19,7 @@ const clientId = process.env.CLIENT_ID;
 const guildId = process.env.GUILD_ID || "";
 const bot = new Client({
     partials: [Partials.User, Partials.Reaction, Partials.GuildMember, Partials.Message, Partials.Channel],
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildVoiceStates,
-    ],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates,],
 });
 bot.commands = new Collection();
 
@@ -87,21 +81,16 @@ const rest = new REST().setToken(TOKEN);
 (async () => {
     try {
         console.log(`Started refreshing ${slashCommands.length} application (/) commands.`);
+        let data;
 
         if (!TEST_MODE) {
             // The put method is used to fully refresh all commands in the guild with the current set
-            const data = await rest.put(
-                Routes.applicationCommands(clientId),
-                {body: slashCommands},
-            );
+            data = await rest.put(Routes.applicationCommands(clientId), {body: slashCommands},);
         } else {
             // The put method is used to fully refresh all commands in the guild with the current set
-            const data = await rest.put(
-                Routes.applicationGuildCommands(clientId, guildId),
-                {body: slashCommands},
-            );
-            console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+            data = await rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: slashCommands});
         }
+        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
     } catch (error) {
         // And of course, make sure you catch and log any errors!
         console.error(error);
@@ -283,12 +272,9 @@ bot.on(Events.ChannelCreate, async (channel) => {
         const messages = await channel.messages.fetch({limit: 10});
         const verifyWords = ["verify", "verification", "verified", "verifiy", "verifcation", "verifed", "verfy", "verifiction", "verifiyed", "verifiycation"];
         // Check the second message's embeds for the verification words
-        const hasVerificationMessage = messages.some(msg =>
-            msg.embeds.some(embed => {
-                return embed.fields && verifyWords.some(word => embed.fields.some(field => field.value.toLowerCase().includes(word)))
-            }) ||
-            msg.content && verifyWords.some(word => msg.content.toLowerCase().includes(word))
-        );
+        const hasVerificationMessage = messages.some(msg => msg.embeds.some(embed => {
+            return embed.fields && verifyWords.some(word => embed.fields.some(field => field.value.toLowerCase().includes(word)))
+        }) || msg.content && verifyWords.some(word => msg.content.toLowerCase().includes(word)));
 
         if (hasVerificationMessage) {
             const embed = new EmbedBuilder()
@@ -298,9 +284,7 @@ bot.on(Events.ChannelCreate, async (channel) => {
                 .setTimestamp(new Date())
                 .setFooter({text: "Please follow the instructions to verify your account."});
             await channel.send({
-                embeds: [
-                    embed
-                ]
+                embeds: [embed]
             });
             console.log(`[INFO] Sent verification instructions to ${channel.name}`);
         } else {
