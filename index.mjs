@@ -300,10 +300,10 @@ const exitListener = async (msg) => {
     if (TEST_MODE) {
         await rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: []})
             .catch(console.error);
+        await rest.put(Routes.applicationCommands(clientId), {body: []})
+            .catch(console.error);
+        console.log('Successfully deleted all application commands.')
     }
-    await rest.put(Routes.applicationCommands(clientId), {body: []})
-        .catch(console.error);
-    console.log('Successfully deleted all application commands.')
     process.exit()
 }
 
