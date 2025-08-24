@@ -69,11 +69,6 @@ for (const folder of commandFolders) {
     }
 }
 
-
-bot
-    .login(TOKEN)
-    .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
-
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(TOKEN);
 
@@ -96,6 +91,11 @@ const rest = new REST().setToken(TOKEN);
         console.error(error);
     }
 })();
+
+bot
+    .login(TOKEN)
+    .catch((err) => console.log("Couldn't login. Wrong token?" + "\n" + err));
+
 
 bot.on(Events.ClientReady, async () => {
     console.info(`Logged in as ${bot.user.tag}!`);
