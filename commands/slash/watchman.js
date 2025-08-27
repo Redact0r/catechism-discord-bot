@@ -19,7 +19,10 @@ export default {
                 .addStringOption(opt =>
                     opt.setName("reason")
                         .setDescription("Reason for ban")
-                        .setChoices("Suspected Joey alt", "other")
+                        .setChoices(
+                            {name: "Suspected Joey alt", value: "Suspected Joey alt"},
+                            {name: "Other", value: "Other"}
+                        )
                         .setRequired(true)
                 )
         ),
