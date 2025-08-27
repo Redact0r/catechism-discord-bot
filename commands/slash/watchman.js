@@ -2,18 +2,24 @@ import {SlashCommandBuilder, userMention} from "discord.js";
 import {CHANNELS, PROD_LOGS_CHANNEL_ID, ROLES} from "../../services/utils.js";
 
 export default {
-    name: "joey-patrol",
-    description: "Joey patrol command",
+    name: "watchman",
+    description: "watchman command",
     data: new SlashCommandBuilder()
-        .setName("joey-patrol")
-        .setDescription("Allow Joey Patrol members to ban suspected Joey alts")
+        .setName("watchman")
+        .setDescription("Allow watchman members to ban")
         .addSubcommand(subcommandGroup =>
             subcommandGroup
                 .setName("ban")
-                .setDescription("Ban a suspected Joey alt")
+                .setDescription("Ban a user")
                 .addUserOption(option =>
                     option.setName("user")
                         .setDescription("The user to ban")
+                        .setRequired(true)
+                )
+                .addStringOption(opt =>
+                    opt.setName("reason")
+                        .setDescription("Reason for ban")
+                        .setChoices("Suspected Joey alt", "other")
                         .setRequired(true)
                 )
         ),
