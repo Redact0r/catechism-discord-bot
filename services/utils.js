@@ -100,6 +100,10 @@ export function randomAdjective() {
     return arrayOfAdjectives[randomIndex];
 }
 
+export function getVerificationInstructions(user, username = "unknown user") {
+    return `Hello ${user ? `<@${user?.user?.id}>` : username},\n\nTo verify your account, please see below:\n
+    An intro is required prior to sending any DMs (no need to add a selfie), so please proceed to ${CHANNELS.MALE_INTROS_MENTIONABLE} or ${CHANNELS.FEMALE_INTROS_MENTIONABLE} and write one up. \n\nTo access the opposite sex’s introductions and selfies, you’ll need to be video verified. You may coordinate with a mod or verifier here.\n\n **Sending DMs without an intro is a bannable offense**, so please make sure to follow the rules.\n\nThank you!`;
+}
 
 export function getNickNameFromGuildObjectWithUserId(guild, user_id) {
     let userObj = guild.members.filter((member) => member.user.id == user_id);

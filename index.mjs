@@ -3,20 +3,31 @@ import * as path from "path";
 import * as url from "url";
 import {Colors, EmbedBuilder, Events, REST, Routes, userMention} from "discord.js";
 import * as dotenv from "dotenv";
-
-dotenv.config()
-
 import {Client, GatewayIntentBits, Collection, Partials} from "discord.js";
-import {ROLES, sleep, CHANNELS} from "./services/utils.js";
+import {ROLES, sleep, CHANNELS, getVerificationInstructions} from "./services/utils.js";
 import {drinkReacts, foodReacts} from "./popebot-reactions.js";
 import {popebotReplies} from "./popebot-replies.js";
 import {RolesService} from "./services/RolesService.js";
+import {bool, cleanEnv, str} from "envalid";
 
-const TOKEN = process.env.TOKEN;
-const TEST_MODE = process.env.TEST_MODE.toLowerCase() === 'true' || process.env.TEST_MODE === '1';
-const TESTER_ID = process.env.TESTER_ID;
-const clientId = process.env.CLIENT_ID;
-const guildId = process.env.GUILD_ID || "";
+dotenv.config()
+
+const env = cleanEnv(process.env, {
+    TOKEN: str(),
+    CLIENT_ID: str(),
+    GUILD_ID: str({default: ""}),
+    TEST_MODE: bool({default: false}),
+    TESTER_ID: str({default: ""}),
+    DELETE_COMMANDS_ON_EXIT: bool({default: false})
+})
+
+
+const TOKEN = env.TOKEN;
+const TEST_MODE = env.TEST_MODE
+const TESTER_ID = env.TESTER_ID;
+const DELETE_COMMANDS_ON_EXIT = env.DELETE_COMMANDS_ON_EXIT
+const clientId = env.CLIENT_ID;
+const guildId = env.GUILD_ID;
 const bot = new Client({
     partials: [Partials.User, Partials.Reaction, Partials.GuildMember, Partials.Message, Partials.Channel],
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates,],
@@ -266,8 +277,7 @@ bot.on(Events.ChannelCreate, async (channel) => {
         // Replace periods with no space
         username = username.replace(/\./g, "");
         const user = channel.members.find(member => member.user.username.replace(/\./g, "") === username.toLowerCase());
-        const instructions = `Hello ${user ? `<@${user?.user?.id}>` : username},\n\nTo verify your account, please see below:\n
-    An intro is required prior to sending any DMs (no need to add a selfie), so please proceed to ${CHANNELS.MALE_INTROS_MENTIONABLE} or ${CHANNELS.FEMALE_INTROS_MENTIONABLE} and write one up. \n\nTo access the opposite sex’s introductions and selfies, you’ll need to be video verified. You may coordinate with a mod or verifier here.\n\n **Sending DMs without an intro is a bannable offense**, so please make sure to follow the rules.\n\nThank you!`;
+        const instructions = getVerificationInstructions(user, username)
 
         const messages = await channel.messages.fetch({limit: 10});
         const verifyWords = ["verify", "verification", "verified", "verifiy", "verifcation", "verifed", "verfy", "verifiction", "verifiyed", "verifiycation"];
@@ -297,7 +307,7 @@ bot.on(Events.ChannelCreate, async (channel) => {
 const exitListener = async (msg) => {
     console.log("Exit signal received:", msg);
     console.log("Bot is shutting down...");
-    if (TEST_MODE) {
+    if (TEST_MODE || DELETE_COMMANDS_ON_EXIT) {
         await rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: []})
             .catch(console.error);
         await rest.put(Routes.applicationCommands(clientId), {body: []})
