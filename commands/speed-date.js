@@ -125,6 +125,8 @@ export default {
                         visited: false
                     }))
                 }
+
+                // Bug here with accessing values in JS objects resulting in visited being set to true for all males in the room index
                 console.debug(`[DEBUG] Member's rooms at index ${memberIndex}:`, speedDateHelper.maleStatusList[memberIndex].rooms);
                 const roomIndex = speedDateHelper.maleStatusList[memberIndex].rooms.findIndex(r => r.name === room.name);
                 console.debug(`[DEBUG] Member index: ${memberIndex}, Room index: ${roomIndex}`);
