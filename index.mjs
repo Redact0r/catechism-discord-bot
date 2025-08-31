@@ -15,7 +15,7 @@ dotenv.config()
 const env = cleanEnv(process.env, {
     TOKEN: str(),
     CLIENT_ID: str(),
-    GUILD_ID: str({default: ""}),
+    GUILD_ID: str({default: "", requiredWhen: (p) => p.TEST_MODE === true}),
     TEST_MODE: bool({default: false}),
     TESTER_ID: str({default: ""}),
     DELETE_COMMANDS_ON_EXIT: bool({default: false})

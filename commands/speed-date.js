@@ -109,10 +109,10 @@ export default {
                 if (memberIndex === -1) {
                     console.warn(`[WARN] Member ${member.user.username} not found in maleStatusList. Adding them.`);
                     // If the member is not found, add them to the list
-                    speedDateHelper.maleStatusList[speedDateHelper.maleStatusList.length] = {
+                    speedDateHelper.maleStatusList.push({
                         username: member.user.username,
                         rooms: womenRooms.map(room => ({name: room.name, visited: false}))
-                    };
+                    })
 
                     memberIndex = speedDateHelper.maleStatusList.length - 1; // Set to the last index
                 }
@@ -120,10 +120,11 @@ export default {
                 // Find the room in the maleStatusList and update the visited status
                 if (!speedDateHelper.maleStatusList[memberIndex].rooms) {
                     console.warn(`[WARN] Member ${member.user.username} has no rooms in maleStatusList. Initializing rooms.`);
-                    speedDateHelper.maleStatusList[memberIndex].rooms = womenRooms.map(room => ({
+                    const rooms = womenRooms.map(room => ({
                         name: room.name,
                         visited: false
                     }))
+                    speedDateHelper.maleStatusList[memberIndex].rooms = rooms
                 }
 
                 // Bug here with accessing values in JS objects resulting in visited being set to true for all males in the room index
