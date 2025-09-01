@@ -222,14 +222,15 @@ export default {
             speedDateHelper.maleStatusList.push(...newUsersInWaitingRoom.map(male => {
                 return {
                     username: male.user.username,
-                    rooms: visitedRooms
+                    // Deep copy the visitedRooms array to avoid reference issues
+                    rooms: JSON.parse(JSON.stringify(visitedRooms)),
                 }
             }));
         } else {
             speedDateHelper.maleStatusList = usersInWaitingRoom.map(male => {
                 return {
                     username: male.user.username,
-                    rooms: visitedRooms
+                    rooms: JSON.parse(JSON.stringify(visitedRooms))
                 };
             });
         }
