@@ -4,6 +4,7 @@ import {CHANNELS, ROLES} from "../../services/utils.js";
 export default {
     name: "watchman",
     description: "watchman command",
+    enabledInProd: false,
     data: new SlashCommandBuilder()
         .setName("watchman")
         .setDescription("Allow watchman members to ban")
