@@ -1,5 +1,5 @@
 import {SlashCommandBuilder, userMention} from "discord.js";
-import {CHANNELS, PROD_LOGS_CHANNEL_ID, ROLES} from "../../services/utils.js";
+import {CHANNELS, ROLES} from "../../services/utils.js";
 
 export default {
     name: "watchman",
@@ -39,7 +39,7 @@ export default {
             return;
         }
 
-        if (!requestingMember.roles.cache.some(role => role.id === ROLES.JOEY_PATROL || role.id === ROLES.SHERIFF || role.id === ROLES.DEPUTY)) {
+        if (!requestingMember.roles.cache.some(role => role.id === ROLES.WATCHMAN || role.id === ROLES.SHERIFF || role.id === ROLES.DEPUTY)) {
             await interaction.reply({content: "You do not have permission to use this command.", ephemeral: true});
             console.log("User is not authorized to use this command");
             console.log("User", interaction.user.username);
@@ -57,7 +57,7 @@ export default {
 
 
                 // Verify the member is not staff
-                if (member.roles.cache.some(role => role.id === ROLES.JOEY_PATROL || role.id === ROLES.SHERIFF || role.id === ROLES.DEPUTY)) {
+                if (member.roles.cache.some(role => role.id === ROLES.WATCHMAN || role.id === ROLES.SHERIFF || role.id === ROLES.DEPUTY)) {
                     await logsChannel.send(`User ${userMention(user.id)} (${user.id}) attempted to ban a staff member: ${userMention(member.id)} (${member.id})`);
                     await interaction.reply({content: "You cannot ban a staff member."});
                     return;

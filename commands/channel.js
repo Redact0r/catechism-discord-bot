@@ -1,4 +1,4 @@
-import {checkIfUserIsAuthorized, PROD_LOGS_CHANNEL_ID, ROLES} from "../services/utils.js";
+import {CHANNELS, checkIfUserIsAuthorized, ROLES} from "../services/utils.js";
 import {ApplicationCommandType, PermissionFlagsBits} from "discord.js";
 
 export default {
@@ -6,7 +6,7 @@ export default {
     description: "Manage channel settings",
     type: ApplicationCommandType.Chat_Input,
     async execute(message, args) {
-        const logsChannel = message.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID);
+        const logsChannel = message.guild.channels.cache.get(CHANNELS.LOGS_CHANNEL_ID);
         // Check if the user has permission to manage channels
         const isCommunityManager = message.member.roles.cache.has(ROLES.COMMUNITY_MANAGER);
         if (!checkIfUserIsAuthorized(message) && !isCommunityManager) {

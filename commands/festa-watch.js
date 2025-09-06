@@ -1,4 +1,4 @@
-import {checkIfUserIsAuthorized, festaJuninaHelper, getMessageLink, PROD_LOGS_CHANNEL_ID} from "../services/utils.js";
+import {checkIfUserIsAuthorized, festaJuninaHelper, getMessageLink, CHANNELS} from "../services/utils.js";
 
 export default {
     name: "!festa-watch",
@@ -37,7 +37,7 @@ export default {
         festaJuninaHelper.festaWatchStatus = true;
         await msg.react("<a:BlurpleLoadEmoji:1366141437808345108>");
 
-        let logsChannel = msg.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID);
+        let logsChannel = msg.guild.channels.cache.get(CHANNELS.LOGS_CHANNEL_ID);
         if (!logsChannel) {
             msg.reply("Error: Logs channel not found.");
             logsChannel = msg.channel;
@@ -66,7 +66,7 @@ async function processQueue(msg) {
     // const lettersChannelId = "891020332436172821"; // dev channel
     const queueChannelId = "1378633224091205642";
 
-    const logsChannel = msg.guild.channels.cache.get(PROD_LOGS_CHANNEL_ID)
+    const logsChannel = msg.guild.channels.cache.get(CHANNELS.LOGS_CHANNEL_ID);
     const lettersChannel = msg.guild.channels.cache.get(lettersChannelId);
     const queueChannel = msg.guild.channels.cache.get(queueChannelId);
     if (!lettersChannel || !queueChannel) {

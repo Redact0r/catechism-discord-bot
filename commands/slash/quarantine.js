@@ -1,7 +1,14 @@
 import {SlashCommandBuilder, userMention} from "discord.js";
-import {ROLES} from "../../services/utils.js";
+import {
+    CHANNELS,
+    checkIfUserIsAuthorized,
+    checkInteractionPermissions,
+    ROLES
+} from "../../services/utils.js";
 
 export default {
+    name: "quarantine",
+    enabledInProd: true,
     data: new SlashCommandBuilder()
         .setName("quarantine")
         .setDescription("Quarantine a user")
@@ -11,7 +18,13 @@ export default {
                 .addUserOption(option =>
                     option.setName("user")
                         .setDescription("The user to quarantine")
-                        .setRequired(true))
+                        .setRequired(true)
+                )
+                .addStringOption(option =>
+                    option.setName("reason")
+                        .setDescription("Reason for quarantine")
+                        .setRequired(true)
+                )
         )
         .addSubcommand(subCommand =>
             subCommand.setName("remove")
@@ -24,12 +37,12 @@ export default {
     async execute(interaction, client) {
         const subCommand = interaction.options.getSubcommand();
         const user = interaction.options.getUser("user");
+        const reason = interaction.options.getString("reason");
+        const logsChannel = await interaction.guild.channels.fetch(CHANNELS.LOGS_CHANNEL_ID); // Replace with actual channel ID
 
-        if (!interaction.member.permissions.has("MANAGE_ROLES")) {
+        if (!checkInteractionPermissions(interaction, ROLES.SHERIFF, ROLES.DEPUTY, ROLES.WATCHMAN)) {
             await interaction.reply({content: "You do not have permission to use this command.", ephemeral: true});
-            console.log("User is not authorized to use this command");
-            console.log("User", interaction.user.username);
-            console.log("User ID", interaction.user.id);
+            console.warn("[WARN] User is not authorized to use this command", interaction.user.username, interaction.user.id);
             return;
         }
         const member = await interaction.guild.members.fetch(user.id).catch(() => null);
@@ -41,6 +54,7 @@ export default {
         if (subCommand === "add") {
             try {
                 await member.roles.add(ROLES.QUARANTINED); // Replace with actual role ID
+                logsChannel.send(`User ${user.username} (${userMention(user.id)}) has been quarantined by ${userMention(interaction.user.id)} for reason: ${reason}`);
                 await interaction.reply({content: `User ${userMention(user.id)} has been quarantined.`});
             } catch (err) {
                 console.error(err);
@@ -49,6 +63,7 @@ export default {
         } else if (subCommand === "remove") {
             try {
                 await member.roles.remove(ROLES.QUARANTINED); // Replace with actual role ID
+                logsChannel.send(`User ${user.username} (${userMention(user.id)}) has been removed from quarantine by ${userMention(interaction.user.id)}`);
                 await interaction.reply({content: `User ${userMention(user.id)} has been removed from quarantine.`});
             } catch (err) {
                 console.error(err);

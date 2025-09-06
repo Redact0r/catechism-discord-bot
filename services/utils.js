@@ -1,6 +1,8 @@
+import {PermissionFlagsBits} from "discord.js";
+
 const TEST_MODE = process.env.TEST_MODE === "true" || process.env.TEST_MODE === "1";
-export const LOGS_CHANNEL_ID = "891742946859311114";
-export const PROD_LOGS_CHANNEL_ID = "1378931217176461404";
+const LOGS_CHANNEL_ID = "891742946859311114";
+const PROD_LOGS_CHANNEL_ID = "1378931217176461404";
 export const CHANNELS = {
     MALE_INTROS_MENTIONABLE: "<#1110735496004509706>",
     FEMALE_INTROS_MENTIONABLE: "<#1110735640473112666>",
@@ -23,8 +25,8 @@ export const ROLES = {
     QUARANTINED: "1333461375808176263",
     COMMUNITY_MANAGER: "1311587534433947679",
     COMMUNITY_MANAGER_MENTIONABLE: "<@&1311587534433947679>",
-    JOEY_PATROL: "1406463467291938837",
-    JOEY_PATROL_MENTIONABLE: `<@&1406463467291938837>`,
+    WATCHMAN: "1406463467291938837",
+    WATCHMAN_MENTIONABLE: `<@&1406463467291938837>`,
     DEAD: '1402664864580763695',
     mentionable: (roleId) => `<@&${roleId}>`,
 };
@@ -117,6 +119,26 @@ export function getNickNameFromGuildObjectWithUserId(guild, user_id) {
     return userName;
 }
 
+/**
+ * Check if the interaction user has one of the specified roles
+ * If no roles are specified, check for SHERIFF or DEPUTY
+ * If the user is the guild owner, always return true
+ * @param interaction {import('discord.js').CommandInteraction}
+ * @param roles {string[]}
+ * @returns {boolean}
+ */
+export function checkInteractionPermissions(interaction, ...roles) {
+    if (interaction.user.id === interaction.guild.ownerId) {
+        return true;
+    }
+
+    if (roles.length === 0) {
+        roles = [ROLES.SHERIFF, ROLES.DEPUTY];
+    }
+
+    return !!interaction.member.roles.cache.some(r => roles.includes(r.id));
+}
+
 
 export function checkIfUserIsAuthorized(msg) {
     let authorized = false;
@@ -127,22 +149,8 @@ export function checkIfUserIsAuthorized(msg) {
     const modRole = msg.member.roles.cache.find(
         (role) => role.id === ROLES.DEPUTY
     );
-    const modRoleTest = msg.member.roles.cache.find(
-        (role) => role.name === "Moderator"
-    );
-
-    if (TEST_MODE && modRoleTest) {
-        authorized = true;
-    }
 
     if (officerRole || modRole) {
-        authorized = true;
-    }
-
-    if (
-        msg.author.id == "289925886424121345" ||
-        msg.author.id == "298190703857500171"
-    ) {
         authorized = true;
     }
     return authorized;
