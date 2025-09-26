@@ -256,13 +256,7 @@ export default {
         if (emptyRooms.size > 0) {
             if (emptyRooms.size > 1) {
                 console.warn(`[WARN] More than one empty room found. Picking the first one.`);
-                // Sort the empty rooms by name and pick the first one
-                const sortedEmptyRooms = emptyRooms.sort((a, b) => {
-                    const numA = a.name.split("-").pop();
-                    const numB = b.name.split("-").pop();
-                    return parseInt(numA) - parseInt(numB);
-                });
-                return {found: true, room: sortedEmptyRooms.first().id};
+                return {found: true, room: emptyRooms.first().id};
             }
             return {found: true, room: emptyRooms.first().id};
         }
