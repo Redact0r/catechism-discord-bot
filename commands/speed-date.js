@@ -304,7 +304,7 @@ export default {
         let ALL_ROOMS_FULL = false;
         for (let [id, user] of usersInWaitingRoom) {
             // Refresh the list of rooms each time
-            await message.guild.channels.fetch({force: true});
+            await message.guild.channels.fetch(undefined, {force: true}).catch(console.error);
             const rooms = message.guild.channels.cache.filter(c => c.name.startsWith("room-"));
 
             if (rooms.size === 0) {
@@ -413,6 +413,7 @@ export default {
                 if (args.length > 1) {
                     return message.reply("Too many arguments. Usage: `!speed-date assign-rooms`");
                 }
+                await message.reply("Assigning rooms... <a:BlurpleLoadEmoji:1366141437808345108>");
                 // Logic to assign rooms
                 await this.handleAssignRoomsCommand(message);
                 break;
