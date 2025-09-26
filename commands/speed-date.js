@@ -340,6 +340,14 @@ export default {
                 await this.assignUserToDateRoom(user, newChannel, message);
             }
 
+            // move user to the found room
+            const chan = message.guild.channels.cache.get(room.room);
+            if (!chan) {
+                console.error(`[ERROR] Room with ID ${room.room} not found.`);
+                await message.reply(`Room with ID ${room.room} not found.`);
+                continue; // Move to the next user
+            }
+            await this.assignUserToDateRoom(user, chan, message);
         }
     },
 
