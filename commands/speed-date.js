@@ -241,23 +241,30 @@ export default {
     },
 
     /**
-     * @description This function walks through the provided rooms and finds the first room that has no female members
+     * @description This function walks through the provided rooms and finds an empty room. Returns the index of the empty room
+     *              or the next room number to be created if all rooms are full
      * @param rooms {import('discord.js').Collection<string, import('discord.js').GuildBasedChannel>}
-     * @returns {{found: boolean, room: string}|{found: false, next: number}}
+     * @returns {{found: boolean, room: string|import('discord.js').Snowflake}|{found: false, next: number}}
      */
     findEmptyRoom(rooms) {
-        // Iterate through the rooms in reverse order to find the first empty room
-        for (let [roomId, room] of rooms.reverse()) {
-            const membersInRoom = room.members.filter(member =>
-                member.roles.cache.some(role => role.id === ROLES.VERIFIED_FEMALE)
-            );
-            if (membersInRoom.size === 0) {
-                // Return the id of the room that is empty
-                console.debug(`[DEBUG] Found empty room: ${room.name}`);
-                return {found: true, room: roomId};
+        const [fullRooms, emptyRooms] = rooms.partition(room => room.members.filter(member =>
+            member.roles.cache.some(role => role.id === ROLES.VERIFIED_FEMALE)
+        ))
+        if (emptyRooms.size > 0) {
+            if (emptyRooms.size > 1) {
+                console.warn(`[WARN] More than one empty room found. Picking the first one.`);
+                // Sort the empty rooms by name and pick the first one
+                const sortedEmptyRooms = emptyRooms.sort((a, b) => {
+                    const numA = a.name.split("-").pop();
+                    const numB = b.name.split("-").pop();
+                    return parseInt(numA) - parseInt(numB);
+                });
+                return {found: true, room: sortedEmptyRooms.first().id};
             }
+            return {found: true, room: emptyRooms.first().id};
         }
-        return {found: false, next: rooms.size+1}
+        // If no empty rooms are found, return the next room number to be created
+        return {found: false, next: rooms.size + 1};
     },
 
     async assignUserToDateRoom(user, newChannel, message) {
@@ -296,7 +303,8 @@ export default {
         }
         let ALL_ROOMS_FULL = false;
         for (let [id, user] of usersInWaitingRoom) {
-            // Create a new channel named room-<number> where number is the next available number
+            // Refresh the list of rooms each time
+            await message.guild.channels.fetch({force: true});
             const rooms = message.guild.channels.cache.filter(c => c.name.startsWith("room-"));
 
             if (rooms.size === 0) {
@@ -319,9 +327,10 @@ export default {
                 });
                 console.debug(`[DEBUG] Created new room: ${newChannel.name}`);
                 await this.assignUserToDateRoom(user, newChannel, message);
+                continue; // Move to the next user
             }
 
-            //: We have found non-empty rooms so we should fill those up first
+            //: We have found rooms so we should fill those up first
             let room = this.findEmptyRoom(rooms);
             if (!room.found) {
                 ALL_ROOMS_FULL = true;
@@ -331,8 +340,8 @@ export default {
                     name: `room-${room.next}`,
                     ...baseDateRoomConfig
                 })
+                await this.assignUserToDateRoom(user, newChannel, message);
             }
-
 
         }
     },
@@ -405,6 +414,8 @@ export default {
                     return message.reply("Too many arguments. Usage: `!speed-date assign-rooms`");
                 }
                 // Logic to assign rooms
+                await this.handleAssignRoomsCommand(message);
+                break;
 
             default:
                 return message.reply("Invalid command argument. Valid arguments are: `init`, `status`, `update`, `broadcast`.");
