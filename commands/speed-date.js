@@ -1,6 +1,6 @@
 import {ROLES, speedDateHelper} from "../services/utils.js";
 import {writeFileSync} from "fs";
-import channel from "./channel.js";
+import {ChannelType} from "discord.js";
 import got from "got";
 
 const WAITING_ROOM_CHANNEL_ID = "1393591760260825199"
@@ -240,6 +240,103 @@ export default {
         await this.backupMaleStatusList(message)
     },
 
+    /**
+     * @description This function walks through the provided rooms and finds the first room that has no female members
+     * @param rooms {import('discord.js').Collection<string, import('discord.js').GuildBasedChannel>}
+     * @returns {{found: boolean, room: string}|{found: false, next: number}}
+     */
+    findEmptyRoom(rooms) {
+        // Iterate through the rooms in reverse order to find the first empty room
+        for (let [roomId, room] of rooms.reverse()) {
+            const membersInRoom = room.members.filter(member =>
+                member.roles.cache.some(role => role.id === ROLES.VERIFIED_FEMALE)
+            );
+            if (membersInRoom.size === 0) {
+                // Return the id of the room that is empty
+                console.debug(`[DEBUG] Found empty room: ${room.name}`);
+                return {found: true, room: roomId};
+            }
+        }
+        return {found: false, next: rooms.size+1}
+    },
+
+    async assignUserToDateRoom(user, newChannel, message) {
+        try {
+            await user.voice.setChannel(newChannel.id);
+            console.debug(`[DEBUG] Moved user ${user.user.username} to room: ${newChannel.name}`);
+            await message.react("1366143203857924116")
+        } catch (error) {
+            console.error(`[ERROR] Failed to move user ${user.user.username} to room: ${newChannel.name}`, error);
+            await message.reply(`Failed to move user ${user.user.username} to room: ${newChannel.name}. They might not be in a voice channel.`);
+            await message.react("1366143203857924117")
+        }
+    },
+
+    async handleAssignRoomsCommand(message) {
+        // Logic to assign rooms
+        // Get all the women in the waiting room channel and create rooms for them, then move them to the room
+        const waitingRoomChannel = await message.guild.channels.cache.find(c => c.id === WAITING_ROOM_CHANNEL_ID);
+        if (!waitingRoomChannel) {
+            return message.reply("Waiting room channel not found.");
+        }
+        console.debug(`[DEBUG] Waiting room channel: ${waitingRoomChannel.name}`);
+        console.debug(`[DEBUG] Waiting room channel is voice based: ${waitingRoomChannel.isVoiceBased()}`);
+        // Fetch users in the waiting room with the role "female"
+        const usersInWaitingRoom = waitingRoomChannel.members.filter(member =>
+            member.roles.cache.some(role => role.id === ROLES.VERIFIED_FEMALE)
+        );
+        if (usersInWaitingRoom.size === 0) {
+            return message.reply("No users found in the waiting room")
+        }
+        console.debug(`[DEBUG] Users in waiting room:`, usersInWaitingRoom.length);
+
+        const baseDateRoomConfig = {
+            type: ChannelType.GuildVoice,
+            parent: "1393591653947932722", // Set the parent category to the same as the waiting room
+        }
+        let ALL_ROOMS_FULL = false;
+        for (let [id, user] of usersInWaitingRoom) {
+            // Create a new channel named room-<number> where number is the next available number
+            const rooms = message.guild.channels.cache.filter(c => c.name.startsWith("room-"));
+
+            if (rooms.size === 0) {
+                // Create the first room
+                const newChannel = await message.guild.channels.create({
+                    name: `room-1`,
+                    ...baseDateRoomConfig
+                });
+                console.debug(`[DEBUG] Created first room: ${newChannel.name}`);
+                await this.assignUserToDateRoom(user, newChannel, message);
+                ALL_ROOMS_FULL = true
+                continue; // Move to the next user
+            }
+
+            // If all rooms are full, create a new room, move the user to the new room, and continue
+            if (ALL_ROOMS_FULL) {
+                const newChannel = await message.guild.channels.create({
+                    name: `room-${rooms.size + 1}`,
+                    ...baseDateRoomConfig
+                });
+                console.debug(`[DEBUG] Created new room: ${newChannel.name}`);
+                await this.assignUserToDateRoom(user, newChannel, message);
+            }
+
+            //: We have found non-empty rooms so we should fill those up first
+            let room = this.findEmptyRoom(rooms);
+            if (!room.found) {
+                ALL_ROOMS_FULL = true;
+                console.debug(`[DEBUG] No empty rooms found, creating a new room: room-${room.next}`);
+                // Create a new room
+                const newChannel = await message.guild.channels.create({
+                    name: `room-${room.next}`,
+                    ...baseDateRoomConfig
+                })
+            }
+
+
+        }
+    },
+
     async execute(message, args, client) {
         // Check if the user has the required role to execute this command
         if (!message.member.roles.cache.some(role => role.id === ROLES.SHERIFF || role.id === ROLES.COMMUNITY_MANAGER || role.id === ROLES.DEPUTY)) {
@@ -303,8 +400,14 @@ export default {
 
                 await message.react("1366143203857924116")
                 break;
+            case "assign-rooms":
+                if (args.length > 1) {
+                    return message.reply("Too many arguments. Usage: `!speed-date assign-rooms`");
+                }
+                // Logic to assign rooms
+
             default:
-                return message.reply("Invalid command argument. Valid arguments are: `init`, `status`, `update`.");
+                return message.reply("Invalid command argument. Valid arguments are: `init`, `status`, `update`, `broadcast`.");
         }
     }
 }
