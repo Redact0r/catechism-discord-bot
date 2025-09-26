@@ -241,10 +241,13 @@ bot.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
      *
      * @type {import('discord.js').TextChannel}
      */
-    const logChannel = newMember.guild.channels.cache.find(channel => channel.name === 'carl-log')
+    const logChannel = newMember.guild.channels.cache.find(channel => channel.id === CHANNELS.LOGS_CHANNEL_ID);
     if (!logChannel) return;
 
+    RolesService.client = bot
+    RolesService.guildId = newMember.guild.id;
     await RolesService.handleSexRoleChanges(oldMember, newMember, logChannel);
+    // await RolesService.cacheVerifiedMembers(newMember)
 })
 
 bot.on(Events.GuildMemberAdd, async (member) => {
