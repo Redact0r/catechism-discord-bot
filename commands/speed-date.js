@@ -250,6 +250,9 @@ export default {
         const [fullRooms, emptyRooms] = rooms.partition(room => room.members.filter(member =>
             member.roles.cache.some(role => role.id === ROLES.VERIFIED_FEMALE)
         ))
+        console.debug(`[DEBUG] Full rooms:`, fullRooms.map(r => r.name));
+        console.debug(`[DEBUG] Empty rooms:`, emptyRooms.map(r => r.name));
+        // If there are empty rooms, return the first one
         if (emptyRooms.size > 0) {
             if (emptyRooms.size > 1) {
                 console.warn(`[WARN] More than one empty room found. Picking the first one.`);
