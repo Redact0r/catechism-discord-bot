@@ -247,7 +247,7 @@ export default {
      * @returns {{found: boolean, room: string|import('discord.js').Snowflake}|{found: false, next: number}}
      */
     findEmptyRoom(rooms) {
-        const [emptyRooms, fullRooms] = rooms.partition(room => room.members.filter(member =>
+        const [emptyRooms, fullRooms] = rooms.partition(room => !!room.members.find(member =>
             member.roles.cache.some(role => role.id === ROLES.VERIFIED_FEMALE)
         ))
         console.debug(`[DEBUG] Full rooms:`, fullRooms.map(r => r.name));
