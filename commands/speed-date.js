@@ -405,7 +405,11 @@ export default {
                 // Iterate through each room and send the broadcast message
                 for (const [roomId, room] of womenRooms) {
                     console.debug(`[DEBUG] Broadcasting to room: ${room.name}`);
-                    await room.send(broadcastMessage)
+                    // get the members of the channel and mention them in the message
+                    const members = room.members.map(member => `<@${member.id}>`).join(", ");
+                    const fullMessage = `**Announcement for ${room.name}**\n${members}\n\n${broadcastMessage}`;
+                    console.debug(`[DEBUG] Full broadcast message: ${fullMessage}`);
+                    await room.send(fullMessage)
                 }
                 // Send message to the waiting room channel
                 const waitingRoomChannel = message.guild.channels.cache.get(WAITING_ROOM_CHANNEL_ID);
