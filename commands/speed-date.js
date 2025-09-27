@@ -339,6 +339,7 @@ export default {
                     ...baseDateRoomConfig
                 })
                 await this.assignUserToDateRoom(user, newChannel, message);
+                continue; // Move to the next user
             }
 
             // move user to the found room
@@ -348,7 +349,7 @@ export default {
                 await message.reply(`Room with ID ${room.room} not found.`);
                 continue; // Move to the next user
             }
-            await this.assignUserToDateRoom(user, chan, message);
+            await this.assignUserToDateRoom(user, room.room, message);
         }
     },
 
