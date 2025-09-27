@@ -278,6 +278,7 @@ export default {
 
     async handleAssignRoomsCommand(message) {
         // Logic to assign rooms
+        await message.guild.members.fetch()
         // Get all the women in the waiting room channel and create rooms for them, then move them to the room
         const waitingRoomChannel = await message.guild.channels.cache.find(c => c.id === WAITING_ROOM_CHANNEL_ID);
         if (!waitingRoomChannel) {
