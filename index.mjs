@@ -241,6 +241,15 @@ bot.on(Events.MessageCreate, async (msg) => {
             await msg.reply("Tell Tyler, Noah, or someone that something broke!");
         }
     }
+
+    if (msg.channelId === CHANNELS.MALE_INTROS || msg.channelId === CHANNELS.FEMALE_INTROS) {
+        // Detect if the user has an open ticket channel and notify them that they successfully posted their intro
+        const ticketChannel = msg.guild.channels.cache.find(channel => channel.name === `ticket-${msg.author.username.toLowerCase().replace(/\./g, "")}`);
+        if (ticketChannel) {
+            await ticketChannel.send(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!`);
+            console.log(`[INFO] Notified user ${msg.author.username} (${msg.author.id}) in their ticket channel about their intro post.`);
+        }
+    }
 })
 
 bot.on(Events.InteractionCreate, async (interaction) => {
