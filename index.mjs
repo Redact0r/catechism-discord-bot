@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "path";
 import * as url from "url";
-import {Colors, EmbedBuilder, Events, REST, Routes, userMention} from "discord.js";
+import {Colors, EmbedBuilder, Events, REST, Routes, SlashCommandBuilder, userMention} from "discord.js";
 import * as dotenv from "dotenv";
 import {Client, GatewayIntentBits, Collection, Partials} from "discord.js";
 import {ROLES, sleep, CHANNELS, getVerificationInstructions} from "./services/utils.js";
@@ -79,6 +79,41 @@ for (const folder of commandFolders) {
         }
     }
 }
+
+// Add a help slash command
+const helpCommand = {
+    name: 'help',
+    description: 'List all available commands',
+    enabledInProd: true,
+    data: new SlashCommandBuilder()
+        .setName('help')
+        .setDescription('List all available commands'),
+    async execute(interaction, client) {
+        const exclamationCommands = client.commands.filter(cmd => {
+            return cmd.name && cmd.name?.startsWith('!') || cmd.data?.name?.startsWith('!');
+        });
+        const plusCommands = client.commands.filter(cmd => {
+            return cmd.name && cmd.name?.startsWith('+') || cmd.data?.name?.startsWith('+');
+        });
+        const slashCommands = client.commands.filter(cmd => {
+            return cmd.name && !cmd.name?.startsWith('!') && !cmd.data?.name?.startsWith('!') && !cmd.name?.startsWith('+') && !cmd.data?.name?.startsWith('+');
+        });
+        const commandList = exclamationCommands.concat(plusCommands, slashCommands).map(command => {
+            if (command.name?.startsWith('!') || command.name?.startsWith('+')) {
+                return `\`${command.name}\`: ${command?.description || command?.data?.description || 'No description available.'}`;
+            }
+            return `/${command.name}: ${command?.description || command?.data?.description || 'No description available.'}`;
+        }).join('\n');
+        const embed = new EmbedBuilder()
+            .setTitle('Available Commands')
+            .setDescription(commandList)
+            .setColor(Colors.Blue)
+            .setTimestamp();
+        await interaction.reply({embeds: [embed], ephemeral: true});
+    }
+}
+slashCommands.push(helpCommand);
+bot.commands.set('help', helpCommand);
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(TOKEN);
@@ -219,7 +254,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         console.debug("[DEBUG] Interaction is a command", interaction.commandName);
         const command = bot.commands.get(interaction.commandName);
         if (!command) {
-            console.log("Command not found");
+            console.log("[DEBUG] Command not found");
             await interaction.reply({
                 content: `I don't know that command. Valid commands are: ${bot.commands.map((c) => c.name).join(', ')}`,
                 ephemeral: true
