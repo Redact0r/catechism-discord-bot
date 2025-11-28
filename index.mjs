@@ -10,6 +10,7 @@ import {popebotReplies} from "./popebot-replies.js";
 import {RolesService} from "./services/RolesService.js";
 import {bool, cleanEnv, str} from "envalid";
 import {ChannelService} from "./services/ChannelService.js";
+import {UserService} from "./services/UserService.js";
 
 dotenv.config()
 
@@ -298,18 +299,7 @@ bot.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 bot.on(Events.GuildMemberAdd, async (member) => {
     if (member.user.bot) return;
 
-    // Parse member's joined timestamp and compare it to current time, if it is less than 1 week automatically quarrantine them
-    const createdAt = member.user.createdAt;
-    const now = new Date();
-    const diff = now - createdAt;
-    const oneWeek = 1000 * 60 * 60 * 24 * 7;
-
-    const logChannel = member.guild.channels.cache.get(CHANNELS.LOGS_CHANNEL_ID)
-    if (diff < oneWeek) {
-        await member.roles.add(ROLES.QUARANTINED);
-        await logChannel.send(`User ${member.user.tag} (${userMention(member.id)}) has been automatically quarantined for joining less than a week ago.`);
-        console.log(`[INFO] Quarantined new member ${member.user.tag} (${member.id}) who joined less than a week ago.`);
-    }
+    await UserService.checkAndQuarantineUser(member)
 })
 
 bot.on(Events.ChannelCreate, async (channel) => {
