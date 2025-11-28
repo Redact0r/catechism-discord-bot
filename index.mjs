@@ -9,6 +9,7 @@ import {drinkReacts, foodReacts} from "./popebot-reactions.js";
 import {popebotReplies} from "./popebot-replies.js";
 import {RolesService} from "./services/RolesService.js";
 import {bool, cleanEnv, str} from "envalid";
+import {ChannelService} from "./services/ChannelService.js";
 
 dotenv.config()
 
@@ -246,7 +247,7 @@ bot.on(Events.MessageCreate, async (msg) => {
         // Detect if the user has an open ticket channel and notify them that they successfully posted their intro
         const ticketChannel = msg.guild.channels.cache.find(channel => channel.name === `ticket-${msg.author.username.toLowerCase().replace(/\./g, "")}`);
         if (ticketChannel) {
-            await ticketChannel.send(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!`);
+            await ticketChannel.send(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!\n\n Please let us know, in this channel, when you are available for a quick video call to complete your verification. If we don't hear from you in a week, we may have to close your ticket.`);
             console.log(`[INFO] Notified user ${msg.author.username} (${msg.author.id}) in their ticket channel about their intro post.`);
         }
     }
@@ -317,38 +318,7 @@ bot.on(Events.ChannelCreate, async (channel) => {
     // If they have, we want to see if the message asks for verification
     // If it does, we want to send a message to the channel giving them instructions
     console.log(`[DEBUG] Channel created: ${channel.name}`);
-    await sleep(1000 * 5); // Wait for 5 seconds to ensure the channel is fully created
-    if (channel.name.startsWith("ticket-")) {
-        // the second half of the channel name is the username
-        let username = channel.name.split("ticket-")[1];
-        // Replace periods with no space
-        username = username.replace(/\./g, "");
-        const user = channel.members.find(member => member.user.username.replace(/\./g, "") === username.toLowerCase());
-        const instructions = getVerificationInstructions(user, username)
-
-        const messages = await channel.messages.fetch({limit: 10});
-        const verifyWords = ["verify", "verification", "verified", "verifiy", "verifcation", "verifed", "verfy", "verifiction", "verifiyed", "verifiycation"];
-        // Check the second message's embeds for the verification words
-        const hasVerificationMessage = messages.some(msg => msg.embeds.some(embed => {
-            return embed.fields && verifyWords.some(word => embed.fields.some(field => field.value.toLowerCase().includes(word)))
-        }) || msg.content && verifyWords.some(word => msg.content.toLowerCase().includes(word)));
-
-        if (hasVerificationMessage) {
-            const embed = new EmbedBuilder()
-                .setColor(Colors.Blue)
-                .setTitle("Verification Instructions")
-                .setDescription(instructions)
-                .setTimestamp(new Date())
-                .setFooter({text: "Please follow the instructions to verify your account."});
-            await channel.send({
-                embeds: [embed]
-            });
-            console.log(`[INFO] Sent verification instructions to ${channel.name}`);
-        } else {
-            console.log(`[INFO] No verification message found in ${channel.name}`);
-        }
-
-    }
+    await ChannelService.handleVerificationTicketOpen(channel);
 })
 
 const exitListener = async (msg) => {
