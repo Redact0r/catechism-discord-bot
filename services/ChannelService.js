@@ -1,7 +1,7 @@
 import {getVerificationInstructions, sleep} from "./utils.js";
 import {Colors, EmbedBuilder} from "discord.js";
 
-export async class ChannelService {
+export class ChannelService {
     static async handleVerificationTicketOpen(channel) {
         await sleep(1000 * 5); // Wait for 5 seconds to ensure the channel is fully created
         if (channel.name.startsWith("ticket-")) {
