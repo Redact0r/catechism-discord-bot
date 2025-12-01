@@ -112,7 +112,8 @@ export function randomAdjective() {
 }
 
 export function getVerificationInstructions(user, username = "unknown user") {
-    return `Hello ${user ? `<@${user?.user?.id}>` : username},\n\nTo verify your account, please see below:\n
+    const id = user?.id ?? user?.user?.id ?? "unknown id";
+    return `Hello ${user ? `<@${id}>` : username},\n\nTo verify your account, please see below:\n
     An intro is required before sending any DMs. Please head to ${CHANNELS.MALE_INTROS_MENTIONABLE} or ${CHANNELS.FEMALE_INTROS_MENTIONABLE} and write yours. Selfies are optional.\n\nUntil you’re video verified, you’ll only be able to post your own intro—you won’t be able to view others’ intros or selfies. You may also temporarily lose visibility of your own intro; if you posted it, trust that it’s there.\n\nTo view the opposite sex’s introductions and selfies, you’ll need to be video verified. You can coordinate verification with a mod or verifier here. Our mod/verification team is busy and has their own schedules, so please be patient—we’ll get to you as soon as possible.\n\nImportant: Sending DMs without an intro is a bannable offense. Please follow the rules.\n\nThank you!`;
 }
 
