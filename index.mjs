@@ -245,10 +245,21 @@ bot.on(Events.MessageCreate, async (msg) => {
     }
 
     if (msg.channelId === CHANNELS.MALE_INTROS || msg.channelId === CHANNELS.FEMALE_INTROS) {
+        await msg.react("👋")
         // Detect if the user has an open ticket channel and notify them that they successfully posted their intro
         const ticketChannel = msg.guild.channels.cache.find(channel => channel.name === `ticket-${msg.author.username.toLowerCase().replace(/\./g, "")}`);
         if (ticketChannel) {
-            await ticketChannel.send(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!\n\n Please let us know, in this channel, when you are available for a quick video call to complete your verification. If we don't hear from you in a week, we may have to close your ticket.`);
+            const embed = new EmbedBuilder()
+                .setColor(Colors.Green)
+                .setTitle("Introduction Received")
+                .setDescription(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!`)
+                .addFields({
+                    name: "Next Steps",
+                    value: "Please let us know, in this channel, a few times you are available to complete verification via a quick video call. If we don't hear from you in a week, we may have to close your ticket."
+                })
+                .setTimestamp();
+            await ticketChannel.send({embeds: [embed]});
+            // await ticketChannel.send(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!\n\nPlease let us know, in this channel, a few times you are available to complete verification. If we don't hear from you in a week, we may have to close your ticket.`);
             console.log(`[INFO] Notified user ${msg.author.username} (${msg.author.id}) in their ticket channel about their intro post.`);
         }
     }
