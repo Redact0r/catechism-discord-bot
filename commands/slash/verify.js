@@ -1,4 +1,4 @@
-import {SlashCommandBuilder} from "discord.js";
+import {EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import {getVerificationInstructions} from "../../services/utils.js";
 
 export default {
@@ -31,7 +31,17 @@ export default {
     async sendVerificationInstructions(interaction) {
         const channel = interaction.options.getChannel("channel")
         const user = interaction.options.getUser("user")
-        await channel.send(getVerificationInstructions(user, user.username))
+        const member = await interaction.guild.members.fetch(user.id).catch(() => null);
+        if (!member) {
+            await interaction.reply({content: "Error, user not found."});
+            return;
+        }
+        const embed = new EmbedBuilder()
+            .setTitle("Verification Instructions")
+            .setDescription(getVerificationInstructions(user, user.username))
+            .setTimestamp(new Date())
+            .setFooter({text: "Please follow the instructions to verify your account."});
+        await channel.send({embeds: [embed]});
         await interaction.reply({content: `Verification instructions sent to ${channel}`, ephemeral: true});
     }
 }

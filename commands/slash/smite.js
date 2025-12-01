@@ -2,6 +2,7 @@ import {SlashCommandBuilder, userMention} from "discord.js";
 import {ROLES} from "../../services/utils.js";
 
 export default {
+    name: "smite",
     enabledInProd: false,
     data: new SlashCommandBuilder()
         .setName("smite")
