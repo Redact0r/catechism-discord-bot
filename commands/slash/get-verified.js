@@ -3,7 +3,7 @@ import {getVerificationInstructions} from "../../services/utils.js";
 
 export default {
     name: "verify",
-    enabledInProd: false,
+    enabledInProd: true,
     data: new SlashCommandBuilder()
         .setName("verify")
         .setDescription("Verification helper command")
