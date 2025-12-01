@@ -1,7 +1,6 @@
 import {SlashCommandBuilder, userMention} from "discord.js";
 import {
     CHANNELS,
-    checkIfUserIsAuthorized,
     checkInteractionPermissions,
     ROLES
 } from "../../services/utils.js";

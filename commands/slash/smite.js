@@ -3,7 +3,7 @@ import {ROLES} from "../../services/utils.js";
 
 export default {
     name: "smite",
-    enabledInProd: false,
+    enabledInProd: true,
     data: new SlashCommandBuilder()
         .setName("smite")
         .setDescription("Smite a user")
