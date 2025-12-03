@@ -1,4 +1,4 @@
-import {PermissionFlagsBits} from "discord.js";
+import {Colors, EmbedBuilder, PermissionFlagsBits, userMention} from "discord.js";
 
 const TEST_MODE = process.env.TEST_MODE === "true" || process.env.TEST_MODE === "1";
 const LOGS_CHANNEL_ID = "891742946859311114";

@@ -245,10 +245,10 @@ bot.on(Events.MessageCreate, async (msg) => {
     }
 
     if (msg.channelId === CHANNELS.MALE_INTROS || msg.channelId === CHANNELS.FEMALE_INTROS) {
-        await msg.react("👋")
         // Detect if the user has an open ticket channel and notify them that they successfully posted their intro
         const ticketChannel = msg.guild.channels.cache.find(channel => channel.name === `ticket-${msg.author.username.toLowerCase().replace(/\./g, "")}`);
         if (ticketChannel) {
+            await msg.react("👋")
             const embed = new EmbedBuilder()
                 .setColor(Colors.Green)
                 .setTitle("Introduction Received")
@@ -319,7 +319,7 @@ bot.on(Events.ChannelCreate, async (channel) => {
     // If they have, we want to see if the message asks for verification
     // If it does, we want to send a message to the channel giving them instructions
     console.log(`[DEBUG] Channel created: ${channel.name}`);
-    await ChannelService.handleVerificationTicketOpen(channel);
+    await ChannelService.handleVerificationTicketOpen(channel, bot);
 })
 
 const exitListener = async (msg) => {
