@@ -8,7 +8,7 @@ export async function popebotReplies(msg) {
         await msg.reply("You're welcome, my dude.").catch((error) => console.log(error));
     }
 
-    if (messageString.includes("no cap")) {
+    if (messageString.includes("no cap") || messageString.includes("fr fr") || messageString.includes("cap")) {
         if (chanceToSay <= 5) {
             await msg.reply("Ultra rare: The Pope approves!").catch((error) => console.log(error));
         } else if (chanceToSay <= 20) {
@@ -32,11 +32,11 @@ export async function popebotReplies(msg) {
         }
     }
 
-    if (messageString.includes("sussy") || messageString.split(" ").includes("sus")) {
-        if (chanceToSay >= 70) {
-            await msg.reply("Sussy baka!").catch((error) => console.log(error));
-        }
-    }
+    // if (messageString.includes("sussy") || messageString.split(" ").includes("sus")) {
+    //     if (chanceToSay >= 95) {
+    //         await msg.reply("Sussy baka!").catch((error) => console.log(error));
+    //     }
+    // }
 
     if (messageString.includes("hallelujah!") || messageString.includes("alleluia!")) {
         await msg.reply("Praise be!").catch((error) => console.log(error));

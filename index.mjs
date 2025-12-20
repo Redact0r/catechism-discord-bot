@@ -9,8 +9,6 @@ import {drinkReacts, foodReacts} from "./popebot-reactions.js";
 import {popebotReplies} from "./popebot-replies.js";
 import {RolesService} from "./services/RolesService.js";
 import {bool, cleanEnv, str} from "envalid";
-import {ChannelService} from "./services/ChannelService.js";
-import {UserService} from "./services/UserService.js";
 
 dotenv.config()
 
@@ -81,41 +79,6 @@ for (const folder of commandFolders) {
         }
     }
 }
-
-// Add a help slash command
-const helpCommand = {
-    name: 'help',
-    description: 'List all available commands',
-    enabledInProd: true,
-    data: new SlashCommandBuilder()
-        .setName('help')
-        .setDescription('List all available commands'),
-    async execute(interaction, client) {
-        const exclamationCommands = client.commands.filter(cmd => {
-            return cmd.name && cmd.name?.startsWith('!') || cmd.data?.name?.startsWith('!');
-        });
-        const plusCommands = client.commands.filter(cmd => {
-            return cmd.name && cmd.name?.startsWith('+') || cmd.data?.name?.startsWith('+');
-        });
-        const slashCommands = client.commands.filter(cmd => {
-            return cmd.name && !cmd.name?.startsWith('!') && !cmd.data?.name?.startsWith('!') && !cmd.name?.startsWith('+') && !cmd.data?.name?.startsWith('+');
-        });
-        const commandList = exclamationCommands.concat(plusCommands, slashCommands).map(command => {
-            if (command.name?.startsWith('!') || command.name?.startsWith('+')) {
-                return `\`${command.name}\`: ${command?.description || command?.data?.description || 'No description available.'}`;
-            }
-            return `/${command.name}: ${command?.description || command?.data?.description || 'No description available.'}`;
-        }).join('\n');
-        const embed = new EmbedBuilder()
-            .setTitle('Available Commands')
-            .setDescription(commandList)
-            .setColor(Colors.Blue)
-            .setTimestamp();
-        await interaction.reply({embeds: [embed], ephemeral: true});
-    }
-}
-slashCommands.push(helpCommand);
-bot.commands.set('help', helpCommand);
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(TOKEN);
@@ -243,26 +206,6 @@ bot.on(Events.MessageCreate, async (msg) => {
             await msg.reply("Tell Tyler, Noah, or someone that something broke!");
         }
     }
-
-    if (msg.channelId === CHANNELS.MALE_INTROS || msg.channelId === CHANNELS.FEMALE_INTROS) {
-        // Detect if the user has an open ticket channel and notify them that they successfully posted their intro
-        const ticketChannel = msg.guild.channels.cache.find(channel => channel.name === `ticket-${msg.author.username.toLowerCase().replace(/\./g, "")}`);
-        if (ticketChannel) {
-            await msg.react("👋")
-            const embed = new EmbedBuilder()
-                .setColor(Colors.Green)
-                .setTitle("Introduction Received")
-                .setDescription(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!`)
-                .addFields({
-                    name: "Next Steps",
-                    value: "Please let us know, in this channel, a few times you are available to complete verification via a quick video call. If we don't hear from you in a week, we may have to close your ticket."
-                })
-                .setTimestamp();
-            await ticketChannel.send({embeds: [embed]});
-            // await ticketChannel.send(`Hello ${userMention(msg.author.id)}, your introduction has been received! Our moderators will review it shortly. Thank you for introducing yourself in ${CHANNELS.mentionable(msg.channelId)}!\n\nPlease let us know, in this channel, a few times you are available to complete verification. If we don't hear from you in a week, we may have to close your ticket.`);
-            console.log(`[INFO] Notified user ${msg.author.username} (${msg.author.id}) in their ticket channel about their intro post.`);
-        }
-    }
 })
 
 bot.on(Events.InteractionCreate, async (interaction) => {
@@ -276,7 +219,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         console.debug("[DEBUG] Interaction is a command", interaction.commandName);
         const command = bot.commands.get(interaction.commandName);
         if (!command) {
-            console.log("[DEBUG] Command not found");
+            console.log("Command not found");
             await interaction.reply({
                 content: `I don't know that command. Valid commands are: ${bot.commands.map((c) => c.name).join(', ')}`,
                 ephemeral: true
@@ -310,7 +253,18 @@ bot.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 bot.on(Events.GuildMemberAdd, async (member) => {
     if (member.user.bot) return;
 
-    await UserService.checkAndQuarantineUser(member)
+    // Parse member's joined timestamp and compare it to current time, if it is less than 1 week automatically quarrantine them
+    const createdAt = member.user.createdAt;
+    const now = new Date();
+    const diff = now - createdAt;
+    const oneWeek = 1000 * 60 * 60 * 24 * 7;
+
+    const logChannel = member.guild.channels.cache.get(CHANNELS.LOGS_CHANNEL_ID)
+    if (diff < oneWeek) {
+        await member.roles.add(ROLES.QUARANTINED);
+        await logChannel.send(`User ${member.user.tag} (${userMention(member.id)}) has been automatically quarantined for joining less than a week ago.`);
+        console.log(`[INFO] Quarantined new member ${member.user.tag} (${member.id}) who joined less than a week ago.`);
+    }
 })
 
 bot.on(Events.ChannelCreate, async (channel) => {
@@ -319,7 +273,38 @@ bot.on(Events.ChannelCreate, async (channel) => {
     // If they have, we want to see if the message asks for verification
     // If it does, we want to send a message to the channel giving them instructions
     console.log(`[DEBUG] Channel created: ${channel.name}`);
-    await ChannelService.handleVerificationTicketOpen(channel, bot);
+    await sleep(1000 * 5); // Wait for 5 seconds to ensure the channel is fully created
+    if (channel.name.startsWith("ticket-")) {
+        // the second half of the channel name is the username
+        let username = channel.name.split("ticket-")[1];
+        // Replace periods with no space
+        username = username.replace(/\./g, "");
+        const user = channel.members.find(member => member.user.username.replace(/\./g, "") === username.toLowerCase());
+        const instructions = getVerificationInstructions(user, username)
+
+        const messages = await channel.messages.fetch({limit: 10});
+        const verifyWords = ["verify", "verification", "verified", "verifiy", "verifcation", "verifed", "verfy", "verifiction", "verifiyed", "verifiycation"];
+        // Check the second message's embeds for the verification words
+        const hasVerificationMessage = messages.some(msg => msg.embeds.some(embed => {
+            return embed.fields && verifyWords.some(word => embed.fields.some(field => field.value.toLowerCase().includes(word)))
+        }) || msg.content && verifyWords.some(word => msg.content.toLowerCase().includes(word)));
+
+        if (hasVerificationMessage) {
+            const embed = new EmbedBuilder()
+                .setColor(Colors.Blue)
+                .setTitle("Verification Instructions")
+                .setDescription(instructions)
+                .setTimestamp(new Date())
+                .setFooter({text: "Please follow the instructions to verify your account."});
+            await channel.send({
+                embeds: [embed]
+            });
+            console.log(`[INFO] Sent verification instructions to ${channel.name}`);
+        } else {
+            console.log(`[INFO] No verification message found in ${channel.name}`);
+        }
+
+    }
 })
 
 const exitListener = async (msg) => {
