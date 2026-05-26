@@ -31,6 +31,8 @@ export const ROLES = {
     SHERIFF_MENTIONABLE: "<@&890984994611265557>",
     DEPUTY: "891744347454844978",
     DEPUTY_MENTIONABLE: "<@&891744347454844978>",
+    VERIFIER: "1381864903840763924",
+    VERIFIER_MENTIONABLE: "<@&1381864903840763924>",
     QUARANTINED: "1333461375808176263",
     COMMUNITY_MANAGER: "1311587534433947679",
     COMMUNITY_MANAGER_MENTIONABLE: "<@&1311587534433947679>",
@@ -113,8 +115,33 @@ export function randomAdjective() {
 
 export function getVerificationInstructions(user, username = "unknown user") {
     const id = user?.id ?? user?.user?.id ?? "unknown id";
-    return `Hello ${user ? `<@${id}>` : username},\n\nTo verify your account, please see below:\n
-    An intro is required before sending any DMs. Please head to ${CHANNELS.MALE_INTROS_MENTIONABLE} or ${CHANNELS.FEMALE_INTROS_MENTIONABLE} and write yours. Selfies are optional.\n\nUntil you’re video verified, you’ll only be able to post your own intro—you won’t be able to view others’ intros or selfies. You may also temporarily lose visibility of your own intro; if you posted it, trust that it’s there.\n\nTo view the opposite sex’s introductions and selfies, you’ll need to be video verified. You can coordinate verification with a mod or verifier here. Our mod/verification team is busy and has their own schedules, so please be patient—we’ll get to you as soon as possible.\n\nImportant: Sending DMs without an intro is a bannable offense. Please follow the rules.\n\nThank you!`;
+    return `Hello ${user ? `<@${id}>` : username}
+
+To verify your account, please see below:
+
+> **For the men**, ||post an introduction to ${CHANNELS.MALE_INTROS_MENTIONABLE} ||
+> 
+> **For the women**, ||post an introduction to ${CHANNELS.FEMALE_INTROS_MENTIONABLE}||
+> 
+> **Be aware the channels will appear blank until you have been verified by a mod or a verifier.**
+>  
+> **Once your intro is posted, immediately let us know by asking for a ${ROLES.VERIFIER_MENTIONABLE} or ${ROLES.SHERIFF_MENTIONABLE} and then we will finalize by doing a 1-3 minute live video call. It will not be recorded and you may ask to have a mod/verifier of your own sex to be on the call. **
+
+# *Important: Sending DMs without an intro is a bannable offense. Please follow the rules.*
+
+
+If you are ${ROLES.mentionable(ROLES.QUARANTINED)} please post your introduction in this chat and then let us know when you're ready. You will copy and paste it later. 
+
+Please be patient with the mod team, we are all busy people and we will do our best to get you verified as soon as possible. 
+
+# DO NOT FORGET TO TAG US, OR WE WILL NOT SEE IT. 
+
+
+
+Thank you!
+
+
+**\`Do not open a ticket and leave it blank, we will close it.\`**`;
 }
 
 export function getNickNameFromGuildObjectWithUserId(guild, user_id) {
