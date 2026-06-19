@@ -61,3 +61,4 @@ typings/
 .next
 
 *.bak
+.DS_Store
