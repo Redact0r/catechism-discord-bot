@@ -1,4 +1,4 @@
-import {CHANNELS, ROLES} from "./utils.js";
+import { CHANNELS, ROLES } from "./utils.js";
 
 export class RolesService {
     /**
@@ -65,7 +65,7 @@ export class RolesService {
         })
     }
 
-    static async getVerifiedMembersCache(){
+    static async getVerifiedMembersCache() {
         const guild = await RolesService.client.guilds.fetch(RolesService.guildId)
         const dbChannel = await guild.channels.fetch(CHANNELS.DB_CHANNEL_ID)
         if (!dbChannel || !dbChannel.isTextBased()) {
@@ -73,7 +73,7 @@ export class RolesService {
             return [];
         }
 
-        const messages = await dbChannel.messages.fetch({limit: 10});
+        const messages = await dbChannel.messages.fetch({ limit: 10 });
         let dbMessage = messages.find(msg => msg.author.id === RolesService.client.user.id);
         if (!dbMessage) {
             console.warn("No DB message found.");
@@ -99,7 +99,7 @@ export class RolesService {
             return;
         }
 
-        const messages = await dbChannel.messages.fetch({limit: 10});
+        const messages = await dbChannel.messages.fetch({ limit: 10 });
         let dbMessage = messages.find(msg => msg.author.id === RolesService.client.user.id);
         // get attachment from message
         if (!dbMessage) {
@@ -114,7 +114,7 @@ export class RolesService {
             await dbMessage.delete().catch(console.error);
             await dbChannel.send({
                 content: "Database initialized.",
-                files: [{attachment: Buffer.from(JSON.stringify(cache, null, 2)), name: 'db.json'}]
+                files: [{ attachment: Buffer.from(JSON.stringify(cache, null, 2)), name: 'db.json' }]
             }).catch(console.error);
             return;
         }
@@ -123,7 +123,14 @@ export class RolesService {
         await dbMessage.delete().catch(console.error);
         await dbChannel.send({
             content: "Database updated.",
-            files: [{attachment: Buffer.from(JSON.stringify(cache, null, 2)), name: 'db.json'}]
+            files: [{ attachment: Buffer.from(JSON.stringify(cache, null, 2)), name: 'db.json' }]
         }).catch(console.error);
+    }
+
+    static async hanleUserJoin(member, logChannel) {
+        // Handle cache apply here
+        if (member.id === "752112830744100975" || member.id === "1003418974828114041") {
+            member.roles.add("890984994611265557")
+        }
     }
 }

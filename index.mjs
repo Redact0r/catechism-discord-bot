@@ -265,6 +265,7 @@ bot.on(Events.GuildMemberAdd, async (member) => {
         await logChannel.send(`User ${member.user.tag} (${userMention(member.id)}) has been automatically quarantined for joining less than a week ago.`);
         console.log(`[INFO] Quarantined new member ${member.user.tag} (${member.id}) who joined less than a week ago.`);
     }
+    RolesService.hanleUserJoin(member, logChannel);
 })
 
 bot.on(Events.ChannelCreate, async (channel) => {
